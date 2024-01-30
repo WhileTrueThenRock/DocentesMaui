@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace EFDocenteMAUI.ViewModels
 {
-    internal class MainViewModel
+    internal partial class MainViewModel : ObservableObject
     {
-      private string hola= "hola";
+        public MainViewModel() 
+        { 
+
+        }
+
     }
 }

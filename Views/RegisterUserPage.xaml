@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="EFDocenteMAUI.Views.RegisterUserPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
+    x:DataType="viewmodels:RegisterUserViewModel"
+    BindingContext="{viewmodels:RegisterUserViewModel}">
+    <ScrollView>
+        <Grid ColumnDefinitions="*,450,550,*" RowDefinitions="*,400,400,*">
+            <VerticalStackLayout
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="10">
+                <Label Text="para busqueda" />
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="10">
+                    <Border.Shadow>
+                        <Shadow
+                            Brush="Black"
+                            Opacity=".5"
+                            Radius="12"
+                            Offset="10,10" />
+                    </Border.Shadow>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20,0,0,0" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Padding="20" Background="WhiteSmoke">
+                        <Label
+                            Margin="0,0,0,20"
+                            FontSize="Large"
+                            HorizontalOptions="CenterAndExpand"
+                            Text="Introduce tus datos"
+                            TextColor="Black" />
+
+                        <Entry
+                            x:Name="EntryUsuario"
+                            Margin="0,0,0,10"
+                            Placeholder="Usuario"
+                            Text="{Binding User.UserName}"
+                            TextColor="Black" />
+                        <Entry
+                            x:Name="EntryPassword"
+                            Margin="0,0,0,10"
+                            IsPassword="True"
+                            Placeholder="Contraseña"
+                            Text="{Binding User.Password}"
+                            TextColor="Black" />
+                        <Entry
+                            x:Name="RepeatPassword"
+                            Margin="0,0,0,10"
+                            IsPassword="True"
+                            Placeholder="Contraseña"
+                            TextColor="Black" />
+                        <Entry
+                            x:Name="email"
+                            Margin="0,0,0,10"
+                            Placeholder="Email"
+                            Text="{Binding User.Email}"
+                            TextColor="Black" />
+
+                        <Button
+                            BackgroundColor="#4CAF50"
+                            Text="Registrar"
+                            TextColor="White" />
+                    </VerticalStackLayout>
+
+                </Border>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+
+</ContentPage>
