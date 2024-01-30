@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
+using Syncfusion.Maui.Core.Hosting;
 
 namespace EFDocenteMAUI
 {
@@ -11,6 +12,7 @@ namespace EFDocenteMAUI
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiCommunityToolkit().ConfigureMopups()
+                .ConfigureSyncfusionCore()
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
