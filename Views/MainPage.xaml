@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="EFDocenteMAUI.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
+    x:DataType="viewmodels:MainViewModel"
+    BindingContext="{viewmodels:MainViewModel}">
+
+    <ScrollView>
+        <Grid ColumnDefinitions="*,180,650,250,*" RowDefinitions="*,600,*">
+            <VerticalStackLayout
+                Grid.Row="1"
+                Grid.Column="0"
+                BackgroundColor="gray" />
+
+            <VerticalStackLayout
+                Grid.Row="1"
+                Grid.Column="1"
+                BackgroundColor="Blue">
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    FontSize="13"
+                    HorizontalOptions="Center"
+                    Text="Users"
+                    VerticalOptions="Center" />
+                <CollectionView
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    HeightRequest="450"
+                    ItemsSource="{Binding UserList}"
+                    SelectedItem="{Binding SelectedUser}"
+                    SelectionMode="Single">
+                    <CollectionView.GestureRecognizers>
+                        <TapGestureRecognizer
+                            x:DataType="viewmodels:MainViewModel"
+                            Command="{Binding ShowPrivateMessagePopupCommand}"
+                            NumberOfTapsRequired="2" />
+                    </CollectionView.GestureRecognizers>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodels:MainViewModel">
+                            <Border>
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="20"
+                                    Text="{Binding}"
+                                    TextColor="Red" />
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup Name="CommonStates">
+                                        <VisualState Name="Normal" />
+                                        <VisualState Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="Background" Value="Chocolate" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Border>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Row="1" Grid.Column="2">
+                <Button Command="{Binding ShowPrivateMessagePopupCommand}" Text="Open popup" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Row="1" Grid.Column="3">
+                <Label Text="Agregar TreeView" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout
+                Grid.Row="1"
+                Grid.Column="4"
+                BackgroundColor="Gray" />
+
+        </Grid>
+    </ScrollView>
+
+</ContentPage>
