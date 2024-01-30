@@ -9,46 +9,42 @@
     <Border HeightRequest="350" WidthRequest="385">
         <Border.Shadow>
             <Shadow
-                Brush="Black"
-                Opacity=".5"
-                Radius="12"
-                Offset="10,10" />
-
+                Brush="Gray"
+                Opacity=".8"
+                Radius="15"
+                Offset="5,5" />
         </Border.Shadow>
         <Border.StrokeShape>
-            <RoundRectangle CornerRadius="20,0,0,0" />
+            <RoundRectangle CornerRadius="25,0,0,0" />
         </Border.StrokeShape>
-        <VerticalStackLayout Padding="20" Background="WhiteSmoke">
+        <VerticalStackLayout Padding="15" Background="#EAEAEA">
             <Label
-                Margin="0,0,0,20"
+                Margin="0,0,0,15"
                 FontSize="Large"
                 HorizontalOptions="CenterAndExpand"
-                Text="Iniciar Sesión"
-                TextColor="Black" />
+                Text="Acceder"
+                TextColor="#333333" />
 
             <Entry
                 x:Name="EntryUsuario"
                 Margin="0,0,0,10"
-                Placeholder="Usuario"
+                Placeholder="Nombre de Usuario"
                 Text="{Binding User.UserName}"
-                TextColor="Black" />
+                TextColor="#333333" />
             <Entry
                 x:Name="EntryPassword"
                 Margin="0,0,0,10"
                 IsPassword="True"
                 Placeholder="Contraseña"
                 Text="{Binding User.Password}"
-                TextColor="Black" />
+                TextColor="#333333" />
 
             <Button
-                BackgroundColor="#4CAF50"
+                BackgroundColor="#4285F4"
                 Command="{Binding LoadMainPageCommand}"
                 Text="Iniciar Sesión"
                 TextColor="White" />
-
-
         </VerticalStackLayout>
-
     </Border>
 
 </ContentPage>

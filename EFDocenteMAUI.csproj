@@ -66,6 +66,7 @@
 		<PackageReference Include="Mopups" Version="1.3.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="StandardSocketsHttpHandler" Version="2.2.0.8" />
+		<PackageReference Include="Syncfusion.Maui.TreeView" Version="24.1.47" />
 		<PackageReference Include="System.Net.WebSockets" Version="4.3.0" />
 	</ItemGroup>
 
@@ -73,13 +74,12 @@
 	  <MauiXaml Update="Views\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Popups\PrivateMessagePopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\RegisterUserPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Views\Popups\" />
 	</ItemGroup>
 
 </Project>
