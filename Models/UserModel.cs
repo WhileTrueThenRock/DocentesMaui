@@ -1,10 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GestorChat.Models
 {
@@ -17,19 +12,28 @@ namespace GestorChat.Models
         public string Apellidos { get; set; }
         public string Dni { get; set; }
         public string Email { get; set; }
-        public string Telefono { get; set; }
+        public int Telefono { get; set; }
         public string FechaNacimiento { get; set; }
-        public string Direccion { get; set; }
         public string Rol { get; set; }
         public string Curso { get; set; }
+        public DireccionModel Direccion { get; set; }
         public string Avatar { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
-        
+        public class DireccionModel
+        {
+            public string Calle { get; set; }
+            public string Numero { get; set; }
+            public string Poblacion { get; set; }
+            public int Cp { get; set; }
+        }
+
 
         public UserModel() { 
             Id=ObjectId.GenerateNewId().ToString();
+            FechaNacimiento = DateTime.Now.ToString();
             Rol = "Estudiante";
+            Direccion = new DireccionModel();
         }
 
     }
