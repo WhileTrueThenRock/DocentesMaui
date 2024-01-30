@@ -4,12 +4,20 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:EFDocenteMAUI"
-    Shell.FlyoutBehavior="Disabled"
-    Title="EFDocenteMAUI">
+    xmlns:views="clr-namespace:EFDocenteMAUI.Views"
+    Title="EFDocenteMAUI"
+    Shell.FlyoutBehavior="Disabled">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <TabBar>
+        <Tab Title="Login">
+            <ShellContent ContentTemplate="{DataTemplate views:LoginPage}" Route="LoginPage" />
+        </Tab>
+        <Tab Title="Register">
+            <ShellContent ContentTemplate="{DataTemplate views:RegisterUserPage}" Route="RegisterUserPage" />
+        </Tab>
+        <Tab Title="Main">
+            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage" />
+        </Tab>
+    </TabBar>
 
 </Shell>
