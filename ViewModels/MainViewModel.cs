@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using EFDocenteMAUI.Models;
 using GestorChat.Views.Popups;
 using System;
 using System.Collections.Generic;
@@ -33,24 +34,113 @@ namespace EFDocenteMAUI.ViewModels
         private string privateMessageToSend;
 
         [ObservableProperty]
-        private string messageToSend;     
+        private string messageToSend;
 
         [ObservableProperty]
         private ObservableCollection<string> messagesReceived;  // Almacena los mensajes recibidos.
 
+        public ObservableCollection<FileManager> ImageNodeInfo { get; set; }
+
+        [ObservableProperty]
+        private string _itemName;
+
+        [ObservableProperty]
+        private ImageSource _imageIcon;
+
+        [ObservableProperty]
+        private ObservableCollection<FileManager> _subFiles;
 
 
         //Popups
         [ObservableProperty]
         private PrivateMessagePopup privateMessagePopup;
 
-        public MainViewModel() 
+        public MainViewModel()
         {
             MessagesReceived = new ObservableCollection<string>();
             MessagesDict = new Dictionary<string, string>();
             Emojis = new ObservableCollection<string>() { "🍻", "🙋‍", "♂️", "💁‍", "♀️", "😍" };
             UserList = new ObservableCollection<string>();
+            userList.Add("Rafa");
+            userList.Add("Victor");
+            userList.Add("Adrian");
+            ImageNodeInfo = new ObservableCollection<FileManager>();
+            FileManager fileManager = new FileManager()
+            {
+                ItemName = "Carpeta",
+                ImageIcon = "ricardo.jpg"
+
+            };
+            ImageNodeInfo.Add(fileManager);
+            GenerateSource();
         }
+
+
+
+        private void GenerateSource()
+        {
+            var nodeImageInfo = new ObservableCollection<FileManager>();
+
+            var calendar = new FileManager() { ItemName = "Calendario", ImageIcon = "calendar.png" };
+            var alumnos = new FileManager() { ItemName = "Alumnos", ImageIcon = "student.png" };
+            var mp3 = new FileManager() { ItemName = "Music", ImageIcon = "ricardo.jpg" };
+            var pictures = new FileManager() { ItemName = "Pictures", ImageIcon = "ricardo.jpg" };
+            var video = new FileManager() { ItemName = "Videos", ImageIcon = "ricardo.jpg" };
+
+            var pollution = new FileManager() { ItemName = "Calendar", ImageIcon = "calendar.png" };
+            var globalWarming = new FileManager() { ItemName = "Global Warming.ppt", ImageIcon = "ricardo.jpg" };
+            var sanitation = new FileManager() { ItemName = "Sanitation.docx", ImageIcon = "ricardo.jpg" };
+            var socialNetwork = new FileManager() { ItemName = "Social Network.pdf", ImageIcon = "ricardo.jpg" };
+            var youthEmpower = new FileManager() { ItemName = "Youth Empowerment.pdf", ImageIcon = "ricardo.jpg" };
+
+
+            var tutorials = new FileManager() { ItemName = "Tutorials.zip", ImageIcon = "ricardo.jpg" };
+            var typeScript = new FileManager() { ItemName = "TypeScript.7z", ImageIcon = "ricardo.jpg" };
+            var uiGuide = new FileManager() { ItemName = "UI-Guide.pdf", ImageIcon = "ricardo.jpg" };
+
+            var song = new FileManager() { ItemName = "Gouttes", ImageIcon = "ricardo.jpg" };
+
+            var camera = new FileManager() { ItemName = "Camera Roll", ImageIcon = "ricardo.jpg" };
+            var stone = new FileManager() { ItemName = "Stone.jpg", ImageIcon = "ricardo.jpg" };
+            var wind = new FileManager() { ItemName = "Wind.jpg", ImageIcon = "ricardo.jpg" };
+
+            var img0 = new FileManager() { ItemName = "WIN_20160726_094117.JPG", ImageIcon = "ricardo.jpg" };
+            var img1 = new FileManager() { ItemName = "WIN_20160726_094118.JPG", ImageIcon = "ricardo.jpg" };
+
+            var video1 = new FileManager() { ItemName = "Naturals.mp4", ImageIcon = "ricardo.jpg" };
+            var video2 = new FileManager() { ItemName = "Wild.mpeg", ImageIcon = "ricardo.jpg" };
+
+
+            mp3.SubFiles = new ObservableCollection<FileManager>
+            {
+                song
+            };
+
+            pictures.SubFiles = new ObservableCollection<FileManager>
+            {
+                camera,
+                stone,
+                wind
+            };
+            camera.SubFiles = new ObservableCollection<FileManager>
+            {
+                img0,
+                img1
+            };
+
+            video.SubFiles = new ObservableCollection<FileManager>
+            {
+                video1,
+                video2
+            };
+
+            nodeImageInfo.Add(mp3);
+            nodeImageInfo.Add(pictures);
+            nodeImageInfo.Add(video);
+            ImageNodeInfo = nodeImageInfo;
+        }
+
+
 
         [RelayCommand]
         public async Task ShowPrivateMessagePopup()
@@ -83,6 +173,23 @@ namespace EFDocenteMAUI.ViewModels
             MessageToSend += emojy;
             PrivateMessageToSend += emojy;
         }
+
+        [RelayCommand]
+        public async Task LoadCalendarPage()
+        {
+            await Shell.Current.GoToAsync("//CalendarPage");
+        }
+
+        [RelayCommand]
+        public async Task LoadRegisterPage()
+        {
+            await Shell.Current.GoToAsync("//RegisterUserPage");
+        }
+
+
+
+
+
 
     }
 }

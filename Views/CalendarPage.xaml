@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="EFDocenteMAUI.Views.CalendarPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:cal="clr-namespace:Plugin.Maui.Calendar.Controls;assembly=Plugin.Maui.Calendar"
+    xmlns:models="clr-namespace:EFDocenteMAUI.Models"
+    xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
+    x:DataType="viewmodels:CalendarViewModel"
+    BindingContext="{viewmodels:CalendarViewModel}">
+    <ScrollView>
+        <VerticalStackLayout Padding="30,0" Spacing="25">
+            <cal:Calendar
+                Margin="0,0,500,0"
+                Culture="{Binding Culture}"
+                Events="{Binding Events}"
+                HeightRequest="500"
+                SelectedDate="{Binding DayEvents.EventDate}"
+                SelectedDateColor="Black"
+                SelectedDayBackgroundColor="Red"
+                SelectedDayEvents="{Binding EventsList, Mode=TwoWay}"
+                TodayOutlineColor="Aqua"
+                WidthRequest="500" />
+            <CollectionView
+                ItemsSource="{Binding EventsList}"
+                SelectedItem="{Binding SelectedEvent}"
+                SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:EventModel">
+                        <Border>
+                            <VerticalStackLayout>
+                                <VerticalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        x:DataType="viewmodels:CalendarViewModel"
+                                        BindingContext="{Binding Source={x:Reference myPage}, Path=BindingContext}"
+                                        Command="{Binding ShowEventPopupCommand}"
+                                        CommandParameter="update"
+                                        NumberOfTapsRequired="2" />
+                                </VerticalStackLayout.GestureRecognizers>
+                                <Label Text="{Binding Name}" TextColor="Black" />
+                                <Label Text="{Binding Description}" />
+                                <Label Text="{Binding StartAt}" />
+                                <Label Text="{Binding EndAt}" />
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup Name="CommonStates">
+                                        <VisualState Name="Normal" />
+                                        <VisualState Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="Background" Value="Chocolate" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Button
+                Command="{Binding ShowEventPopupCommand}"
+                CommandParameter="create"
+                HeightRequest="100"
+                Text="Abrir"
+                WidthRequest="100" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
