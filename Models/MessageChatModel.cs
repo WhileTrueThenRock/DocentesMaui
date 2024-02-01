@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GestorChat.Models
+namespace EFDocenteMAUI.Models
 {
     internal class MessageChatModel
     {

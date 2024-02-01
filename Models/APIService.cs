@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace GestorChat.Models
+namespace EFDocenteMAUI.Models
 {
     internal class APIService
     {
