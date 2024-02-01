@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 
-namespace GestorChat.Models
+namespace EFDocenteMAUI.Models
 {
    public class UserModel
     {

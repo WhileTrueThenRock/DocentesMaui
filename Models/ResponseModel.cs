@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GestorChat.Models
+namespace EFDocenteMAUI.Models
 {
     // Definición de la clase ResponseModel, utilizada para representar un modelo de respuesta.
     internal class ResponseModel

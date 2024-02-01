@@ -41,7 +41,7 @@
 
             <Button
                 BackgroundColor="#4285F4"
-                Command="{Binding LoadMainPageCommand}"
+                Command="{Binding LoginCommand}"
                 Text="Iniciar Sesión"
                 TextColor="White" />
         </VerticalStackLayout>

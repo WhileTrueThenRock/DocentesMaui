@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GestorChat.Models;
+using EFDocenteMAUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +17,27 @@ namespace EFDocenteMAUI.ViewModels
         public LoginViewModel()
         {
             User = new UserModel();
+            SecureStorage.Default.RemoveAll();
         }
 
+        [RelayCommand]
+        public async Task Login()
+        {
+            var request = new RequestModel(route: "/auth/login",
+                                           method: "POST",
+                                           data: User,
+                                           server: APIService.GestionServerUrl);
+            var response = await APIService.ExecuteRequest(request);
+            if (response.Success.Equals(0))
+            {
+                await SecureStorage.Default.SetAsync("token", response.Data.ToString());
+                await LoadMainPage();
+            }
+            await App.Current.MainPage.DisplayAlert("Registro",
+                response.Message, "ACEPTAR");
+            User = new UserModel();
 
+        }
 
         [RelayCommand]
         public async Task LoadMainPage()
