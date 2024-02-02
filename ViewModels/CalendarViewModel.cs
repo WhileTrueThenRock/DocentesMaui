@@ -3,17 +3,11 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EFDocenteMAUI.Models;
 using EFDocenteMAUI.Views.Popups;
-using GestorChat.Models;
 using MongoDB.Bson;
 using Newtonsoft.Json;
 using Plugin.Maui.Calendar.Models;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EFDocenteMAUI.ViewModels
 {
