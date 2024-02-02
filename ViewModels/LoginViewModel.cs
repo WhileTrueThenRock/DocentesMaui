@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EFDocenteMAUI.ViewModels
 {
-   internal partial class LoginViewModel : ObservableObject
+    internal partial class LoginViewModel : ObservableObject
     {
         [ObservableProperty]
         private UserModel user;
@@ -32,10 +32,18 @@ namespace EFDocenteMAUI.ViewModels
             {
                 await SecureStorage.Default.SetAsync("token", response.Data.ToString());
                 await LoadMainPage();
-            }
-            await App.Current.MainPage.DisplayAlert("Registro",
+                await App.Current.MainPage.DisplayAlert("Login",
                 response.Message, "ACEPTAR");
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Login",
+                    "Error de conexión, intentelo más tarde", "ACEPTAR");
+            }
+
             User = new UserModel();
+
+
 
         }
 
