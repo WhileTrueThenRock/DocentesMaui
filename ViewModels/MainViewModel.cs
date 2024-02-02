@@ -16,28 +16,28 @@ namespace EFDocenteMAUI.ViewModels
     internal partial class MainViewModel : ObservableObject
     {
         [ObservableProperty]
-        private ObservableCollection<string> userList;
+        private ObservableCollection<string> _userList;
 
         [ObservableProperty]
-        private Dictionary<string, string> messagesDict;
+        private Dictionary<string, string> _messagesDict;
 
         [ObservableProperty]
-        private ObservableCollection<string> emojis;
+        private ObservableCollection<string> _emojis;
 
         [ObservableProperty]
-        private string selectedUser;
+        private string _selectedUser;
 
         [ObservableProperty]
-        private string privateMessagesReceived;
+        private string _privateMessagesReceived;
 
         [ObservableProperty]
-        private string privateMessageToSend;
+        private string _privateMessageToSend;
 
         [ObservableProperty]
-        private string messageToSend;
+        private string _messageToSend;
 
         [ObservableProperty]
-        private ObservableCollection<string> messagesReceived;  // Almacena los mensajes recibidos.
+        private ObservableCollection<string> _messagesReceived;  // Almacena los mensajes recibidos.
 
         public ObservableCollection<FileManager> ImageNodeInfo { get; set; }
 
@@ -61,9 +61,9 @@ namespace EFDocenteMAUI.ViewModels
             MessagesDict = new Dictionary<string, string>();
             Emojis = new ObservableCollection<string>() { "🍻", "🙋‍", "♂️", "💁‍", "♀️", "😍" };
             UserList = new ObservableCollection<string>();
-            userList.Add("Rafa");
-            userList.Add("Victor");
-            userList.Add("Adrian");
+            UserList.Add("Rafa");
+            UserList.Add("Victor");
+            UserList.Add("Adrian");
             ImageNodeInfo = new ObservableCollection<FileManager>();
             FileManager fileManager = new FileManager()
             {

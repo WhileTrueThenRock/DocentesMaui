@@ -10,7 +10,7 @@ namespace EFDocenteMAUI.Models
     {
         // Constantes que representan las URL de los servidores
         public const string GestionServerUrl = "http://127.0.0.1:5000";
-        private const string ImagenesServerUrl = "http://127.0.0.1:5000";
+        public const string ImagenesServerUrl = "http://127.0.0.1:5000";
 
         // Método para ejecutar una solicitud HTTP y obtener una respuesta asincrónica
         public static async Task<ResponseModel> ExecuteRequest(RequestModel requestModel)

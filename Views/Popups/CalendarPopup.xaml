@@ -6,11 +6,105 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
     x:DataType="viewmodels:CalendarViewModel"
-    CanBeDismissedByTappingOutsideOfPopup="False">
-    <VerticalStackLayout>
+    CanBeDismissedByTappingOutsideOfPopup="False"
+    Color="White">
+    <VerticalStackLayout HeightRequest="600" WidthRequest="1100">
         <Label
+            Margin="0,0,0,20"
+            HeightRequest="50"
             HorizontalOptions="Center"
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" />
+            Text="Crear Evento"
+            VerticalOptions="Center"
+            WidthRequest="100" />
+        <toolkit:AvatarView
+            Margin="10,0,0,0"
+            Padding="0"
+            CornerRadius="300"
+            HeightRequest="200"
+            ImageSource="{Binding AvatarImage}"
+            IsEnabled="True"
+            StrokeThickness="2"
+            WidthRequest="200">
+            <toolkit:AvatarView.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding LoadImageCommand}" NumberOfTapsRequired="1" />
+            </toolkit:AvatarView.GestureRecognizers>
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup Name="CommonStates">
+                    <VisualState Name="Normal" />
+                    <VisualState Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="BorderColor" Value="Red" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </toolkit:AvatarView>
+
+        <Label
+            Margin="0,50,0,0"
+            HorizontalOptions="Center"
+            Text="Fecha:" />
+        <DatePicker
+            Date="{Binding DayEvents.EventDate}"
+            Format="dd-mm-yyyy"
+            HorizontalOptions="Center" />
+        <!--  Nombre evento  -->
+        <Label HorizontalOptions="Center" Text="Nombre Evento:" />
+        <Entry
+            Text="{Binding SelectedEvent.Type}"
+            VerticalTextAlignment="Center"
+            WidthRequest="290" />
+        <!--  Descripcion  -->
+        <Label
+            Margin="0,10,0,0"
+            HorizontalOptions="Center"
+            Text="Descripcion:" />
+
+        <Entry
+            Text="{Binding SelectedEvent.Description}"
+            VerticalTextAlignment="Center"
+            WidthRequest="290" />
+
+        <!--  Hora Inicio  -->
+        <Label
+            Margin="0,10,0,0"
+            HorizontalOptions="Center"
+            Text="Hora Inicio:" />
+        <TimePicker
+            Format="HH:mm"
+            HorizontalOptions="Center"
+            Time="{Binding SelectedEvent.StartAt}" />
+        <!--  Hora Fin  -->
+        <Label
+            Margin="0,30,0,0"
+            HorizontalOptions="Center"
+            Text="Hora Fin:" />
+        <TimePicker
+            Format="HH:mm"
+            HorizontalOptions="Center"
+            Time="{Binding SelectedEvent.EndAt}" />
+        <HorizontalStackLayout
+            Margin="0,20,0,0"
+            HorizontalOptions="Center"
+            WidthRequest="400">
+            <Button
+                BackgroundColor="Red"
+                Command="{Binding CreateEventCommand}"
+                Text="Crear"
+                WidthRequest="100" />
+            <Button
+                BackgroundColor="Yellow"
+                Command="{Binding ClosePopUpCommand}"
+                Text="Cancelar"
+                TextColor="Black"
+                WidthRequest="100" />
+
+            <Button
+                BackgroundColor="Red"
+                Command="{Binding DeleteEventCommand}"
+                Text="Borrar"
+                WidthRequest="100" />
+        </HorizontalStackLayout>
     </VerticalStackLayout>
+
 </toolkit:Popup>
