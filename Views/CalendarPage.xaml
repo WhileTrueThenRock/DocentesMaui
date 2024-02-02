@@ -37,7 +37,7 @@
                                         CommandParameter="update"
                                         NumberOfTapsRequired="2" />
                                 </VerticalStackLayout.GestureRecognizers>
-                                <Label Text="{Binding Name}" TextColor="Black" />
+                                <Label Text="{Binding Type}" TextColor="Black" />
                                 <Label Text="{Binding Description}" />
                                 <Label Text="{Binding StartAt}" />
                                 <Label Text="{Binding EndAt}" />

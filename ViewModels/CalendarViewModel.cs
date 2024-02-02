@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EFDocenteMAUI.Models;
+using EFDocenteMAUI.Utils;
 using EFDocenteMAUI.Views.Popups;
 using MongoDB.Bson;
 using Newtonsoft.Json;
@@ -20,19 +21,25 @@ namespace EFDocenteMAUI.ViewModels
         private EventCollection _events = new();
 
         [ObservableProperty]
-        private ObservableCollection<EventModel> eventsList = new();
+        private ObservableCollection<EventModel> _eventsList = new();
 
         [ObservableProperty]
-        private EventModel selectedEvent;
+        private EventModel _selectedEvent;
 
         [ObservableProperty]
-        private DayEventsModel dayEvents = new();
+        private DayEventsModel _dayEvents = new();
 
         [ObservableProperty]
-        private CalendarPopup calendarPopup;
+        private CalendarPopup _calendarPopup;
 
         [ObservableProperty]
-        private string mode;
+        private string _mode;
+
+        [ObservableProperty]
+        private string avatarImage64;
+
+        [ObservableProperty]
+        private ImageSource avatarImage;
 
         public CalendarViewModel() 
         {
@@ -86,11 +93,45 @@ namespace EFDocenteMAUI.ViewModels
         }
 
         [RelayCommand]
+        public async Task CreateEvent()
+        {
+
+            ExecuteRequest();
+        }
+
+        [RelayCommand]
         public async Task DeleteEvent()
         {
             Mode = "delete";
             ExecuteRequest();
             ClosePopUp();
+        }
+
+
+        [RelayCommand]
+        public async Task LoadImage()
+        {
+            //cambiar por isEnabled observable property
+                var imagesDict = await ImageUtils.OpenImage();
+                if (imagesDict != null)
+                {
+                    AvatarImage = (ImageSource)imagesDict["imageFromStream"];
+                    AvatarImage64 = (string)imagesDict["imageBase64"];
+                }
+        }
+
+        public async Task<bool> UpdateImage()
+        {
+
+            ImageModel imagen = new ImageModel();
+           // imagen.Id = User.Id.ToString(); quitar o no
+            var request = new RequestModel(method: "POST", route: "/imagenes/save", data: imagen, server: APIService.ImagenesServerUrl);
+            imagen.Content = AvatarImage64;
+
+            ResponseModel response = await APIService.ExecuteRequest(request);
+
+            await App.Current.MainPage.DisplayAlert("Actualizar", response.Message, "Aceptar");
+            return response.Success == 0;
         }
 
 
