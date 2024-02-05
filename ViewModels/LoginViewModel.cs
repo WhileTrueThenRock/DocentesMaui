@@ -71,12 +71,12 @@ namespace EFDocenteMAUI.ViewModels
         public async Task<bool> ComprobarCamposAsync()
         {
             bool todoOK = false;
-            if (User.UserName == null)
+            if (User.UserName == null || User.UserName.Any(Char.IsWhiteSpace))
             {
                 await App.Current.MainPage.DisplayAlert("Login",
                     "El campo Nombre de Usuario no puede esta vacio", "ACEPTAR");
             }
-            else if(User.Password == null)
+            else if(User.Password == null || User.Password.Any(Char.IsWhiteSpace))
             {
                 await App.Current.MainPage.DisplayAlert("Login",
                     "El campo Contraseña no puede esta vacio", "ACEPTAR");

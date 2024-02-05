@@ -45,6 +45,9 @@ namespace EFDocenteMAUI.ViewModels
         private string _cpString;
         [ObservableProperty]
         private string _mensajeError;
+
+        [ObservableProperty]
+        private bool _imageChanged;
         
       
 
@@ -62,7 +65,7 @@ namespace EFDocenteMAUI.ViewModels
         {
             bool okSaveImage = await UpdateImage();
             if (okSaveImage)
-            {
+            {   
                 string[] fechamodificada = User.FechaNacimiento.Replace(" 0:00:00", " ").Split(' ');
                 User.FechaNacimiento = fechamodificada[0];
                 User.Avatar = APIService.ImagenesServerUrl + "/avatars/" + User.Id.ToString();
@@ -71,7 +74,8 @@ namespace EFDocenteMAUI.ViewModels
                                                 data: User,
                                                 server: APIService.GestionServerUrl);
                 ResponseModel response = await APIService.ExecuteRequest(request);
-
+                AvatarImage64 = null;
+                await App.Current.MainPage.DisplayAlert("Info", response.Message, "ACEPTAR");
                 await GetUsers();
                 ShowUserInfo();
             }
@@ -79,6 +83,21 @@ namespace EFDocenteMAUI.ViewModels
         }
         [RelayCommand]
         public async Task GetUsers()
+        {
+            IsListVisible = true;
+            var request = new RequestModel(method: "GET",
+                                            route: "/users/all",
+                                            data: User,
+                                            server: APIService.GestionServerUrl);
+            ResponseModel response = await APIService.ExecuteRequest(request);
+            if (response.Success == 0)
+            {
+                UserList = JsonConvert.DeserializeObject<ObservableCollection<UserModel>>(response.Data.ToString());
+            }
+        }
+
+        [RelayCommand]
+        public async Task GetUsersByName()
         {
             IsListVisible = true;
             var request = new RequestModel(method: "GET",
@@ -108,7 +127,7 @@ namespace EFDocenteMAUI.ViewModels
         }
         private bool ValidateName()
         {
-            if (null == User.Nombre || !User.Nombre.Equals(string.IsNullOrWhiteSpace))
+            if (null == User.Nombre || User.Nombre.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Nombre, no puede estar vacio";
                 return false;
@@ -117,7 +136,7 @@ namespace EFDocenteMAUI.ViewModels
         }
         private bool ValidateSurname()
         {
-            if (null == User.Apellidos || !User.Apellidos.Equals(string.IsNullOrWhiteSpace))
+            if (null == User.Apellidos || User.Apellidos.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Apellidos, no puede estar vacio";
                 return false;
@@ -126,7 +145,7 @@ namespace EFDocenteMAUI.ViewModels
         }
         private bool ValidateDni()
         {
-            if (null == User.Dni || !User.Dni.Equals(string.IsNullOrWhiteSpace))
+            if (null == User.Dni || User.Dni.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo DNI no puede estar vacio";
                 return false;
@@ -135,7 +154,7 @@ namespace EFDocenteMAUI.ViewModels
         }
         private bool ValidateEmail()
         {
-            if (null == User.Email || !User.Email.Equals(string.IsNullOrWhiteSpace))
+            if (null == User.Email || User.Email.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo E-mail, no puede estar vacio";
                 return false;
@@ -148,7 +167,7 @@ namespace EFDocenteMAUI.ViewModels
             bool isValid = int.TryParse(TelefonoString, out numericValue)
                            && numericValue >= 600000000
                            && numericValue <= 999999999;
-            if (null == TelefonoString || !TelefonoString.Equals(string.IsNullOrWhiteSpace))
+            if (null == TelefonoString || TelefonoString.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Teléfono, no puede estar vacio";
                 return false;
@@ -165,7 +184,7 @@ namespace EFDocenteMAUI.ViewModels
         }
         private bool ValidateGrade()
         {
-            if (null == User.Curso || !User.Curso.Equals(string.IsNullOrWhiteSpace))
+            if (null == User.Curso || User.Curso.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Curso, no puede estar vacio";
                 return false;
@@ -175,7 +194,7 @@ namespace EFDocenteMAUI.ViewModels
 
         private bool ValidateStreet()
         {
-            if (null == User.Direccion.Calle || !User.Direccion.Calle.Equals(string.IsNullOrWhiteSpace))
+            if (null == User.Direccion.Calle || User.Direccion.Calle.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Calle, no puede estar vacio";
                 return false;
@@ -184,7 +203,7 @@ namespace EFDocenteMAUI.ViewModels
         }
         private bool ValidateNumber()
         {
-            if (null == User.Direccion.Numero || !User.Direccion.Numero.Equals(string.IsNullOrWhiteSpace))
+            if (null == User.Direccion.Numero || User.Direccion.Numero.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Número, no puede estar vacio";
                 return false;
@@ -193,7 +212,7 @@ namespace EFDocenteMAUI.ViewModels
         }
         private bool ValidateCity()
         {
-            if (null == User.Direccion.Poblacion || !User.Direccion.Poblacion.Equals(string.IsNullOrWhiteSpace))
+            if (null == User.Direccion.Poblacion || User.Direccion.Poblacion.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Población, no puede estar vacio";
                 return false;
@@ -206,7 +225,7 @@ namespace EFDocenteMAUI.ViewModels
             bool isValid = int.TryParse(CpString, out numericValue)
                            && numericValue >= 0
                            && numericValue <= 99999;
-            if (null == CpString || !CpString.Equals(string.IsNullOrWhiteSpace))
+            if (null == CpString || CpString.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo CP, no puede estar vacio";
                 return false;
@@ -220,7 +239,7 @@ namespace EFDocenteMAUI.ViewModels
         private bool ValidateUserName()
         {
             
-            if (null == User.UserName || !User.UserName.Equals(string.IsNullOrWhiteSpace))
+            if (null == User.UserName || User.UserName.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Nombre de Usuario,\n no puede estar vacio";
                 return false;
@@ -231,7 +250,7 @@ namespace EFDocenteMAUI.ViewModels
         private bool ValidatePassword()
         {
 
-            if (null == User.Password || !User.Password.Equals(string.IsNullOrWhiteSpace))
+            if (null == User.Password || User.Password.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Contraseña,\n no puede estar vacio";
                 return false;
@@ -266,6 +285,7 @@ namespace EFDocenteMAUI.ViewModels
 
                         await App.Current.MainPage.DisplayAlert("Info", response.Message, "ACEPTAR");
                         User = new UserModel();
+                        AvatarImage64 = null;
                         GetUsers();
                     }
 
@@ -308,6 +328,7 @@ namespace EFDocenteMAUI.ViewModels
             IsEditMode = false;
             IsDataEnabled = true;
             AvatarImage = User.Avatar;
+            ImageChanged = false;
 
         }
         [RelayCommand]
@@ -318,6 +339,9 @@ namespace EFDocenteMAUI.ViewModels
             IsCreateMode = false;
             IsDataEnabled = false;
             AvatarImage = User.Avatar;
+            TelefonoString = User.Telefono.ToString();
+            CpString = User.Direccion.Cp.ToString();
+            ImageChanged = false;
         }
         [RelayCommand]
         public void EditEnabled()
@@ -333,21 +357,27 @@ namespace EFDocenteMAUI.ViewModels
             {
                 AvatarImage = (ImageSource)imagesDict["imageFromStream"];
                 AvatarImage64 = (string)imagesDict["imageBase64"];
+                ImageChanged = true;
             }
         }
         public async Task<bool> UpdateImage()
         {
+            ResponseModel response = new ResponseModel();
+            if (ImageChanged)
+            {
+                ImageModel imagen = new ImageModel();
+                imagen.Id = User.Id.ToString();
+                imagen.Content = AvatarImage64;
+                var request = new RequestModel(method: "POST", route: "/avatars/save", data: imagen, server: APIService.ImagenesServerUrl);
 
-            ImageModel imagen = new ImageModel();
-            imagen.Id = User.Id.ToString();
-            imagen.Content = AvatarImage64;
-            var request = new RequestModel(method: "POST", route: "/avatars/save", data: imagen, server: APIService.ImagenesServerUrl);
-            
 
-            ResponseModel response = await APIService.ExecuteRequest(request);
+                response = await APIService.ExecuteRequest(request);
+            }
+            response.Success = 0;
 
             //await App.Current.MainPage.DisplayAlert("Actualizar", response.Message, "Aceptar");
             return response.Success == 0;
         }
     }
+    
 }
