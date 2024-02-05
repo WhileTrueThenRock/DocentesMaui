@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="EFDocenteMAUI.Views.TestPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:EFDocenteMAUI.Models"
+    xmlns:tabview="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
+    x:DataType="viewmodels:CalendarViewModel"
+    BackgroundColor="Beige">
+    <VerticalStackLayout HeightRequest="650" WidthRequest="1100">
+        <tabview:SfTabView HeightRequest="500" WidthRequest="500">
+            <tabview:SfTabView.Items>
+                <tabview:SfTabItem Header="Crear evento">
+                    <tabview:SfTabItem.Content>
+                        <ScrollView>
+                            <VerticalStackLayout>
+                                <!--  Tipo del evento Binding SelectedEvent.Type  -->
+                                <Label HorizontalOptions="Center" Text="Tipo de Evento:" />
+                                <Picker
+                                    HeightRequest="50"
+                                    ItemsSource="{Binding TipoEventos}"
+                                    TextColor="White"
+                                    WidthRequest="290" />
+                                <!--  Nombre evento  -->
+                                <Label HorizontalOptions="Center" Text="Nombre Evento:" />
+                                <Entry
+                                    Text="{Binding SelectedEvent.Type}"
+                                    VerticalTextAlignment="Center"
+                                    WidthRequest="290" />
+                                <!--  Descripcion  -->
+                                <Label
+                                    Margin="0,10,0,0"
+                                    HorizontalOptions="Center"
+                                    Text="Descripcion:" />
+                                <Entry
+                                    Text="{Binding SelectedEvent.Description}"
+                                    VerticalTextAlignment="Center"
+                                    WidthRequest="290" />
+                                <!--  Añadir Imagen  -->
+                                <Label
+                                    Margin="0,10,0,0"
+                                    HorizontalOptions="Center"
+                                    Text="Añade Imagen:" />
+                                <HorizontalStackLayout HorizontalOptions="Center">
+                                    <ImageButton
+                                        HeightRequest="30"
+                                        Source="plus.png"
+                                        WidthRequest="30">
+                                        <ImageButton.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding LoadImageCommand}" NumberOfTapsRequired="1" />
+                                        </ImageButton.GestureRecognizers>
+                                    </ImageButton>
+
+                                </HorizontalStackLayout>
+                                <Label
+                                    Margin="0,20,0,0"
+                                    HorizontalOptions="Center"
+                                    Text="Fecha:" />
+                                <DatePicker
+                                    Date="{Binding DayEvents.EventDate}"
+                                    Format="dd-mm-yyyy"
+                                    HorizontalOptions="Center" />
+                                <HorizontalStackLayout HorizontalOptions="Center">
+                                    <!--  Hora Inicio  -->
+                                    <Label Text="Hora Inicio:" />
+                                    <TimePicker
+                                        BackgroundColor="Red"
+                                        Format="HH:mm"
+                                        Time="{Binding SelectedEvent.StartAt}"
+                                        WidthRequest="50" />
+                                    <!--  Hora Fin  -->
+                                    <Label Text="Hora Fin:" />
+                                    <TimePicker
+                                        BackgroundColor="Red"
+                                        Format="HH:mm"
+                                        Time="{Binding SelectedEvent.EndAt}"
+                                        WidthRequest="50" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </ScrollView>
+                    </tabview:SfTabItem.Content>
+                </tabview:SfTabItem>
+
+                <tabview:SfTabItem Header="Favorites">
+                    <tabview:SfTabItem.Content>
+                        <Grid BackgroundColor="Green" />
+                    </tabview:SfTabItem.Content>
+                </tabview:SfTabItem>
+
+                <tabview:SfTabItem Header="Contacts">
+                    <tabview:SfTabItem.Content>
+                        <Grid BackgroundColor="Blue" />
+                    </tabview:SfTabItem.Content>
+                </tabview:SfTabItem>
+            </tabview:SfTabView.Items>
+        </tabview:SfTabView>
+
+
+        <HorizontalStackLayout
+            Margin="0,20,0,0"
+            HorizontalOptions="Center"
+            WidthRequest="400">
+            <Button
+                BackgroundColor="Red"
+                Command="{Binding CreateEventCommand}"
+                Text="Crear"
+                WidthRequest="100" />
+            <Button
+                BackgroundColor="Yellow"
+                Command="{Binding ClosePopUpCommand}"
+                Text="Cancelar"
+                TextColor="Black"
+                WidthRequest="100" />
+
+            <Button
+                BackgroundColor="Red"
+                Command="{Binding DeleteEventCommand}"
+                Text="Borrar"
+                WidthRequest="100" />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

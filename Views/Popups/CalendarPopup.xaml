@@ -3,86 +3,165 @@
     x:Class="EFDocenteMAUI.Views.Popups.CalendarPopup"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+    xmlns:picker="clr-namespace:Syncfusion.Maui.Picker;assembly=Syncfusion.Maui.Picker"
+    xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Expander;assembly=Syncfusion.Maui.Expander"
+    xmlns:tabview="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
+    x:Name="thisPage"
     x:DataType="viewmodels:CalendarViewModel"
     CanBeDismissedByTappingOutsideOfPopup="False"
-    Color="White">
-    <VerticalStackLayout HeightRequest="600" WidthRequest="1100">
-        <Label
-            Margin="0,0,0,20"
-            HeightRequest="50"
-            HorizontalOptions="Center"
-            Text="Crear Evento"
-            VerticalOptions="Center"
-            WidthRequest="100" />
-        <toolkit:AvatarView
-            Margin="10,0,0,0"
-            Padding="0"
-            CornerRadius="300"
-            HeightRequest="200"
-            ImageSource="{Binding AvatarImage}"
-            IsEnabled="True"
-            StrokeThickness="2"
-            WidthRequest="200">
-            <toolkit:AvatarView.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding LoadImageCommand}" NumberOfTapsRequired="1" />
-            </toolkit:AvatarView.GestureRecognizers>
-            <VisualStateManager.VisualStateGroups>
-                <VisualStateGroup Name="CommonStates">
-                    <VisualState Name="Normal" />
-                    <VisualState Name="PointerOver">
-                        <VisualState.Setters>
-                            <Setter Property="BorderColor" Value="Red" />
-                        </VisualState.Setters>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateManager.VisualStateGroups>
-        </toolkit:AvatarView>
+    Color="Beige">
+    <VerticalStackLayout HeightRequest="650" WidthRequest="500">
+        <tabview:SfTabView HeightRequest="550" WidthRequest="350">
+            <tabview:SfTabView.Items>
+                <tabview:SfTabItem
+                    Header="Crear evento"
+                    ImageSource="crud.png"
+                    ImageTextSpacing="1">
+                    <tabview:SfTabItem.Content>
+                        <ScrollView>
+                            <VerticalStackLayout>
+                                <!--  Tipo del evento Binding SelectedEvent.Type  -->
+                                <Label
+                                    Margin="0,10,0,0"
+                                    HorizontalOptions="Center"
+                                    Text="Tipo de Evento:" />
+                                <Border
+                                    BackgroundColor="LightGreen"
+                                    StrokeShape="RoundRectangle 0,20,20,0"
+                                    StrokeThickness="2">
+                                    <syncfusion:SfExpander
+                                        x:Name="muscleExpander"
+                                        Margin="10,10,0,0"
+                                        IsExpanded="{Binding EventExpander}"
+                                        WidthRequest="200">
+                                        <syncfusion:SfExpander.Header>
+                                            <Grid>
+                                                <Label HeightRequest="40" Text="{Binding EventHeader}" />
+                                            </Grid>
+                                        </syncfusion:SfExpander.Header>
+                                        <syncfusion:SfExpander.Content>
+                                            <Grid>
+                                                <buttons:SfRadioGroup>
+                                                    <buttons:SfRadioButton IsChecked="True" Text="Actividades de clase">
+                                                        <buttons:SfRadioButton.GestureRecognizers>
+                                                            <TapGestureRecognizer
+                                                                Command="{Binding SelectedTypeEventCommand}"
+                                                                CommandParameter="actividades"
+                                                                NumberOfTapsRequired="1" />
+                                                        </buttons:SfRadioButton.GestureRecognizers>
+                                                    </buttons:SfRadioButton>
 
-        <Label
-            Margin="0,50,0,0"
-            HorizontalOptions="Center"
-            Text="Fecha:" />
-        <DatePicker
-            Date="{Binding DayEvents.EventDate}"
-            Format="dd-mm-yyyy"
-            HorizontalOptions="Center" />
-        <!--  Nombre evento  -->
-        <Label HorizontalOptions="Center" Text="Nombre Evento:" />
-        <Entry
-            Text="{Binding SelectedEvent.Type}"
-            VerticalTextAlignment="Center"
-            WidthRequest="290" />
-        <!--  Descripcion  -->
-        <Label
-            Margin="0,10,0,0"
-            HorizontalOptions="Center"
-            Text="Descripcion:" />
+                                                    <buttons:SfRadioButton Text="Entrega de trabajos">
+                                                        <buttons:SfRadioButton.GestureRecognizers>
+                                                            <TapGestureRecognizer
+                                                                Command="{Binding SelectedTypeEventCommand}"
+                                                                CommandParameter="trabajos"
+                                                                NumberOfTapsRequired="1" />
+                                                        </buttons:SfRadioButton.GestureRecognizers>
+                                                    </buttons:SfRadioButton>
 
-        <Entry
-            Text="{Binding SelectedEvent.Description}"
-            VerticalTextAlignment="Center"
-            WidthRequest="290" />
+                                                    <buttons:SfRadioButton Text="Exámenes">
+                                                        <buttons:SfRadioButton.GestureRecognizers>
+                                                            <TapGestureRecognizer
+                                                                Command="{Binding SelectedTypeEventCommand}"
+                                                                CommandParameter="examenes"
+                                                                NumberOfTapsRequired="1" />
+                                                        </buttons:SfRadioButton.GestureRecognizers>
+                                                    </buttons:SfRadioButton>
+                                                    <buttons:SfRadioButton Text="Vacaciones">
+                                                        <buttons:SfRadioButton.GestureRecognizers>
+                                                            <TapGestureRecognizer
+                                                                Command="{Binding SelectedTypeEventCommand}"
+                                                                CommandParameter="vacaciones"
+                                                                NumberOfTapsRequired="1" />
+                                                        </buttons:SfRadioButton.GestureRecognizers>
+                                                    </buttons:SfRadioButton>
+                                                </buttons:SfRadioGroup>
+                                            </Grid>
+                                        </syncfusion:SfExpander.Content>
+                                    </syncfusion:SfExpander>
+                                </Border>
 
-        <!--  Hora Inicio  -->
-        <Label
-            Margin="0,10,0,0"
-            HorizontalOptions="Center"
-            Text="Hora Inicio:" />
-        <TimePicker
-            Format="HH:mm"
-            HorizontalOptions="Center"
-            Time="{Binding SelectedEvent.StartAt}" />
-        <!--  Hora Fin  -->
-        <Label
-            Margin="0,30,0,0"
-            HorizontalOptions="Center"
-            Text="Hora Fin:" />
-        <TimePicker
-            Format="HH:mm"
-            HorizontalOptions="Center"
-            Time="{Binding SelectedEvent.EndAt}" />
+                                <!--  Nombre evento  -->
+                                <Label HorizontalOptions="Center" Text="Nombre Evento:" />
+                                <Entry
+                                    Text="{Binding SelectedEvent.Type}"
+                                    VerticalTextAlignment="Center"
+                                    WidthRequest="290" />
+                                <!--  Descripcion  -->
+                                <Label
+                                    Margin="0,10,0,0"
+                                    HorizontalOptions="Center"
+                                    Text="Descripcion:" />
+                                <Entry
+                                    Text="{Binding SelectedEvent.Description}"
+                                    VerticalTextAlignment="Center"
+                                    WidthRequest="290" />
+                                <!--  Añadir Imagen  -->
+                                <Label
+                                    Margin="0,10,0,0"
+                                    HorizontalOptions="Center"
+                                    Text="Añade Imagen:" />
+                                <HorizontalStackLayout HorizontalOptions="Center">
+                                    <ImageButton
+                                        HeightRequest="80"
+                                        Source="{Binding AvatarImage}"
+                                        WidthRequest="80">
+                                        <ImageButton.GestureRecognizers>
+
+                                            <TapGestureRecognizer Command="{Binding LoadImageCommand}" NumberOfTapsRequired="1" />
+                                        </ImageButton.GestureRecognizers>
+                                    </ImageButton>
+
+                                </HorizontalStackLayout>
+                                <Label
+                                    Margin="0,20,0,0"
+                                    HorizontalOptions="Center"
+                                    Text="Fecha:" />
+                                <DatePicker
+                                    Date="{Binding DayEvents.EventDate}"
+                                    Format="dd-mm-yyyy"
+                                    HorizontalOptions="Center" />
+                                <HorizontalStackLayout HorizontalOptions="Center">
+                                    <!--  Hora Inicio  -->
+                                    <Label Text="Hora Inicio:" />
+                                    <TimePicker
+                                        Format="HH:mm"
+                                        TextColor="Black"
+                                        Time="{Binding SelectedEvent.StartAt}"
+                                        WidthRequest="50" />
+                                    <!--  Hora Fin  -->
+                                    <Label Text="Hora Fin:" />
+                                    <TimePicker
+                                        Format="HH:mm"
+                                        TextColor="Black"
+                                        Time="{Binding SelectedEvent.EndAt}"
+                                        WidthRequest="50" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </ScrollView>
+                    </tabview:SfTabItem.Content>
+                </tabview:SfTabItem>
+
+                <tabview:SfTabItem
+                    Header="Filtros"
+                    ImageSource="loupe.png"
+                    ImageTextSpacing="1">
+                    <tabview:SfTabItem.Content>
+                        <ScrollView>
+                            <VerticalStackLayout>
+
+                                <picker:SfTimePicker x:Name="timePicker" />
+                            </VerticalStackLayout>
+                        </ScrollView>
+                    </tabview:SfTabItem.Content>
+                </tabview:SfTabItem>
+
+            </tabview:SfTabView.Items>
+        </tabview:SfTabView>
         <HorizontalStackLayout
             Margin="0,20,0,0"
             HorizontalOptions="Center"
