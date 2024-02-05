@@ -58,6 +58,9 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\calendar.png" />
+	  <None Remove="Resources\Images\crud.png" />
+	  <None Remove="Resources\Images\loupe.png" />
+	  <None Remove="Resources\Images\plus.png" />
 	  <None Remove="Resources\Images\ricardo.jpg" />
 	  <None Remove="Resources\Images\student.png" />
 	</ItemGroup>
@@ -75,6 +78,9 @@
 		<PackageReference Include="Plugin.Maui.Calendar" Version="1.1.1" />
 		<PackageReference Include="StandardSocketsHttpHandler" Version="2.2.0.8" />
 		<PackageReference Include="Syncfusion.Maui.Buttons" Version="24.2.3" />
+		<PackageReference Include="Syncfusion.Maui.Expander" Version="24.2.3" />
+		<PackageReference Include="Syncfusion.Maui.Picker" Version="24.2.3" />
+		<PackageReference Include="Syncfusion.Maui.TabView" Version="24.2.3" />
 		<PackageReference Include="Syncfusion.Maui.TreeView" Version="24.1.47" />
 		<PackageReference Include="System.Net.WebSockets" Version="4.3.0" />
 	</ItemGroup>
@@ -93,6 +99,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\RegisterUserPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\TestPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

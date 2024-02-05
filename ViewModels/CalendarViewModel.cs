@@ -41,12 +41,50 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private ImageSource avatarImage;
 
-        public CalendarViewModel() 
+        [ObservableProperty]
+        private string _eventHeader;
+
+        [ObservableProperty]
+        private bool _eventExpander;
+
+
+        public CalendarViewModel()
         {
             Culture = CultureInfo.CurrentCulture;
             SelectedEvent = new EventModel();
             GetEvents();
+            EventHeader = "Actividades de clase";
+            AvatarImage = "ricardo.jpg";
         }
+
+
+        [RelayCommand]
+        public async Task SelectedTypeEvent(string tipoEvento)
+        {
+
+            if (tipoEvento == "actividades")
+            {
+                EventHeader = "Actividades de clase";
+
+            }
+
+            else if (tipoEvento == "trabajos")
+            {
+                EventHeader = "Entrega de trabajos";
+            }
+
+            else if (tipoEvento == "examenes")
+            {
+                EventHeader = "Exámenes";
+            }
+
+            else if (tipoEvento == "vacaciones")
+            {
+                EventHeader = "Vacaciones";
+            }
+            EventExpander = false;
+        }
+
 
         [RelayCommand]
         public async Task GetEvents()
@@ -112,19 +150,19 @@ namespace EFDocenteMAUI.ViewModels
         public async Task LoadImage()
         {
             //cambiar por isEnabled observable property
-                var imagesDict = await ImageUtils.OpenImage();
-                if (imagesDict != null)
-                {
-                    AvatarImage = (ImageSource)imagesDict["imageFromStream"];
-                    AvatarImage64 = (string)imagesDict["imageBase64"];
-                }
+            var imagesDict = await ImageUtils.OpenImage();
+            if (imagesDict != null)
+            {
+                AvatarImage = (ImageSource)imagesDict["imageFromStream"];
+                AvatarImage64 = (string)imagesDict["imageBase64"];
+            }
         }
 
         public async Task<bool> UpdateImage()
         {
 
             ImageModel imagen = new ImageModel();
-           // imagen.Id = User.Id.ToString(); quitar o no
+            // imagen.Id = User.Id.ToString(); quitar o no
             var request = new RequestModel(method: "POST", route: "/imagenes/save", data: imagen, server: APIService.ImagenesServerUrl);
             imagen.Content = AvatarImage64;
 

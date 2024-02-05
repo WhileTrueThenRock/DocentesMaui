@@ -21,6 +21,9 @@
         <Tab Title="Calendar">
             <ShellContent ContentTemplate="{DataTemplate views:CalendarPage}" Route="CalendarPage" />
         </Tab>
+        <Tab Title="CalentarTest">
+            <ShellContent ContentTemplate="{DataTemplate views:TestPage}" Route="TestPage" />
+        </Tab>
     </TabBar>
 
 </Shell>
