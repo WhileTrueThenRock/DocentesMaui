@@ -10,6 +10,16 @@
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
     x:DataType="viewmodels:RegisterUserViewModel"
     BindingContext="{viewmodels:RegisterUserViewModel}">
+
+    <ContentPage.Resources>
+        <toolkit:IsNotNullConverter x:Key="IsNotNullConverter" />
+        <Style x:Key="InvalidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Red" />
+        </Style>
+        <Style x:Key="ValidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Black" />
+        </Style>
+    </ContentPage.Resources>
     <ScrollView>
         <Grid ColumnDefinitions="*,450,550,*" RowDefinitions="*,400,400,*">
             <Border
@@ -238,8 +248,18 @@
                                 Grid.Row="5"
                                 Grid.Column="1"
                                 IsEnabled="{Binding IsDataEnabled}"
-                                Text="{Binding User.Telefono}" />
-
+                                Keyboard="Numeric"
+                                Text="{Binding TelefonoString}">
+                                <Entry.Behaviors>
+                                    <toolkit:NumericValidationBehavior
+                                        Flags="ValidateOnValueChanged"
+                                        InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                        MaximumDecimalPlaces="0"
+                                        MaximumValue="999999999"
+                                        MinimumValue="600000000"
+                                        ValidStyle="{StaticResource ValidEntryStyle}" />
+                                </Entry.Behaviors>
+                            </Entry>
                             <Label
                                 Grid.Row="7"
                                 Grid.Column="0"
@@ -319,7 +339,17 @@
                                 Grid.Row="13"
                                 Grid.Column="1"
                                 IsEnabled="{Binding IsDataEnabled}"
-                                Text="{Binding User.Direccion.Cp}" />
+                                Text="{Binding CpString}">
+                                <Entry.Behaviors>
+                                    <toolkit:NumericValidationBehavior
+                                        Flags="ValidateOnValueChanged"
+                                        InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                        MaximumDecimalPlaces="0"
+                                        MaximumValue="99999"
+                                        MinimumValue="0"
+                                        ValidStyle="{StaticResource ValidEntryStyle}" />
+                                </Entry.Behaviors>
+                            </Entry>
                             <Label
                                 Grid.Row="14"
                                 Grid.Column="0"
@@ -344,7 +374,7 @@
                                 Grid.Row="16"
                                 Grid.Column="1"
                                 Margin="0,0,10,0"
-                                IsEnabled="{Binding IsDataEnabled}"
+                                IsEnabled="{Binding IsCreateMode}"
                                 Text="{Binding User.Password}" />
                         </Grid>
                         <HorizontalStackLayout HorizontalOptions="Center">
