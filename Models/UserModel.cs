@@ -33,6 +33,7 @@ namespace EFDocenteMAUI.Models
             Id=ObjectId.GenerateNewId().ToString();
             FechaNacimiento = DateTime.Now.ToString();
             Rol = "Estudiante";
+            Avatar = APIService.ImagenesServerUrl + "/avatars/defaultimage";
             Direccion = new DireccionModel();
         }
 
