@@ -13,6 +13,7 @@ namespace EFDocenteMAUI.ViewModels
     {
         [ObservableProperty]
         private UserModel user;
+        public static string UserName { get; set; }
 
         public LoginViewModel()
         {
@@ -33,6 +34,7 @@ namespace EFDocenteMAUI.ViewModels
                 if (response.Success.Equals(0))
                 {
                     await SecureStorage.Default.SetAsync("token", response.Data.ToString());
+                    UserName = User.UserName;
                     await LoadMainPage();
                     await App.Current.MainPage.DisplayAlert("Login",
                     response.Message, "ACEPTAR");

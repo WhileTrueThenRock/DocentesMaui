@@ -145,7 +145,7 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task CreateEvent()
         {
-
+            Mode = "create";
             ExecuteRequest();
         }
 
@@ -175,8 +175,9 @@ namespace EFDocenteMAUI.ViewModels
 
             ImageModel imagen = new ImageModel();
             // imagen.Id = User.Id.ToString(); quitar o no
-            var request = new RequestModel(method: "POST", route: "/imagenes/save", data: imagen, server: APIService.ImagenesServerUrl);
             imagen.Content = AvatarImage64;
+            var request = new RequestModel(method: "POST", route: "/imagenes/save", data: imagen, server: APIService.ImagenesServerUrl);
+            
 
             ResponseModel response = await APIService.ExecuteRequest(request);
 
