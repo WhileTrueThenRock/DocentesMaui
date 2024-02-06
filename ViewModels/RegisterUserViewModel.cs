@@ -48,6 +48,9 @@ namespace EFDocenteMAUI.ViewModels
 
         [ObservableProperty]
         private bool _imageChanged;
+
+        [ObservableProperty]
+        private string _filtro;
         
       
 
@@ -57,7 +60,7 @@ namespace EFDocenteMAUI.ViewModels
             IsSelectedUser = false;
             IsEditMode = false;
             ParametrosBusqueda = new ObservableCollection<string>();
-            ParametrosBusqueda = ["Nombre","Apellidos", "Grupo","Poblacion","Nombre de Usuario"];
+            ParametrosBusqueda = ["Nombre","Correo","Curso","Poblacion"];
         }
 
         [RelayCommand]
@@ -97,17 +100,26 @@ namespace EFDocenteMAUI.ViewModels
         }
 
         [RelayCommand]
-        public async Task GetUsersByName()
+        public async Task GetUsersByFiltro(string name)
         {
+            string filtro = Filtro.ToLower();
             IsListVisible = true;
             var request = new RequestModel(method: "GET",
-                                            route: "/users/all",
+                                            route: "/users/"+filtro+"/"+name,
                                             data: User,
                                             server: APIService.GestionServerUrl);
             ResponseModel response = await APIService.ExecuteRequest(request);
             if (response.Success == 0)
             {
                 UserList = JsonConvert.DeserializeObject<ObservableCollection<UserModel>>(response.Data.ToString());
+                if (UserList.Count == 0)
+                {
+                    await App.Current.MainPage.DisplayAlert("Info", "No se han encontrado resultados", "ACEPTAR");
+                }
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Info", "No se han encontrado resultados", "ACEPTAR");
             }
         }
         private bool ValidateFields()
