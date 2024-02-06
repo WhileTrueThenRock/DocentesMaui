@@ -52,10 +52,18 @@
                         Text="MOSTRAR USUARIOS"
                         WidthRequest="200" />
                     <HorizontalStackLayout Margin="5">
-                        <Picker ItemsSource="{Binding ParametrosBusqueda}" WidthRequest="180" />
-                        <Entry Text="{Binding Busqueda}" WidthRequest="220" />
+                        <Picker
+                            ItemsSource="{Binding ParametrosBusqueda}"
+                            SelectedItem="{Binding Filtro}"
+                            WidthRequest="180" />
+                        <Entry
+                            x:Name="entrdaBusqueda"
+                            Text="{Binding Busqueda}"
+                            WidthRequest="220" />
                     </HorizontalStackLayout>
                     <Button
+                        Command="{Binding GetUsersByFiltroCommand}"
+                        CommandParameter="{Binding Source={x:Reference entrdaBusqueda}, Path=Text}"
                         HorizontalOptions="Center"
                         Text="BUSCAR"
                         WidthRequest="200" />
