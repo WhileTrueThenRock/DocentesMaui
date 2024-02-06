@@ -47,6 +47,15 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private bool _eventExpander;
 
+        [ObservableProperty]
+        private string _resultadoFecha;
+
+        [ObservableProperty]
+        private DateTime _fechaIni;
+
+        [ObservableProperty]
+        private DateTime _fechaFin;
+
 
         public CalendarViewModel()
         {
@@ -55,6 +64,9 @@ namespace EFDocenteMAUI.ViewModels
             GetEvents();
             EventHeader = "Actividades de clase";
             AvatarImage = "ricardo.jpg";
+            FechaIni = new DateTime(2023, 1, 1);
+            FechaFin = DateTime.Now;
+            // ResultadoFecha = $"Años filtrados: {AnioMenor} - {AnioMayor}";
         }
 
 

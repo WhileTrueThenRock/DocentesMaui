@@ -3,15 +3,23 @@
     x:Class="EFDocenteMAUI.Views.CalendarPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
     xmlns:cal="clr-namespace:Plugin.Maui.Calendar.Controls;assembly=Plugin.Maui.Calendar"
     xmlns:models="clr-namespace:EFDocenteMAUI.Models"
+    xmlns:picker="clr-namespace:Syncfusion.Maui.Picker;assembly=Syncfusion.Maui.Picker"
+    xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Expander;assembly=Syncfusion.Maui.Expander"
+    xmlns:tabview="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
+    x:Name="thisPage"
     x:DataType="viewmodels:CalendarViewModel"
     BindingContext="{viewmodels:CalendarViewModel}">
     <ScrollView>
-        <VerticalStackLayout Padding="30,0" Spacing="25">
+        <Grid ColumnDefinitions="0,580,600,*" RowDefinitions="*,400,400,*">
+            <!--  Calendario en la fila 2, columna 2  -->
             <cal:Calendar
-                Margin="0,0,500,0"
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="0,150,0,0"
                 Culture="{Binding Culture}"
                 Events="{Binding Events}"
                 HeightRequest="500"
@@ -20,8 +28,12 @@
                 SelectedDayBackgroundColor="Red"
                 SelectedDayEvents="{Binding EventsList, Mode=TwoWay}"
                 TodayOutlineColor="Aqua"
-                WidthRequest="500" />
+                WidthRequest="450" />
+
+            <!--  Colección de eventos en la fila 3, columna 3  -->
             <CollectionView
+                Grid.Row="2"
+                Grid.Column="2"
                 ItemsSource="{Binding EventsList}"
                 SelectedItem="{Binding SelectedEvent}"
                 SelectionMode="Single">
@@ -57,11 +69,283 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
             <Button
+                Grid.Row="0"
+                Grid.Column="1"
                 Command="{Binding ShowEventPopupCommand}"
                 CommandParameter="create"
-                HeightRequest="100"
-                Text="Abrir"
-                WidthRequest="100" />
-        </VerticalStackLayout>
+                HeightRequest="20"
+                Text="Crear Evento"
+                WidthRequest="150" />
+            <Button
+                Grid.Row="0"
+                Grid.Column="2"
+                Command="{Binding ShowEventPopupCommand}"
+                CommandParameter="create"
+                HeightRequest="20"
+                Text="Filtrar por..."
+                WidthRequest="150" />
+
+            <ScrollView
+                Grid.Row="1"
+                Grid.RowSpan="2"
+                Grid.Column="2"
+                Margin="10"
+                IsVisible="True">
+                <Border>
+                    <Border.Shadow>
+                        <Shadow
+                            Brush="Black"
+                            Opacity=".5"
+                            Radius="12"
+                            Offset="10,10" />
+                    </Border.Shadow>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20,0,0,0" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Padding="10" Background="WhiteSmoke">
+
+                        <tabview:SfTabView
+                            x:Name="tabView"
+                            HeightRequest="750"
+                            WidthRequest="500">
+                            <tabview:SfTabView.Items>
+                                <tabview:SfTabItem Header="Fecha">
+                                    <tabview:SfTabItem.Content>
+                                        <VerticalStackLayout>
+                                            <!--  Boton para filtrar por fecha fabricacion  -->
+                                            <HorizontalStackLayout BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}" HeightRequest="100">
+
+                                                <picker:SfDatePicker
+                                                    x:Name="pickerIni"
+                                                    HeightRequest="20"
+                                                    Mode="Dialog"
+                                                    SelectedDate="{Binding FechaIni, Mode=TwoWay}"
+                                                    WidthRequest="50">
+                                                    <picker:SfDatePicker.HeaderView>
+                                                        <picker:PickerHeaderView
+                                                            Height="40"
+                                                            Background="MediumPurple"
+                                                            DividerColor="Red"
+                                                            Text="Desde" />
+                                                    </picker:SfDatePicker.HeaderView>
+                                                </picker:SfDatePicker>
+                                                <Button
+                                                    x:Name="pickerButtonIni"
+                                                    Margin="0,28,0,0"
+                                                    Background="MediumPurple"
+                                                    Clicked="Button_ClickedIni"
+                                                    HeightRequest="5"
+                                                    Text="Primera fecha"
+                                                    TextColor="Black"
+                                                    VerticalOptions="Start"
+                                                    WidthRequest="150" />
+                                                <Button
+                                                    x:Name="pickerButtonFin"
+                                                    Margin="130,0,0,0"
+                                                    Background="MediumPurple"
+                                                    Clicked="Button_ClickedFin"
+                                                    HeightRequest="5"
+                                                    Text="Segunda fecha"
+                                                    TextColor="Black"
+                                                    WidthRequest="150" />
+
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout>
+                                                <picker:SfDatePicker
+                                                    x:Name="pickerFin"
+                                                    HeightRequest="20"
+                                                    Mode="Dialog"
+                                                    SelectedDate="{Binding FechaFin, Mode=TwoWay}"
+                                                    WidthRequest="50">
+                                                    <picker:SfDatePicker.HeaderView>
+                                                        <picker:PickerHeaderView
+                                                            Height="40"
+                                                            Background="MediumPurple"
+                                                            DividerColor="Red"
+                                                            Text="Hasta" />
+                                                    </picker:SfDatePicker.HeaderView>
+                                                </picker:SfDatePicker>
+
+                                                <Label
+                                                    FontAttributes="Italic"
+                                                    FontSize="25"
+                                                    Text="{Binding FechaIni, StringFormat='{}{0:dd/MM/yyyy}'}"
+                                                    TextColor="Black" />
+
+                                                <Label
+                                                    Margin="150,0,0,0"
+                                                    FontAttributes="Italic"
+                                                    FontSize="25"
+                                                    Text="{Binding FechaFin, StringFormat='{}{0:dd/MM/yyyy}'}"
+                                                    TextColor="Black" />
+                                            </HorizontalStackLayout>
+
+                                            <Button
+                                                Margin="0,20,0,0"
+                                                Text="Filtrar"
+                                                WidthRequest="100" />
+
+                                            <CollectionView
+                                                Grid.Row="2"
+                                                Grid.Column="2"
+                                                ItemsSource="{Binding EventsList}"
+                                                SelectedItem="{Binding SelectedEvent}"
+                                                SelectionMode="Single">
+                                                <CollectionView.ItemTemplate>
+                                                    <DataTemplate x:DataType="models:EventModel">
+                                                        <Border>
+                                                            <VerticalStackLayout>
+                                                                <VerticalStackLayout.GestureRecognizers>
+                                                                    <TapGestureRecognizer
+                                                                        x:DataType="viewmodels:CalendarViewModel"
+                                                                        BindingContext="{Binding Source={x:Reference myPage}, Path=BindingContext}"
+                                                                        Command="{Binding ShowEventPopupCommand}"
+                                                                        CommandParameter="update"
+                                                                        NumberOfTapsRequired="2" />
+                                                                </VerticalStackLayout.GestureRecognizers>
+                                                                <ImageButton Source="{Binding Image}" />
+                                                                <Label Text="{Binding Type}" />
+                                                                <Label Text="{Binding Description}" />
+                                                                <Label Text="{Binding StartAt}" />
+                                                                <Label Text="{Binding EndAt}" />
+                                                                <VisualStateManager.VisualStateGroups>
+                                                                    <VisualStateGroup Name="CommonStates">
+                                                                        <VisualState Name="Normal" />
+                                                                        <VisualState Name="Selected">
+                                                                            <VisualState.Setters>
+                                                                                <Setter Property="Background" Value="Chocolate" />
+                                                                            </VisualState.Setters>
+                                                                        </VisualState>
+                                                                    </VisualStateGroup>
+                                                                </VisualStateManager.VisualStateGroups>
+                                                            </VerticalStackLayout>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </CollectionView.ItemTemplate>
+                                            </CollectionView>
+
+
+                                            <HorizontalStackLayout HorizontalOptions="Center">
+                                                <ImageButton Source="{Binding AvatarImage}">
+                                                    <ImageButton.GestureRecognizers>
+
+                                                        <TapGestureRecognizer Command="{Binding LoadImageCommand}" NumberOfTapsRequired="1" />
+                                                    </ImageButton.GestureRecognizers>
+                                                </ImageButton>
+                                                <HorizontalStackLayout Margin="0,55,0,0" HorizontalOptions="Center">
+                                                    <!--  Nombre Evento  -->
+                                                    <Label Margin="0,10,0,0" Text="Nombre Evento:" />
+                                                    <Entry Text="{Binding SelectedEvent.Type}" WidthRequest="290" />
+                                                </HorizontalStackLayout>
+
+                                                <!--  Descripcion  -->
+                                                <HorizontalStackLayout Margin="0,15,0,0" HorizontalOptions="Center">
+                                                    <Label
+                                                        Margin="0,10,0,0"
+                                                        HorizontalOptions="Center"
+                                                        Text="Descripcion:" />
+                                                    <Entry
+                                                        Text="{Binding SelectedEvent.Description}"
+                                                        VerticalTextAlignment="Center"
+                                                        WidthRequest="290" />
+                                                </HorizontalStackLayout>
+
+                                                <HorizontalStackLayout Margin="0,15,0,0" HorizontalOptions="Center">
+                                                    <!--  Hora Inicio  -->
+                                                    <Label Text="Hora Inicio:" />
+                                                    <TimePicker Format="HH:mm" Time="{Binding SelectedEvent.StartAt}" />
+
+                                                </HorizontalStackLayout>
+                                                <HorizontalStackLayout Margin="0,15,0,0" HorizontalOptions="Center">
+                                                    <!--  Hora Fin  -->
+                                                    <Label Text="Hora Fin:" />
+                                                    <TimePicker Format="HH:mm" Time="{Binding SelectedEvent.EndAt}" />
+                                                </HorizontalStackLayout>
+                                                <Label
+                                                    Margin="0,0,10,0"
+                                                    HorizontalTextAlignment="End"
+                                                    Text="Tipo de Evento:"
+                                                    VerticalOptions="Center" />
+                                                <Border
+                                                    BackgroundColor="LightGreen"
+                                                    StrokeShape="RoundRectangle 0,20,20,0"
+                                                    StrokeThickness="2">
+                                                    <syncfusion:SfExpander
+                                                        Margin="10,10,0,0"
+                                                        IsExpanded="{Binding EventExpander}"
+                                                        WidthRequest="200">
+                                                        <syncfusion:SfExpander.Header>
+                                                            <Grid>
+                                                                <Label HeightRequest="40" Text="{Binding EventHeader}" />
+                                                            </Grid>
+                                                        </syncfusion:SfExpander.Header>
+                                                        <syncfusion:SfExpander.Content>
+                                                            <Grid>
+                                                                <buttons:SfRadioGroup>
+                                                                    <buttons:SfRadioButton IsChecked="True" Text="Actividades de clase">
+                                                                        <buttons:SfRadioButton.GestureRecognizers>
+                                                                            <TapGestureRecognizer
+                                                                                Command="{Binding SelectedTypeEventCommand}"
+                                                                                CommandParameter="actividades"
+                                                                                NumberOfTapsRequired="1" />
+                                                                        </buttons:SfRadioButton.GestureRecognizers>
+                                                                    </buttons:SfRadioButton>
+
+                                                                    <buttons:SfRadioButton Text="Entrega de trabajos">
+                                                                        <buttons:SfRadioButton.GestureRecognizers>
+                                                                            <TapGestureRecognizer
+                                                                                Command="{Binding SelectedTypeEventCommand}"
+                                                                                CommandParameter="trabajos"
+                                                                                NumberOfTapsRequired="1" />
+                                                                        </buttons:SfRadioButton.GestureRecognizers>
+                                                                    </buttons:SfRadioButton>
+
+                                                                    <buttons:SfRadioButton Text="Exámenes">
+                                                                        <buttons:SfRadioButton.GestureRecognizers>
+                                                                            <TapGestureRecognizer
+                                                                                Command="{Binding SelectedTypeEventCommand}"
+                                                                                CommandParameter="examenes"
+                                                                                NumberOfTapsRequired="1" />
+                                                                        </buttons:SfRadioButton.GestureRecognizers>
+                                                                    </buttons:SfRadioButton>
+                                                                    <buttons:SfRadioButton Text="Vacaciones">
+                                                                        <buttons:SfRadioButton.GestureRecognizers>
+                                                                            <TapGestureRecognizer
+                                                                                Command="{Binding SelectedTypeEventCommand}"
+                                                                                CommandParameter="vacaciones"
+                                                                                NumberOfTapsRequired="1" />
+                                                                        </buttons:SfRadioButton.GestureRecognizers>
+                                                                    </buttons:SfRadioButton>
+                                                                </buttons:SfRadioGroup>
+                                                            </Grid>
+                                                        </syncfusion:SfExpander.Content>
+                                                    </syncfusion:SfExpander>
+                                                </Border>
+                                            </HorizontalStackLayout>
+
+
+                                        </VerticalStackLayout>
+                                    </tabview:SfTabItem.Content>
+                                </tabview:SfTabItem>
+
+                                <tabview:SfTabItem Header="Tipo">
+                                    <tabview:SfTabItem.Content>
+                                        <Grid BackgroundColor="Green" />
+                                    </tabview:SfTabItem.Content>
+                                </tabview:SfTabItem>
+
+                                <tabview:SfTabItem Header="Descripción">
+                                    <tabview:SfTabItem.Content>
+                                        <Grid BackgroundColor="Blue" />
+                                    </tabview:SfTabItem.Content>
+                                </tabview:SfTabItem>
+                            </tabview:SfTabView.Items>
+                        </tabview:SfTabView>
+
+
+                    </VerticalStackLayout>
+                </Border>
+            </ScrollView>
+        </Grid>
     </ScrollView>
 </ContentPage>

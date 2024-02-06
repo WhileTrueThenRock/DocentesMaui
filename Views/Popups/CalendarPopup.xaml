@@ -33,7 +33,6 @@
                                     StrokeShape="RoundRectangle 0,20,20,0"
                                     StrokeThickness="2">
                                     <syncfusion:SfExpander
-                                        x:Name="muscleExpander"
                                         Margin="10,10,0,0"
                                         IsExpanded="{Binding EventExpander}"
                                         WidthRequest="200">
@@ -84,13 +83,6 @@
                                         </syncfusion:SfExpander.Content>
                                     </syncfusion:SfExpander>
                                 </Border>
-
-                                <!--  Nombre evento  -->
-                                <Label HorizontalOptions="Center" Text="Nombre Evento:" />
-                                <Entry
-                                    Text="{Binding SelectedEvent.Type}"
-                                    VerticalTextAlignment="Center"
-                                    WidthRequest="290" />
                                 <!--  Descripcion  -->
                                 <Label
                                     Margin="0,10,0,0"
@@ -125,35 +117,23 @@
                                     Date="{Binding DayEvents.EventDate}"
                                     Format="dd-mm-yyyy"
                                     HorizontalOptions="Center" />
-                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Margin="2">
+                                <HorizontalStackLayout
+                                    Margin="2"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center">
                                     <!--  Hora Inicio  -->
                                     <Label Text="Hora Inicio:" />
-                                    <TimePicker
-                                        Format="HH:mm"
-                                        Time="{Binding SelectedEvent.StartAt}" />
+                                    <TimePicker Format="HH:mm" Time="{Binding SelectedEvent.StartAt}" />
 
                                 </HorizontalStackLayout>
-                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Margin="2">
+                                <HorizontalStackLayout
+                                    Margin="2"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center">
                                     <!--  Hora Fin  -->
                                     <Label Text="Hora Fin:" />
-                                    <TimePicker
-                                        Format="HH:mm"
-                                        Time="{Binding SelectedEvent.EndAt}"/>
+                                    <TimePicker Format="HH:mm" Time="{Binding SelectedEvent.EndAt}" />
                                 </HorizontalStackLayout>
-                            </VerticalStackLayout>
-                        </ScrollView>
-                    </tabview:SfTabItem.Content>
-                </tabview:SfTabItem>
-
-                <tabview:SfTabItem
-                    Header="Filtros"
-                    ImageSource="loupe.png"
-                    ImageTextSpacing="1">
-                    <tabview:SfTabItem.Content>
-                        <ScrollView>
-                            <VerticalStackLayout>
-
-                                <picker:SfTimePicker x:Name="timePicker" />
                             </VerticalStackLayout>
                         </ScrollView>
                     </tabview:SfTabItem.Content>
