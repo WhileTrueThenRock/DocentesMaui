@@ -3,11 +3,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EFDocenteMAUI.Models;
 using GestorChat.Views.Popups;
+using Mopups.PreBaked.PopupPages.Login;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -49,21 +54,34 @@ namespace EFDocenteMAUI.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<FileManager> _subFiles;
+        [ObservableProperty]
+        private string _userName;
+        [ObservableProperty]
+        private string _connectionState;
+        [ObservableProperty]
+        private string _chatSelection;
+        [ObservableProperty]
+        private ObservableCollection<string> _NotificationMessagesReceived;
+
 
 
         //Popups
         [ObservableProperty]
         private PrivateMessagePopup privateMessagePopup;
+        ClientWebSocket ClientWebSocket { get; set; }
+        [ObservableProperty]
+        private string messagesPrivateReceived;
 
         public MainViewModel()
         {
             MessagesReceived = new ObservableCollection<string>();
+            NotificationMessagesReceived = new ObservableCollection<string>();
             MessagesDict = new Dictionary<string, string>();
             Emojis = new ObservableCollection<string>() { "🍻", "🙋‍", "♂️", "💁‍", "♀️", "😍" };
             UserList = new ObservableCollection<string>();
-            UserList.Add("Rafa");
-            UserList.Add("Victor");
-            UserList.Add("Adrian");
+            ConnectionState = "DESCONECTADO";
+            ChatSelection = "SALA PRINCIPAL";
+            UserName = LoginViewModel.UserName;
             ImageNodeInfo = new ObservableCollection<FileManager>();
             FileManager fileManager = new FileManager()
             {
@@ -73,9 +91,14 @@ namespace EFDocenteMAUI.ViewModels
             };
             ImageNodeInfo.Add(fileManager);
             GenerateSource();
+            Conectar();
         }
 
-
+        [RelayCommand]
+        public void AddEmoji(string emoji)
+        {
+            MessageToSend += emoji;
+        }
 
         private void GenerateSource()
         {
@@ -139,26 +162,65 @@ namespace EFDocenteMAUI.ViewModels
             nodeImageInfo.Add(video);
             ImageNodeInfo = nodeImageInfo;
         }
+        public async Task Conectar()
+        {
+            ClientWebSocket = new ClientWebSocket();  // Crear una nueva instancia de ClientWebSocket.
 
+            // Construir la URI para la conexión WebSocket con el identificador del usuario. 192.168.20.12
+            Uri uri = new Uri($"ws://localhost:5000/chat-websocket?userId={UserName}");
+            ClientWebSocket.Options.SetRequestHeader("UserId", UserName);  // Configurar el encabezado UserId.
+            string token = await SecureStorage.Default.GetAsync("token");
+            ClientWebSocket.Options.SetRequestHeader("Authorization", $"Bearer {token}");
+            try
+            {
+                await ClientWebSocket.ConnectAsync(uri, CancellationToken.None);  // Intentar conectar al servidor.
+
+                // Si la conexión se establece correctamente, cambiar ConnectionState a "CONECTADO".
+                if (ClientWebSocket.State == WebSocketState.Open)
+                {
+                    ConnectionState = "CONECTADO";
+                    // Iniciar un hilo para recibir mensajes mientras la conexión esté abierta.
+                    _ = Task.Run(async () => await ReceiveMessage(ClientWebSocket));
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);  // Registrar cualquier excepción durante la conexión.
+            }
+
+
+        }
 
 
         [RelayCommand]
         public async Task ShowPrivateMessagePopup()
         {
-            //string sessionMessages = null;
-            //MessagesDict.TryGetValue(SelectedUser, out sessionMessages);
-            //if (sessionMessages != null)
-            //{
-            //    PrivateMessagesReceived += sessionMessages;
-            //}
-            //else
-            //{
-            //    PrivateMessagesReceived = string.Empty;
-            //}
 
             PrivateMessagePopup = new PrivateMessagePopup();
+            MessagesPrivateReceived = string.Empty;
+            string sessionMessage = null;
+            MessagesDict.TryGetValue(SelectedUser, out sessionMessage);
+            if (sessionMessage != null)
+            {
+                MessagesPrivateReceived = sessionMessage;
+            }
+            else
+            {
+                MessagesPrivateReceived = string.Empty;
+            }
             await App.Current.MainPage.ShowPopupAsync(PrivateMessagePopup);
         }
+        [RelayCommand]
+        public void ShowMainMsg()
+        {
+            ChatSelection = "SALA PRINCIPAL";
+        }
+        [RelayCommand]
+        public void ShowBroadCastMsg()
+        {
+            ChatSelection = "NOTIFICACIONES";
+        }
+
 
         [RelayCommand]
         public async Task ClosePopUp()
@@ -186,9 +248,151 @@ namespace EFDocenteMAUI.ViewModels
             await Shell.Current.GoToAsync("//RegisterUserPage");
         }
 
+        [RelayCommand]
+        public async Task SendMessage(string purpose)
+        {
+            // Crear una nueva instancia del modelo de mensaje de chat.
+            var messageChat = new MessageChatModel();
 
+            // Asignar el identificador de usuario y el contenido del mensaje.
+            messageChat.UserId = UserName;
+            messageChat.Content = MessageToSend;
+            messageChat.Purpose = purpose;
+            if (purpose.Equals("Private"))
+            {
+                string sessionMessages = string.Empty;
+                MessagesDict.TryGetValue(SelectedUser, out sessionMessages);
+                if (sessionMessages != null)
+                {
+                    sessionMessages += messageChat.Content + "\n";
+                    MessagesDict.Remove(SelectedUser);
+                    MessagesDict.Add(SelectedUser, sessionMessages);
+                }
+                else
+                {
+                    MessagesDict.Add(SelectedUser, PrivateMessageToSend + "\n");
+                }
+                messageChat.Content = PrivateMessageToSend;
+                messageChat.TargetUserID = SelectedUser;
+                MessagesPrivateReceived += PrivateMessageToSend + "\n";
+                PrivateMessageToSend = "";
+            }
+            // Serializar el objeto MessageChatModel a una cadena JSON.
+            var settings = new JsonSerializerSettings();
+            settings.ContractResolver = new LowercaseContractResolver();  // Utilizar el resolver de nombres en minúsculas.
+            settings.DateFormatString = "yyyy-MM-ddTHH:mm:ss";
+            var data = JsonConvert.SerializeObject(messageChat, settings);
 
+            try
+            {
+                // Verificar si la conexión WebSocket está abierta.
+                if (ClientWebSocket.State == WebSocketState.Open)
+                {
+                    // Convertir la cadena JSON a bytes y enviarla al servidor.
+                    byte[] buffer = Encoding.UTF8.GetBytes(data);
+                    await ClientWebSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
+                    MessageToSend = "";
 
+                }
+                else
+                {
+                    Debug.WriteLine("WebSocket connection is not open.");  // Registrar si la conexión WebSocket no está abierta.
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);  // Registrar cualquier excepción durante el envío del mensaje.
+            }
+        }
+
+        private async Task ReceiveMessage(ClientWebSocket webSocket)
+        {
+            try
+            {
+                Debug.WriteLine("ReceiveMessages: Inicio");
+
+                // Bucle continuo para recibir mensajes mientras la conexión esté abierta.
+                while (webSocket.State == WebSocketState.Open)
+                {
+                    Debug.WriteLine("ReceiveMessages: Esperando mensaje...");
+
+                    byte[] buffer = new byte[1024];
+
+                    // Esperar y recibir un mensaje del servidor WebSocket.
+                    var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+
+                    // Verificar si el tipo de mensaje es de texto.
+                    if (result.MessageType == WebSocketMessageType.Text)
+                    {
+                        // Decodificar el mensaje y agregarlo a la propiedad MessagesReceived.
+                        var messageChatModel = JsonConvert.DeserializeObject<MessageChatModel>(Encoding.UTF8.GetString(buffer, 0, result.Count));
+                        if (messageChatModel.Purpose.Equals("BroadCast"))
+                        {
+                            //Añado mensaje al chat general
+                            MessagesReceived.Add((string)messageChatModel.Content);
+
+                        }
+                        else if (messageChatModel.Purpose.Equals("UserList"))
+                        {
+                            UserList = JsonConvert.
+                                DeserializeObject<ObservableCollection<string>>(messageChatModel.Content.ToString());
+                        }
+                        else if (messageChatModel.Purpose.Equals("Private"))
+                        {
+                            string sessionMessages = string.Empty;
+                            MessagesDict.TryGetValue(messageChatModel.UserId, out sessionMessages);
+                            if (sessionMessages != null)
+                            {
+                                sessionMessages += messageChatModel.Content + "\n";
+                                MessagesDict.Remove(messageChatModel.UserId);
+                                MessagesDict.Add(messageChatModel.UserId, sessionMessages);
+                                if (messageChatModel.UserId.Equals(SelectedUser))
+                                {
+                                    MessagesPrivateReceived = sessionMessages;
+                                }
+                            }
+                            else
+                            {
+                                MessagesDict.Add(messageChatModel.UserId, messageChatModel.Content + "\n");
+                                if (messageChatModel.UserId == SelectedUser)
+                                {
+                                    MessagesPrivateReceived = messageChatModel.Content + "\n";
+                                }
+                            }
+                        }
+                        else if (messageChatModel.Purpose.Equals("BroadcastMsg"))
+                        {
+                            JArray jArray = (JArray)messageChatModel.Content;
+                            var msgList = jArray.ToObject<ObservableCollection<string>>();
+                            foreach (var msg in msgList)
+                            {
+                                MessagesReceived.Add(msg);
+                            }
+                        }
+                        else if (messageChatModel.Purpose.Equals("Notification"))
+                        {
+                            NotificationMessagesReceived = JsonConvert.
+                                DeserializeObject<ObservableCollection<string>>(messageChatModel.Content.ToString());
+                        }
+                        Debug.WriteLine("Received message: " + MessagesReceived);
+                    }
+                }
+
+                Debug.WriteLine("ReceiveMessages: Saliendo del bucle");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error en ReceiveMessages: " + ex.Message);  // Registrar cualquier excepción durante la recepción de mensajes.
+            }
+            finally
+            {
+                // Cerrar la conexión si todavía está abierta al salir del bucle.
+                if (webSocket.State == WebSocketState.Open)
+                {
+                    await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Cerrando conexión", CancellationToken.None);
+                }
+            }
+        }
 
 
     }
