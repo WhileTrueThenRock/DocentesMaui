@@ -74,10 +74,15 @@ namespace EFDocenteMAUI.ViewModels
         private PrivateMessagePopup privateMessagePopup;
         ClientWebSocket ClientWebSocket { get; set; }
         [ObservableProperty]
-        private string messagesPrivateReceived;
-
+        private string _messagesPrivateReceived;
+        [ObservableProperty]
+        private bool _notificacionChatGeneral;
+        [ObservableProperty]
+        private bool _notificacionChatNotificaciones;
         public MainViewModel()
-        {
+        {   
+            NotificacionChatNotificaciones = false;
+            NotificacionChatGeneral = false;
             MessagesReceived = new ObservableCollection<string>();
             NotificationMessagesReceived = new ObservableCollection<string>();
             ShowMessagesList = new ObservableCollection<string>();
@@ -105,7 +110,7 @@ namespace EFDocenteMAUI.ViewModels
         {
             MessageToSend += emoji;
         }
-
+        
         private void GenerateSource()
         {
             var nodeImageInfo = new ObservableCollection<FileManager>();
@@ -229,7 +234,7 @@ namespace EFDocenteMAUI.ViewModels
             NotificationMessage = false;
         }
         [RelayCommand]
-        public void ShowBroadCastMsg()
+        public void ShowNotificationMsg()
         {
             ChatSelection = "NOTIFICACIONES";
             LoadMessagesList(NotificationMessagesReceived);
@@ -347,6 +352,7 @@ namespace EFDocenteMAUI.ViewModels
                         var messageChatModel = JsonConvert.DeserializeObject<MessageChatModel>(Encoding.UTF8.GetString(buffer, 0, result.Count));
                         if (messageChatModel.Purpose.Equals("BroadCast"))
                         {
+                           
                             //Añado mensaje al chat general
                             MessagesReceived.Add((string)messageChatModel.Content);
 
