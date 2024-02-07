@@ -59,6 +59,11 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private DateTime _fechaFin;
 
+        [ObservableProperty]
+        private bool _isCreateTabVisible;
+
+        [ObservableProperty]
+        private bool _isUpdateTabVisible;
 
         public CalendarViewModel()
         {
@@ -171,7 +176,6 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task LoadImage()
         {
-            //cambiar por isEnabled observable property
             var imagesDict = await ImageUtils.OpenImage();
             if (imagesDict != null)
             {
@@ -201,9 +205,17 @@ namespace EFDocenteMAUI.ViewModels
             Mode = mode;
             if (Mode.Equals("create"))
             {
+                IsCreateTabVisible = true;
+                IsUpdateTabVisible = false;
+
                 DayEvents.Events.Clear();
                 DayEvents.Id = ObjectId.GenerateNewId().ToString();
                 SelectedEvent = new EventModel();
+            }
+            else if(Mode.Equals("update"))
+            {
+                IsCreateTabVisible = false;
+                IsUpdateTabVisible = true;
             }
             CalendarPopup = new CalendarPopup();
             await App.Current.MainPage.ShowPopupAsync(CalendarPopup);
