@@ -61,9 +61,13 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private string _chatSelection;
         [ObservableProperty]
-        private ObservableCollection<string> _NotificationMessagesReceived;
+        private ObservableCollection<string> _notificationMessagesReceived;
 
+        [ObservableProperty]
+        private ObservableCollection<string> _showMessagesList;
 
+        [ObservableProperty]
+        private bool _notificationMessage;
 
         //Popups
         [ObservableProperty]
@@ -76,6 +80,7 @@ namespace EFDocenteMAUI.ViewModels
         {
             MessagesReceived = new ObservableCollection<string>();
             NotificationMessagesReceived = new ObservableCollection<string>();
+            ShowMessagesList = new ObservableCollection<string>();
             MessagesDict = new Dictionary<string, string>();
             Emojis = new ObservableCollection<string>() { "🍻", "🙋‍", "♂️", "💁‍", "♀️", "😍" };
             UserList = new ObservableCollection<string>();
@@ -92,6 +97,7 @@ namespace EFDocenteMAUI.ViewModels
             ImageNodeInfo.Add(fileManager);
             GenerateSource();
             Conectar();
+            ShowMainMsg();
         }
 
         [RelayCommand]
@@ -210,15 +216,24 @@ namespace EFDocenteMAUI.ViewModels
             }
             await App.Current.MainPage.ShowPopupAsync(PrivateMessagePopup);
         }
+
+        public void LoadMessagesList(ObservableCollection<string> lista)
+        {
+            ShowMessagesList = lista;
+        }
         [RelayCommand]
         public void ShowMainMsg()
         {
             ChatSelection = "SALA PRINCIPAL";
+            LoadMessagesList(MessagesReceived);
+            NotificationMessage = false;
         }
         [RelayCommand]
         public void ShowBroadCastMsg()
         {
             ChatSelection = "NOTIFICACIONES";
+            LoadMessagesList(NotificationMessagesReceived);
+            NotificationMessage = true;
         }
 
 
@@ -258,6 +273,10 @@ namespace EFDocenteMAUI.ViewModels
             messageChat.UserId = UserName;
             messageChat.Content = MessageToSend;
             messageChat.Purpose = purpose;
+            if (NotificationMessage)
+            {
+                messageChat.Purpose = "Notification";
+            }
             if (purpose.Equals("Private"))
             {
                 string sessionMessages = string.Empty;
@@ -369,10 +388,20 @@ namespace EFDocenteMAUI.ViewModels
                                 MessagesReceived.Add(msg);
                             }
                         }
+                        else if (messageChatModel.Purpose.Equals("NotificationMsg"))
+                        {
+                            JArray jArray = (JArray)messageChatModel.Content;
+                            var msgList = jArray.ToObject<ObservableCollection<string>>();
+                            foreach (var msg in msgList)
+                            {
+                                NotificationMessagesReceived.Add(msg);
+                               
+                            }
+                            
+                        }
                         else if (messageChatModel.Purpose.Equals("Notification"))
                         {
-                            NotificationMessagesReceived = JsonConvert.
-                                DeserializeObject<ObservableCollection<string>>(messageChatModel.Content.ToString());
+                            NotificationMessagesReceived.Add((string)messageChatModel.Content);
                         }
                         Debug.WriteLine("Received message: " + MessagesReceived);
                     }
