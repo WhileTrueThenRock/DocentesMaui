@@ -71,9 +71,9 @@ namespace EFDocenteMAUI.ViewModels
             {   
                 string[] fechamodificada = User.FechaNacimiento.Replace(" 0:00:00", " ").Split(' ');
                 User.FechaNacimiento = fechamodificada[0];
-                User.Avatar = APIService.ImagenesServerUrl + "/avatars/" + User.Id.ToString();
+                User.Avatar = APIService.ImagenesServerUrl + "/images/" + User.Id.ToString();
                 var request = new RequestModel(method: "POST",
-                                                route: "/users/update",
+                                                route: "/events/update",
                                                 data: User,
                                                 server: APIService.GestionServerUrl);
                 ResponseModel response = await APIService.ExecuteRequest(request);
