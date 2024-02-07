@@ -9,8 +9,8 @@ namespace EFDocenteMAUI.Models
     internal class APIService
     {
         // Constantes que representan las URL de los servidores
-        public const string GestionServerUrl = "http://127.0.0.1:5000";
-        public const string ImagenesServerUrl = "http://127.0.0.1:12061";
+        public const string GestionServerUrl = "http://192.168.20.10:5000";
+        public const string ImagenesServerUrl = "http://192.168.20.10:12061";
 
         // Método para ejecutar una solicitud HTTP y obtener una respuesta asincrónica
         public static async Task<ResponseModel> ExecuteRequest(RequestModel requestModel)

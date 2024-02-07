@@ -33,7 +33,8 @@
             <!--  Colección de eventos en la fila 3, columna 3  -->
             <CollectionView
                 Grid.Row="2"
-                Grid.Column="2"
+                Grid.Column="1"
+                Margin="10,0,0,0"
                 ItemsSource="{Binding EventsList}"
                 SelectedItem="{Binding SelectedEvent}"
                 SelectionMode="Single">
@@ -49,7 +50,7 @@
                                         CommandParameter="update"
                                         NumberOfTapsRequired="2" />
                                 </VerticalStackLayout.GestureRecognizers>
-                                <Label Text="{Binding Type}" TextColor="Black" />
+                                <Label Text="{Binding Type}" />
                                 <Label Text="{Binding Description}" />
                                 <Label Text="{Binding StartAt}" />
                                 <Label Text="{Binding EndAt}" />
@@ -185,143 +186,106 @@
                                                 Text="Filtrar"
                                                 WidthRequest="100" />
 
-                                            <CollectionView
-                                                Grid.Row="2"
-                                                Grid.Column="2"
-                                                ItemsSource="{Binding EventsList}"
-                                                SelectedItem="{Binding SelectedEvent}"
-                                                SelectionMode="Single">
-                                                <CollectionView.ItemTemplate>
-                                                    <DataTemplate x:DataType="models:EventModel">
-                                                        <Border>
-                                                            <VerticalStackLayout>
-                                                                <VerticalStackLayout.GestureRecognizers>
-                                                                    <TapGestureRecognizer
-                                                                        x:DataType="viewmodels:CalendarViewModel"
-                                                                        BindingContext="{Binding Source={x:Reference myPage}, Path=BindingContext}"
-                                                                        Command="{Binding ShowEventPopupCommand}"
-                                                                        CommandParameter="update"
-                                                                        NumberOfTapsRequired="2" />
-                                                                </VerticalStackLayout.GestureRecognizers>
-                                                                <ImageButton Source="{Binding Image}" />
-                                                                <Label Text="{Binding Type}" />
-                                                                <Label Text="{Binding Description}" />
-                                                                <Label Text="{Binding StartAt}" />
-                                                                <Label Text="{Binding EndAt}" />
-                                                                <VisualStateManager.VisualStateGroups>
-                                                                    <VisualStateGroup Name="CommonStates">
-                                                                        <VisualState Name="Normal" />
-                                                                        <VisualState Name="Selected">
-                                                                            <VisualState.Setters>
-                                                                                <Setter Property="Background" Value="Chocolate" />
-                                                                            </VisualState.Setters>
-                                                                        </VisualState>
-                                                                    </VisualStateGroup>
-                                                                </VisualStateManager.VisualStateGroups>
-                                                            </VerticalStackLayout>
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </CollectionView.ItemTemplate>
-                                            </CollectionView>
 
+                                            <ImageButton
+                                                HeightRequest="80"
+                                                Source="{Binding AvatarImage}"
+                                                WidthRequest="80">
+                                                <ImageButton.GestureRecognizers>
 
-                                            <HorizontalStackLayout HorizontalOptions="Center">
-                                                <ImageButton Source="{Binding AvatarImage}">
-                                                    <ImageButton.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding LoadImageCommand}" NumberOfTapsRequired="1" />
+                                                </ImageButton.GestureRecognizers>
+                                            </ImageButton>
 
-                                                        <TapGestureRecognizer Command="{Binding LoadImageCommand}" NumberOfTapsRequired="1" />
-                                                    </ImageButton.GestureRecognizers>
-                                                </ImageButton>
-                                                <HorizontalStackLayout Margin="0,55,0,0" HorizontalOptions="Center">
-                                                    <!--  Nombre Evento  -->
-                                                    <Label Margin="0,10,0,0" Text="Nombre Evento:" />
-                                                    <Entry Text="{Binding SelectedEvent.Type}" WidthRequest="290" />
-                                                </HorizontalStackLayout>
-
-                                                <!--  Descripcion  -->
-                                                <HorizontalStackLayout Margin="0,15,0,0" HorizontalOptions="Center">
-                                                    <Label
-                                                        Margin="0,10,0,0"
-                                                        HorizontalOptions="Center"
-                                                        Text="Descripcion:" />
-                                                    <Entry
-                                                        Text="{Binding SelectedEvent.Description}"
-                                                        VerticalTextAlignment="Center"
-                                                        WidthRequest="290" />
-                                                </HorizontalStackLayout>
-
-                                                <HorizontalStackLayout Margin="0,15,0,0" HorizontalOptions="Center">
-                                                    <!--  Hora Inicio  -->
-                                                    <Label Text="Hora Inicio:" />
-                                                    <TimePicker Format="HH:mm" Time="{Binding SelectedEvent.StartAt}" />
-
-                                                </HorizontalStackLayout>
-                                                <HorizontalStackLayout Margin="0,15,0,0" HorizontalOptions="Center">
-                                                    <!--  Hora Fin  -->
-                                                    <Label Text="Hora Fin:" />
-                                                    <TimePicker Format="HH:mm" Time="{Binding SelectedEvent.EndAt}" />
-                                                </HorizontalStackLayout>
-                                                <Label
-                                                    Margin="0,0,10,0"
-                                                    HorizontalTextAlignment="End"
-                                                    Text="Tipo de Evento:"
-                                                    VerticalOptions="Center" />
-                                                <Border
-                                                    BackgroundColor="LightGreen"
-                                                    StrokeShape="RoundRectangle 0,20,20,0"
-                                                    StrokeThickness="2">
-                                                    <syncfusion:SfExpander
-                                                        Margin="10,10,0,0"
-                                                        IsExpanded="{Binding EventExpander}"
-                                                        WidthRequest="200">
-                                                        <syncfusion:SfExpander.Header>
-                                                            <Grid>
-                                                                <Label HeightRequest="40" Text="{Binding EventHeader}" />
-                                                            </Grid>
-                                                        </syncfusion:SfExpander.Header>
-                                                        <syncfusion:SfExpander.Content>
-                                                            <Grid>
-                                                                <buttons:SfRadioGroup>
-                                                                    <buttons:SfRadioButton IsChecked="True" Text="Actividades de clase">
-                                                                        <buttons:SfRadioButton.GestureRecognizers>
-                                                                            <TapGestureRecognizer
-                                                                                Command="{Binding SelectedTypeEventCommand}"
-                                                                                CommandParameter="actividades"
-                                                                                NumberOfTapsRequired="1" />
-                                                                        </buttons:SfRadioButton.GestureRecognizers>
-                                                                    </buttons:SfRadioButton>
-
-                                                                    <buttons:SfRadioButton Text="Entrega de trabajos">
-                                                                        <buttons:SfRadioButton.GestureRecognizers>
-                                                                            <TapGestureRecognizer
-                                                                                Command="{Binding SelectedTypeEventCommand}"
-                                                                                CommandParameter="trabajos"
-                                                                                NumberOfTapsRequired="1" />
-                                                                        </buttons:SfRadioButton.GestureRecognizers>
-                                                                    </buttons:SfRadioButton>
-
-                                                                    <buttons:SfRadioButton Text="Exámenes">
-                                                                        <buttons:SfRadioButton.GestureRecognizers>
-                                                                            <TapGestureRecognizer
-                                                                                Command="{Binding SelectedTypeEventCommand}"
-                                                                                CommandParameter="examenes"
-                                                                                NumberOfTapsRequired="1" />
-                                                                        </buttons:SfRadioButton.GestureRecognizers>
-                                                                    </buttons:SfRadioButton>
-                                                                    <buttons:SfRadioButton Text="Vacaciones">
-                                                                        <buttons:SfRadioButton.GestureRecognizers>
-                                                                            <TapGestureRecognizer
-                                                                                Command="{Binding SelectedTypeEventCommand}"
-                                                                                CommandParameter="vacaciones"
-                                                                                NumberOfTapsRequired="1" />
-                                                                        </buttons:SfRadioButton.GestureRecognizers>
-                                                                    </buttons:SfRadioButton>
-                                                                </buttons:SfRadioGroup>
-                                                            </Grid>
-                                                        </syncfusion:SfExpander.Content>
-                                                    </syncfusion:SfExpander>
-                                                </Border>
+                                            <HorizontalStackLayout Margin="0,55,0,0" HorizontalOptions="Center">
+                                                <!--  Nombre Evento  -->
+                                                <Label Margin="0,10,0,0" Text="Nombre Evento:" />
+                                                <Entry Text="{Binding SelectedEvent.Type}" WidthRequest="290" />
                                             </HorizontalStackLayout>
+
+                                            <!--  Descripcion  -->
+                                            <HorizontalStackLayout Margin="0,15,0,0" HorizontalOptions="Center">
+                                                <Label
+                                                    Margin="0,10,0,0"
+                                                    HorizontalOptions="Center"
+                                                    Text="Descripcion:" />
+                                                <Entry
+                                                    Text="{Binding SelectedEvent.Description}"
+                                                    VerticalTextAlignment="Center"
+                                                    WidthRequest="290" />
+                                            </HorizontalStackLayout>
+
+                                            <HorizontalStackLayout Margin="0,15,0,0" HorizontalOptions="Center">
+                                                <!--  Hora Inicio  -->
+                                                <Label Text="Hora Inicio:" />
+                                                <TimePicker Format="HH:mm" Time="{Binding SelectedEvent.StartAt}" />
+
+                                            </HorizontalStackLayout>
+                                            <HorizontalStackLayout Margin="0,15,0,0" HorizontalOptions="Center">
+                                                <!--  Hora Fin  -->
+                                                <Label Text="Hora Fin:" />
+                                                <TimePicker Format="HH:mm" Time="{Binding SelectedEvent.EndAt}" />
+                                            </HorizontalStackLayout>
+                                            <Label
+                                                Margin="0,0,10,0"
+                                                HorizontalTextAlignment="Center"
+                                                Text="Tipo de Evento:"
+                                                VerticalOptions="Center" />
+                                            <Border
+                                                BackgroundColor="LightGreen"
+                                                StrokeShape="RoundRectangle 0,20,20,0"
+                                                StrokeThickness="2">
+                                                <syncfusion:SfExpander
+                                                    Margin="10,10,0,0"
+                                                    IsExpanded="{Binding EventExpander}"
+                                                    WidthRequest="200">
+                                                    <syncfusion:SfExpander.Header>
+                                                        <Grid>
+                                                            <Label HeightRequest="40" Text="{Binding SelectedEvent.Type}" />
+                                                        </Grid>
+                                                    </syncfusion:SfExpander.Header>
+                                                    <syncfusion:SfExpander.Content>
+                                                        <Grid>
+                                                            <buttons:SfRadioGroup>
+                                                                <buttons:SfRadioButton IsChecked="True" Text="Actividades de clase">
+                                                                    <buttons:SfRadioButton.GestureRecognizers>
+                                                                        <TapGestureRecognizer
+                                                                            Command="{Binding SelectedTypeEventCommand}"
+                                                                            CommandParameter="actividades"
+                                                                            NumberOfTapsRequired="1" />
+                                                                    </buttons:SfRadioButton.GestureRecognizers>
+                                                                </buttons:SfRadioButton>
+
+                                                                <buttons:SfRadioButton Text="Entrega de trabajos">
+                                                                    <buttons:SfRadioButton.GestureRecognizers>
+                                                                        <TapGestureRecognizer
+                                                                            Command="{Binding SelectedTypeEventCommand}"
+                                                                            CommandParameter="trabajos"
+                                                                            NumberOfTapsRequired="1" />
+                                                                    </buttons:SfRadioButton.GestureRecognizers>
+                                                                </buttons:SfRadioButton>
+
+                                                                <buttons:SfRadioButton Text="Exámenes">
+                                                                    <buttons:SfRadioButton.GestureRecognizers>
+                                                                        <TapGestureRecognizer
+                                                                            Command="{Binding SelectedTypeEventCommand}"
+                                                                            CommandParameter="examenes"
+                                                                            NumberOfTapsRequired="1" />
+                                                                    </buttons:SfRadioButton.GestureRecognizers>
+                                                                </buttons:SfRadioButton>
+                                                                <buttons:SfRadioButton Text="Vacaciones">
+                                                                    <buttons:SfRadioButton.GestureRecognizers>
+                                                                        <TapGestureRecognizer
+                                                                            Command="{Binding SelectedTypeEventCommand}"
+                                                                            CommandParameter="vacaciones"
+                                                                            NumberOfTapsRequired="1" />
+                                                                    </buttons:SfRadioButton.GestureRecognizers>
+                                                                </buttons:SfRadioButton>
+                                                            </buttons:SfRadioGroup>
+                                                        </Grid>
+                                                    </syncfusion:SfExpander.Content>
+                                                </syncfusion:SfExpander>
+                                            </Border>
 
 
                                         </VerticalStackLayout>

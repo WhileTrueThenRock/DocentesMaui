@@ -15,6 +15,9 @@ namespace EFDocenteMAUI.ViewModels
     internal partial class CalendarViewModel : ObservableObject
     {
         [ObservableProperty]
+        private UserModel _user;
+
+        [ObservableProperty]
         private CultureInfo _culture;
 
         [ObservableProperty]
@@ -59,11 +62,11 @@ namespace EFDocenteMAUI.ViewModels
 
         public CalendarViewModel()
         {
+            User = new UserModel();
             Culture = CultureInfo.CurrentCulture;
             SelectedEvent = new EventModel();
             GetEvents();
             EventHeader = "Actividades de clase";
-            AvatarImage = "ricardo.jpg";
             FechaIni = new DateTime(2023, 1, 1);
             FechaFin = DateTime.Now;
             // ResultadoFecha = $"Años filtrados: {AnioMenor} - {AnioMayor}";
@@ -125,21 +128,28 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task ExecuteRequest()
         {
-            DayEvents.Events.Clear();
-            DayEvents.Events.Add(SelectedEvent); //selectedEvent es el popup
-            string[] dateArray = DayEvents.EventDate.Split(' ');
-            DayEvents.EventDate = dateArray[0];
-            var request = new RequestModel(method: "POST",
-                                          route: "/events/" + Mode,
-                                          data: DayEvents,
-                                          server: APIService.GestionServerUrl);
-            var response = await APIService.ExecuteRequest(request);
-            if (response.Success == 0)
+            bool okSaveImage = await UpdateImage();
+            if (okSaveImage)
             {
-                App.Current.MainPage.DisplayAlert("Eventos", response.Message, "Aceptar");
-                GetEvents();
-                ClosePopUp();
+                DayEvents.Events.Clear();
+                DayEvents.Events.Add(SelectedEvent); //selectedEvent es el popup
+                string[] dateArray = DayEvents.EventDate.Split(' ');
+                DayEvents.EventDate = dateArray[0];
+                User.Avatar = APIService.ImagenesServerUrl + "/images/" + User.Id.ToString();
+                SelectedEvent.Type = EventHeader;
+                var request = new RequestModel(method: "POST",
+                                              route: "/events/" + Mode,
+                                              data: DayEvents,
+                                              server: APIService.GestionServerUrl);
+                var response = await APIService.ExecuteRequest(request);
+                if (response.Success == 0)
+                {
+                    App.Current.MainPage.DisplayAlert("Eventos", response.Message, "Aceptar");
+                    GetEvents();
+                    ClosePopUp();
+                }
             }
+
         }
 
         [RelayCommand]
@@ -172,12 +182,11 @@ namespace EFDocenteMAUI.ViewModels
 
         public async Task<bool> UpdateImage()
         {
-
             ImageModel imagen = new ImageModel();
-            // imagen.Id = User.Id.ToString(); quitar o no
+            imagen.Id = SelectedEvent.Id.ToString(); //Linea modificada
             imagen.Content = AvatarImage64;
-            var request = new RequestModel(method: "POST", route: "/imagenes/save", data: imagen, server: APIService.ImagenesServerUrl);
-            
+            var request = new RequestModel(method: "POST", route: "/images/save", data: imagen, server: APIService.ImagenesServerUrl);
+
 
             ResponseModel response = await APIService.ExecuteRequest(request);
 
