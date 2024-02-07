@@ -37,7 +37,7 @@
                     BackgroundColor="Transparent"
                     BorderColor="Black"
                     BorderWidth="1"
-                    Command="{Binding ShowBroadCastMsgCommand}"
+                    Command="{Binding ShowNotificationMsgCommand}"
                     CornerRadius="5"
                     Text="NOTIFICACIONES"
                     TextColor="Black" />
@@ -171,6 +171,7 @@
                             HorizontalOptions="Center"
                             Text="ENVIAR"
                             WidthRequest="100" />
+
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
 
