@@ -128,7 +128,7 @@
                         BackgroundColor="Aqua"
                         HeightRequest="450"
                         HorizontalOptions="Center"
-                        ItemsSource="{Binding MessagesReceived}"
+                        ItemsSource="{Binding ShowMessagesList}"
                         ItemsUpdatingScrollMode="KeepLastItemInView"
                         WidthRequest="500">
                         <CollectionView.ItemTemplate>
