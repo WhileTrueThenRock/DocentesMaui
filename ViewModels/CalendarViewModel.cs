@@ -60,10 +60,16 @@ namespace EFDocenteMAUI.ViewModels
         private DateTime _fechaFin;
 
         [ObservableProperty]
-        private bool _isCreateTabVisible;
+        private bool _isCreateVisible;
 
         [ObservableProperty]
-        private bool _isUpdateTabVisible;
+        private bool _isUpdateVisible;
+
+        [ObservableProperty]
+        private bool _isDeleteVisible;
+
+        [ObservableProperty]
+        private string _headerTabName;
 
         public CalendarViewModel()
         {
@@ -140,7 +146,7 @@ namespace EFDocenteMAUI.ViewModels
                 DayEvents.Events.Add(SelectedEvent); //selectedEvent es el popup
                 string[] dateArray = DayEvents.EventDate.Split(' ');
                 DayEvents.EventDate = dateArray[0];
-                User.Avatar = APIService.ImagenesServerUrl + "/images/" + User.Id.ToString();
+                SelectedEvent.Image= APIService.ImagenesServerUrl + "/images/" + SelectedEvent.Id.ToString();
                 SelectedEvent.Type = EventHeader;
                 var request = new RequestModel(method: "POST",
                                               route: "/events/" + Mode,
@@ -161,6 +167,13 @@ namespace EFDocenteMAUI.ViewModels
         public async Task CreateEvent()
         {
             Mode = "create";
+            ExecuteRequest();
+        }
+
+        [RelayCommand]
+        public async Task UpdateEvent()
+        {
+            Mode = "update";
             ExecuteRequest();
         }
 
@@ -194,7 +207,6 @@ namespace EFDocenteMAUI.ViewModels
 
             ResponseModel response = await APIService.ExecuteRequest(request);
 
-            await App.Current.MainPage.DisplayAlert("Actualizar", response.Message, "Aceptar");
             return response.Success == 0;
         }
 
@@ -205,8 +217,12 @@ namespace EFDocenteMAUI.ViewModels
             Mode = mode;
             if (Mode.Equals("create"))
             {
-                IsCreateTabVisible = true;
-                IsUpdateTabVisible = false;
+                HeaderTabName = "Crear Evento";
+                IsCreateVisible = true;
+                IsUpdateVisible = false;
+                IsDeleteVisible = false;
+                AvatarImage = APIService.ImagenesServerUrl+"/images/default";
+
 
                 DayEvents.Events.Clear();
                 DayEvents.Id = ObjectId.GenerateNewId().ToString();
@@ -214,8 +230,11 @@ namespace EFDocenteMAUI.ViewModels
             }
             else if(Mode.Equals("update"))
             {
-                IsCreateTabVisible = false;
-                IsUpdateTabVisible = true;
+                HeaderTabName = "Editar Evento";
+                IsCreateVisible = false;
+                IsUpdateVisible = true;
+                IsDeleteVisible = true;
+                AvatarImage = SelectedEvent.Image;
             }
             CalendarPopup = new CalendarPopup();
             await App.Current.MainPage.ShowPopupAsync(CalendarPopup);
