@@ -193,7 +193,7 @@ namespace EFDocenteMAUI.ViewModels
             ClientWebSocket = new ClientWebSocket();  // Crear una nueva instancia de ClientWebSocket.
 
             // Construir la URI para la conexión WebSocket con el identificador del usuario. 192.168.20.12
-            Uri uri = new Uri($"ws://localhost:5000/chat-websocket?userId={UserName}");
+            Uri uri = new Uri($"ws://192.168.20.10:5000/chat-websocket?userId={UserName}");
             ClientWebSocket.Options.SetRequestHeader("UserId", UserName);  // Configurar el encabezado UserId.
             string token = await SecureStorage.Default.GetAsync("token");
             ClientWebSocket.Options.SetRequestHeader("Authorization", $"Bearer {token}");

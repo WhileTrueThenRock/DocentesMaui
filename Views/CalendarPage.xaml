@@ -104,7 +104,7 @@
                         <RoundRectangle CornerRadius="20,0,0,0" />
                     </Border.StrokeShape>
                     <VerticalStackLayout Padding="10" Background="WhiteSmoke">
-
+                    <!--TAB 2-->
                         <tabview:SfTabView
                             x:Name="tabView"
                             HeightRequest="750"
