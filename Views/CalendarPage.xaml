@@ -104,7 +104,7 @@
                         <RoundRectangle CornerRadius="20,0,0,0" />
                     </Border.StrokeShape>
                     <VerticalStackLayout Padding="10" Background="WhiteSmoke">
-                    <!--TAB 2-->
+                        <!--  TAB 2  -->
                         <tabview:SfTabView
                             x:Name="tabView"
                             HeightRequest="750"
@@ -118,8 +118,10 @@
 
                                                 <picker:SfDatePicker
                                                     x:Name="pickerIni"
+                                                    CancelButtonClicked="pickerIni_CancelButtonClicked"
                                                     HeightRequest="20"
                                                     Mode="Dialog"
+                                                    OkButtonClicked="pickerIni_CancelButtonClicked"
                                                     SelectedDate="{Binding FechaIni, Mode=TwoWay}"
                                                     WidthRequest="50">
                                                     <picker:SfDatePicker.HeaderView>
@@ -129,6 +131,14 @@
                                                             DividerColor="Red"
                                                             Text="Desde" />
                                                     </picker:SfDatePicker.HeaderView>
+                                                    <picker:SfDatePicker.FooterView>
+                                                        <picker:PickerFooterView
+                                                            Height="40"
+                                                            Background="Gray"
+                                                            CancelButtonText="Cancelar"
+                                                            OkButtonText="Ok"
+                                                            ShowOkButton="True" />
+                                                    </picker:SfDatePicker.FooterView>
                                                 </picker:SfDatePicker>
                                                 <Button
                                                     x:Name="pickerButtonIni"
@@ -154,8 +164,10 @@
                                             <HorizontalStackLayout>
                                                 <picker:SfDatePicker
                                                     x:Name="pickerFin"
+                                                    CancelButtonClicked="pickerFin_OkButtonClicked"
                                                     HeightRequest="20"
                                                     Mode="Dialog"
+                                                    OkButtonClicked="pickerFin_OkButtonClicked"
                                                     SelectedDate="{Binding FechaFin, Mode=TwoWay}"
                                                     WidthRequest="50">
                                                     <picker:SfDatePicker.HeaderView>
@@ -165,6 +177,14 @@
                                                             DividerColor="Red"
                                                             Text="Hasta" />
                                                     </picker:SfDatePicker.HeaderView>
+                                                    <picker:SfDatePicker.FooterView>
+                                                        <picker:PickerFooterView
+                                                            Height="40"
+                                                            Background="Gray"
+                                                            CancelButtonText="Cancelar"
+                                                            OkButtonText="Ok"
+                                                            ShowOkButton="True" />
+                                                    </picker:SfDatePicker.FooterView>
                                                 </picker:SfDatePicker>
 
                                                 <Label
@@ -183,8 +203,52 @@
 
                                             <Button
                                                 Margin="0,20,0,0"
+                                                Command="{Binding FiltrarFechaCommand}"
                                                 Text="Filtrar"
                                                 WidthRequest="100" />
+
+                                            <CollectionView
+                                                Grid.Row="2"
+                                                Grid.Column="1"
+                                                Margin="10,150,0,0"
+                                                ItemsSource="{Binding EventsFiltered}"
+                                                SelectedItem="{Binding SelectedEvent}"
+                                                SelectionMode="Single">
+                                                <CollectionView.ItemTemplate>
+                                                    <DataTemplate x:DataType="models:EventModel">
+                                                        <Border>
+                                                            <VerticalStackLayout>
+                                                                <VerticalStackLayout.GestureRecognizers>
+                                                                    <TapGestureRecognizer
+                                                                        x:DataType="viewmodels:CalendarViewModel"
+                                                                        BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
+                                                                        Command="{Binding ShowEventPopupCommand}"
+                                                                        CommandParameter="update"
+                                                                        NumberOfTapsRequired="2" />
+                                                                </VerticalStackLayout.GestureRecognizers>
+                                                                <Image
+                                                                    HeightRequest="50"
+                                                                    Source="{Binding Image}"
+                                                                    WidthRequest="50" />
+                                                                <Label Text="{Binding Type}" />
+                                                                <Label Text="{Binding Description}" />
+                                                                <Label Text="{Binding StartAt}" />
+                                                                <Label Text="{Binding EndAt}" />
+                                                                <VisualStateManager.VisualStateGroups>
+                                                                    <VisualStateGroup Name="CommonStates">
+                                                                        <VisualState Name="Normal" />
+                                                                        <VisualState Name="Selected">
+                                                                            <VisualState.Setters>
+                                                                                <Setter Property="Background" Value="Chocolate" />
+                                                                            </VisualState.Setters>
+                                                                        </VisualState>
+                                                                    </VisualStateGroup>
+                                                                </VisualStateManager.VisualStateGroups>
+                                                            </VerticalStackLayout>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </CollectionView.ItemTemplate>
+                                            </CollectionView>
 
                                         </VerticalStackLayout>
                                     </tabview:SfTabItem.Content>

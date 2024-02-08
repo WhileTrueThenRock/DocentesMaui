@@ -14,8 +14,19 @@ public partial class CalendarPage : ContentPage
     {
         this.pickerIni.IsOpen = true;
     }
+
     private void Button_ClickedFin(object sender, System.EventArgs e)
     {
         this.pickerFin.IsOpen = true;
+    }
+
+    private void pickerFin_OkButtonClicked(object sender, EventArgs e)
+    {
+        this.pickerFin.IsOpen = false;
+    }
+
+    private void pickerIni_CancelButtonClicked(object sender, EventArgs e)
+    {
+        this.pickerIni.IsOpen = false;
     }
 }
