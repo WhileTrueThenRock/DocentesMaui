@@ -387,7 +387,6 @@ namespace EFDocenteMAUI.ViewModels
             }
             response.Success = 0;
 
-            //await App.Current.MainPage.DisplayAlert("Actualizar", response.Message, "Aceptar");
             return response.Success == 0;
         }
     }
