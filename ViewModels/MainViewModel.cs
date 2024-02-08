@@ -79,8 +79,20 @@ namespace EFDocenteMAUI.ViewModels
         private bool _notificacionChatGeneral;
         [ObservableProperty]
         private bool _notificacionChatNotificaciones;
+        [ObservableProperty]
+        private ImageSource _imageMainChat;
+        [ObservableProperty]
+        private string _imageNotificationChat;
+        [ObservableProperty]
+        private bool _imMainChat;
+        [ObservableProperty]
+        private bool _imNotificationChat;
         public MainViewModel()
-        {   
+        {
+            Inicio();
+        }
+        public void Inicio()
+        {
             NotificacionChatNotificaciones = false;
             NotificacionChatGeneral = false;
             MessagesReceived = new ObservableCollection<string>();
@@ -103,8 +115,11 @@ namespace EFDocenteMAUI.ViewModels
             GenerateSource();
             Conectar();
             ShowMainMsg();
+            ImMainChat = true;
+            ImNotificationChat = false;
+            ImageMainChat = "botonmain.png";
+            ImageNotificationChat = "botonnotification.png";
         }
-
         [RelayCommand]
         public void AddEmoji(string emoji)
         {
@@ -232,6 +247,9 @@ namespace EFDocenteMAUI.ViewModels
             ChatSelection = "SALA PRINCIPAL";
             LoadMessagesList(MessagesReceived);
             NotificationMessage = false;
+            ImMainChat = true;
+            ImNotificationChat = false;
+            ImageMainChat = "botonmain.png";
         }
         [RelayCommand]
         public void ShowNotificationMsg()
@@ -239,6 +257,9 @@ namespace EFDocenteMAUI.ViewModels
             ChatSelection = "NOTIFICACIONES";
             LoadMessagesList(NotificationMessagesReceived);
             NotificationMessage = true;
+            ImMainChat = false;
+            ImNotificationChat = true;
+            ImageNotificationChat = "botonnotification.png";
         }
 
 
@@ -352,7 +373,10 @@ namespace EFDocenteMAUI.ViewModels
                         var messageChatModel = JsonConvert.DeserializeObject<MessageChatModel>(Encoding.UTF8.GetString(buffer, 0, result.Count));
                         if (messageChatModel.Purpose.Equals("BroadCast"))
                         {
-                           
+                            if (!ImMainChat)
+                            {
+                                ImageMainChat = "botonmainnotifications.png";
+                            }                        
                             //Añado mensaje al chat general
                             MessagesReceived.Add((string)messageChatModel.Content);
 
@@ -407,6 +431,10 @@ namespace EFDocenteMAUI.ViewModels
                         }
                         else if (messageChatModel.Purpose.Equals("Notification"))
                         {
+                            if (!ImNotificationChat)
+                            {
+                                ImageNotificationChat = "botonnotificationnotifications.png";
+                            }
                             NotificationMessagesReceived.Add((string)messageChatModel.Content);
                         }
                         Debug.WriteLine("Received message: " + MessagesReceived);

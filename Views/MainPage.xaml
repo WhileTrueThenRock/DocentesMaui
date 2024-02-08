@@ -23,24 +23,18 @@
                 Grid.Column="1"
                 Padding="5"
                 BackgroundColor="White">
-                <Button
+                <ImageButton
                     Margin="2"
                     BackgroundColor="Transparent"
-                    BorderColor="Black"
-                    BorderWidth="1"
                     Command="{Binding ShowMainMsgCommand}"
                     CornerRadius="5"
-                    Text="SALA PRINCIPAL"
-                    TextColor="Black" />
-                <Button
+                    Source="{Binding ImageMainChat}" />
+                <ImageButton
                     Margin="2"
                     BackgroundColor="Transparent"
-                    BorderColor="Black"
-                    BorderWidth="1"
                     Command="{Binding ShowNotificationMsgCommand}"
                     CornerRadius="5"
-                    Text="NOTIFICACIONES"
-                    TextColor="Black" />
+                    Source="{Binding ImageNotificationChat}" />
                 <Label
                     Grid.Row="1"
                     Grid.Column="1"
