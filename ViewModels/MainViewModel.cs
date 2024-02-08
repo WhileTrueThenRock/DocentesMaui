@@ -13,6 +13,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -69,7 +70,7 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private bool _notificationMessage;
 
-        //Popups
+        
         [ObservableProperty]
         private PrivateMessagePopup privateMessagePopup;
         ClientWebSocket ClientWebSocket { get; set; }
@@ -87,6 +88,10 @@ namespace EFDocenteMAUI.ViewModels
         private bool _imMainChat;
         [ObservableProperty]
         private bool _imNotificationChat;
+
+        [ObservableProperty]
+        private Color _notificationColor;
+
         public MainViewModel()
         {
             Inicio();
@@ -119,6 +124,7 @@ namespace EFDocenteMAUI.ViewModels
             ImNotificationChat = false;
             ImageMainChat = "botonmain.png";
             ImageNotificationChat = "botonnotification.png";
+            
         }
         [RelayCommand]
         public void AddEmoji(string emoji)
@@ -221,7 +227,7 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task ShowPrivateMessagePopup()
         {
-
+            NotificationColor = Colors.Black;
             PrivateMessagePopup = new PrivateMessagePopup();
             MessagesPrivateReceived = string.Empty;
             string sessionMessage = null;
@@ -388,6 +394,7 @@ namespace EFDocenteMAUI.ViewModels
                         }
                         else if (messageChatModel.Purpose.Equals("Private"))
                         {
+                            NotificationColor = Colors.Red;
                             string sessionMessages = string.Empty;
                             MessagesDict.TryGetValue(messageChatModel.UserId, out sessionMessages);
                             if (sessionMessages != null)
@@ -395,7 +402,7 @@ namespace EFDocenteMAUI.ViewModels
                                 sessionMessages += messageChatModel.Content + "\n";
                                 MessagesDict.Remove(messageChatModel.UserId);
                                 MessagesDict.Add(messageChatModel.UserId, sessionMessages);
-                                if (messageChatModel.UserId.Equals(SelectedUser))
+                                if (SelectedUser.Equals(messageChatModel.UserId))
                                 {
                                     MessagesPrivateReceived = sessionMessages;
                                 }
@@ -403,7 +410,7 @@ namespace EFDocenteMAUI.ViewModels
                             else
                             {
                                 MessagesDict.Add(messageChatModel.UserId, messageChatModel.Content + "\n");
-                                if (messageChatModel.UserId == SelectedUser)
+                                if ( SelectedUser.Equals(messageChatModel.UserId))
                                 {
                                     MessagesPrivateReceived = messageChatModel.Content + "\n";
                                 }

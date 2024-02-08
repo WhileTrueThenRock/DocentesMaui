@@ -58,17 +58,26 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:MainViewModel">
                             <Border>
-                                <Label
-                                    FontAttributes="Bold"
-                                    FontSize="20"
-                                    Text="{Binding}"
-                                    TextColor="Red" />
+                                <HorizontalStackLayout>
+
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="20"
+                                        Text="{Binding .}"
+                                        TextColor="Black" />
+                                    <Image
+                                        Aspect="AspectFit"
+                                        BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
+                                        HeightRequest="30"
+                                        Source="notificationbell.png"
+                                        WidthRequest="30" />
+                                </HorizontalStackLayout>
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup Name="CommonStates">
                                         <VisualState Name="Normal" />
                                         <VisualState Name="Selected">
                                             <VisualState.Setters>
-                                                <Setter Property="Background" Value="Chocolate" />
+                                                <Setter Property="Background" Value="Gray" />
                                             </VisualState.Setters>
                                         </VisualState>
                                     </VisualStateGroup>
