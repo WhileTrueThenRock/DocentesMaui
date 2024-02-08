@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using EFDocenteMAUI.Models;
 using EFDocenteMAUI.Utils;
 using EFDocenteMAUI.Views.Popups;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using Newtonsoft.Json;
 using Plugin.Maui.Calendar.Models;
@@ -25,6 +26,10 @@ namespace EFDocenteMAUI.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<EventModel> _eventsList = new();
+
+        [ObservableProperty]
+        private ObservableCollection<EventModel> _eventsFiltered = new();
+
 
         [ObservableProperty]
         private EventModel _selectedEvent;
@@ -82,6 +87,40 @@ namespace EFDocenteMAUI.ViewModels
             FechaFin = DateTime.Now;
             // ResultadoFecha = $"Años filtrados: {AnioMenor} - {AnioMayor}";
         }
+
+        [RelayCommand]
+        public async Task FiltrarFecha()
+        {
+            if (FechaIni != null && FechaFin != null && FechaIni <= FechaFin)
+            {
+                Events.Clear();
+                //string[] dateArray = FechaIni.Split(' ');
+                //DayEvents.EventDate = dateArray[0];
+                var request = new RequestModel(method: "GET",
+                                               route: "/events/getEventsByDate/"+FechaIni+"/"+FechaFin,
+                                               data: string.Empty,
+                                               server: APIService.GestionServerUrl);
+                var response = await APIService.ExecuteRequest(request);
+                if (response.Success == 0)
+                {
+                    ObservableCollection<DayEventsModel> EventsFiltered =
+                    JsonConvert.DeserializeObject<ObservableCollection<DayEventsModel>>
+                        (response.Data.ToString());
+                    foreach (DayEventsModel dem in EventsFiltered)
+                    {
+                        if (dem.Events.Count > 0)
+                        {
+                            Events.Add(DateTime.Parse(dem.EventDate), dem.Events);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Manejo para el caso donde FechaIni es mayor que FechaFin
+            }
+        }
+
 
 
         [RelayCommand]
