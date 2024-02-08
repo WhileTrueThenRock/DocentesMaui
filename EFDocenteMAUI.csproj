@@ -63,7 +63,9 @@
 	  <None Remove="Resources\Images\botonnotificationnotifications.png" />
 	  <None Remove="Resources\Images\calendar.png" />
 	  <None Remove="Resources\Images\crud.png" />
+	  <None Remove="Resources\Images\fondologin.png" />
 	  <None Remove="Resources\Images\loupe.png" />
+	  <None Remove="Resources\Images\notificationbell.png" />
 	  <None Remove="Resources\Images\plus.png" />
 	  <None Remove="Resources\Images\ricardo.jpg" />
 	  <None Remove="Resources\Images\student.png" />

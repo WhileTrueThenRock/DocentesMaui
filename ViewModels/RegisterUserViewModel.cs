@@ -102,24 +102,35 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task GetUsersByFiltro(string name)
         {
-            string filtro = Filtro.ToLower();
-            IsListVisible = true;
-            var request = new RequestModel(method: "GET",
-                                            route: "/users/"+filtro+"/"+name,
-                                            data: User,
-                                            server: APIService.GestionServerUrl);
-            ResponseModel response = await APIService.ExecuteRequest(request);
-            if (response.Success == 0)
+            if (null == Filtro)
             {
-                UserList = JsonConvert.DeserializeObject<ObservableCollection<UserModel>>(response.Data.ToString());
-                if (UserList.Count == 0)
-                {
-                    await App.Current.MainPage.DisplayAlert("Info", "No se han encontrado resultados", "ACEPTAR");
-                }
+                await App.Current.MainPage.DisplayAlert("Info", "Debes selecionar un Campo de busqueda", "ACEPTAR");
+                
+            }else if (null == name || name.Any(Char.IsWhiteSpace))
+            {
+                await App.Current.MainPage.DisplayAlert("Info", "El campo de busqueda no puede estar vacio", "ACEPTAR");
             }
             else
             {
-                await App.Current.MainPage.DisplayAlert("Info", "No se han encontrado resultados", "ACEPTAR");
+                string filtro = Filtro.ToLower();
+                IsListVisible = true;
+                var request = new RequestModel(method: "GET",
+                                                route: "/users/" + filtro + "/" + name,
+                                                data: User,
+                                                server: APIService.GestionServerUrl);
+                ResponseModel response = await APIService.ExecuteRequest(request);
+                if (response.Success == 0)
+                {
+                    UserList = JsonConvert.DeserializeObject<ObservableCollection<UserModel>>(response.Data.ToString());
+                    if (UserList.Count == 0)
+                    {
+                        await App.Current.MainPage.DisplayAlert("Info", "No se han encontrado resultados", "ACEPTAR");
+                    }
+                }
+                else
+                {
+                    await App.Current.MainPage.DisplayAlert("Info", "No se han encontrado resultados", "ACEPTAR");
+                }
             }
         }
         private bool ValidateFields()

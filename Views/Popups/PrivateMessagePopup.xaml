@@ -27,7 +27,7 @@
             HeightRequest="400"
             HorizontalOptions="Center"
             IsReadOnly="True"
-            Text="{Binding PrivateMessagesReceived}"
+            Text="{Binding MessagesPrivateReceived}"
             WidthRequest="490" />
         <HorizontalStackLayout
             Grid.Row="3"
@@ -54,10 +54,10 @@
             </Picker>
             <Button
                 Background="LightGreen"
+                Command="{Binding SendMessageCommand}"
                 CommandParameter="Private"
                 HorizontalOptions="Center"
                 Text="ENVIAR"
-                Command="{Binding SendMessageCommand}"
                 WidthRequest="80" />
         </HorizontalStackLayout>
         <Button
