@@ -199,7 +199,7 @@ namespace EFDocenteMAUI.ViewModels
             ClientWebSocket = new ClientWebSocket();  // Crear una nueva instancia de ClientWebSocket.
 
             // Construir la URI para la conexión WebSocket con el identificador del usuario. 192.168.20.12
-            Uri uri = new Uri($"ws://192.168.20.10:5000/chat-websocket?userId={UserName}");
+            Uri uri = new Uri($"ws://127.0.0.1:5000/chat-websocket?userId={UserName}");
             ClientWebSocket.Options.SetRequestHeader("UserId", UserName);  // Configurar el encabezado UserId.
             string token = await SecureStorage.Default.GetAsync("token");
             ClientWebSocket.Options.SetRequestHeader("Authorization", $"Bearer {token}");
@@ -305,7 +305,7 @@ namespace EFDocenteMAUI.ViewModels
             messageChat.UserId = UserName;
             messageChat.Content = MessageToSend;
             messageChat.Purpose = purpose;
-            if (NotificationMessage)
+            if (NotificationMessage && !purpose.Equals("Private"))
             {
                 messageChat.Purpose = "Notification";
             }
@@ -394,7 +394,7 @@ namespace EFDocenteMAUI.ViewModels
                         }
                         else if (messageChatModel.Purpose.Equals("Private"))
                         {
-                            NotificationColor = Colors.Red;
+                            
                             string sessionMessages = string.Empty;
                             MessagesDict.TryGetValue(messageChatModel.UserId, out sessionMessages);
                             if (sessionMessages != null)

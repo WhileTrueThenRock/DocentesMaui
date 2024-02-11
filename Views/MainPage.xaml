@@ -59,7 +59,6 @@
                         <DataTemplate x:DataType="viewmodels:MainViewModel">
                             <Border>
                                 <HorizontalStackLayout>
-
                                     <Label
                                         FontAttributes="Bold"
                                         FontSize="20"
@@ -127,23 +126,28 @@
                     <HorizontalStackLayout Padding="2" HorizontalOptions="Center">
                         <Label Text="{Binding ConnectionState}" />
                     </HorizontalStackLayout>
-                    <CollectionView
-                        BackgroundColor="Aqua"
+                    <Border
+                        BackgroundColor="LightSeaGreen"
                         HeightRequest="450"
                         HorizontalOptions="Center"
-                        ItemsSource="{Binding ShowMessagesList}"
-                        ItemsUpdatingScrollMode="KeepLastItemInView"
+                        Stroke="Black"
                         WidthRequest="500">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Label
-                                    Margin="2"
-                                    FontAttributes="Bold"
-                                    FontSize="15"
-                                    Text="{Binding}" />
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+                        <CollectionView ItemsSource="{Binding ShowMessagesList}" ItemsUpdatingScrollMode="KeepLastItemInView">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Label
+                                        Margin="2"
+                                        FontAttributes="Bold"
+                                        FontSize="15"
+                                        Text="{Binding}" />
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Border>
+
                     <HorizontalStackLayout HorizontalOptions="Center">
                         <Entry
                             Margin="0,2,2,2"
