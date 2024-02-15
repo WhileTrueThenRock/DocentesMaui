@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Views;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EFDocenteMAUI.Models;
@@ -6,6 +7,7 @@ using GestorChat.Views.Popups;
 using Mopups.PreBaked.PopupPages.Login;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Plugin.LocalNotification;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,6 +21,7 @@ using System.Threading.Tasks;
 
 namespace EFDocenteMAUI.ViewModels
 {
+    [QueryProperty("User","User")]
     internal partial class MainViewModel : ObservableObject
     {
         [ObservableProperty]
@@ -91,6 +94,10 @@ namespace EFDocenteMAUI.ViewModels
 
         [ObservableProperty]
         private Color _notificationColor;
+        [ObservableProperty]
+        private UserModel _user;
+        [ObservableProperty]
+        private bool _profesor;
 
         public MainViewModel()
         {
@@ -131,7 +138,14 @@ namespace EFDocenteMAUI.ViewModels
         {
             MessageToSend += emoji;
         }
-        
+        public bool EsProfesor()
+        {
+            if (User.Rol.Equals("Profesor"))
+            {
+                return true;
+            }
+            return false;
+        }
         private void GenerateSource()
         {
             var nodeImageInfo = new ObservableCollection<FileManager>();
@@ -219,8 +233,8 @@ namespace EFDocenteMAUI.ViewModels
             {
                 Debug.WriteLine(ex);  // Registrar cualquier excepción durante la conexión.
             }
-
-
+            User = await GetUserByUserName();
+            Profesor = EsProfesor();
         }
 
 
@@ -268,12 +282,24 @@ namespace EFDocenteMAUI.ViewModels
             ImageNotificationChat = "botonnotification.png";
         }
 
+        
 
         [RelayCommand]
         public async Task ClosePopUp()
         {
             PrivateMessagePopup.Close();
 
+        }
+        public async Task<UserModel> GetUserByUserName()
+        {
+            UserModel user = new UserModel();
+            var request = new RequestModel(route: "/users/byname/" + UserName,
+                                           method: "GET",
+                                           data: User,
+                                           server: APIService.GestionServerUrl);
+            var response = await APIService.ExecuteRequest(request);
+            user = JsonConvert.DeserializeObject<UserModel>(response.Data.ToString());
+            return user;
         }
 
         [RelayCommand]
@@ -302,7 +328,7 @@ namespace EFDocenteMAUI.ViewModels
             var messageChat = new MessageChatModel();
 
             // Asignar el identificador de usuario y el contenido del mensaje.
-            messageChat.UserId = UserName;
+            messageChat.UserId = User.UserName;
             messageChat.Content = MessageToSend;
             messageChat.Purpose = purpose;
             if (NotificationMessage && !purpose.Equals("Private"))
@@ -415,6 +441,7 @@ namespace EFDocenteMAUI.ViewModels
                                     MessagesPrivateReceived = messageChatModel.Content + "\n";
                                 }
                             }
+                            ShowNotification(messageChatModel.UserId);
                         }
                         else if (messageChatModel.Purpose.Equals("BroadcastMsg"))
                         {
@@ -463,7 +490,31 @@ namespace EFDocenteMAUI.ViewModels
                 }
             }
         }
+        
+        public async Task ShowNotification(string user)
+        {
+            if (DeviceInfo.Platform == DevicePlatform.Android ||
+                DeviceInfo.Platform == DevicePlatform.iOS)
+            {
+                if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
+                {
+                    await LocalNotificationCenter.Current.RequestNotificationPermission();
+                }
+                var notification = new NotificationRequest
+                {
+                    NotificationId = 100,
+                    Title = "MENSAJE PRIVADO",
+                    Sound = "sound",
+                    Description = "Aviso sensor de movimiento"
+                };
+                await LocalNotificationCenter.Current.Show(notification);
 
+            }
+            else if (DeviceInfo.Platform == DevicePlatform.WinUI)
+            {
+                await Toast.Make("Tienes un mensaje de\n"+user).Show();
+            }
+        }
 
     }
 }

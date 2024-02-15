@@ -120,7 +120,7 @@
                                 FontFamily="Times New Roman"
                                 FontSize="20"
                                 HorizontalOptions="Center"
-                                Text="{Binding UserName}" />
+                                Text="{Binding User.UserName}" />
                         </HorizontalStackLayout>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Padding="2" HorizontalOptions="Center">
@@ -200,6 +200,7 @@
                     Background="Transparent"
                     Command="{Binding LoadRegisterPageCommand}"
                     ImageSource="student.png"
+                    IsVisible="{Binding Profesor}"
                     ShowIcon="True"
                     Text="Alumnos"
                     TextColor="Black"
