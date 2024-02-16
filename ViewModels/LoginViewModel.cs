@@ -1,11 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EFDocenteMAUI.Models;
+using MongoDB.Bson.IO;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JsonConvert = Newtonsoft.Json.JsonConvert;
 
 namespace EFDocenteMAUI.ViewModels
 {
@@ -63,7 +67,8 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task LoadMainPage()
         {
-            await Shell.Current.GoToAsync("//MainPage");
+            //User = await GetUserByUserName();
+            await Shell.Current.GoToAsync("//MainPage");//,new Dictionary<string, object>(){["User"] = User});
         }
 
         [RelayCommand]
@@ -90,6 +95,17 @@ namespace EFDocenteMAUI.ViewModels
                 todoOK = true;
             }
             return todoOK;
+        }
+        public async Task<UserModel> GetUserByUserName()
+        {
+            UserModel user = new UserModel();
+            var request = new RequestModel(route: "/users/byname/"+User.UserName,
+                                           method: "GET",
+                                           data: User,
+                                           server: APIService.GestionServerUrl);
+            var response = await APIService.ExecuteRequest(request);
+            user = JsonConvert.DeserializeObject<UserModel>(response.Data.ToString());
+            return user;
         }
     }
 }
