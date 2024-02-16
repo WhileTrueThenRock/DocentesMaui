@@ -98,6 +98,8 @@ namespace EFDocenteMAUI.ViewModels
         private UserModel _user;
         [ObservableProperty]
         private bool _profesor;
+        [ObservableProperty]
+        private bool _profesorEnabled;
 
         public MainViewModel()
         {
@@ -129,6 +131,7 @@ namespace EFDocenteMAUI.ViewModels
             ShowMainMsg();
             ImMainChat = true;
             ImNotificationChat = false;
+            ProfesorEnabled = true;
             ImageMainChat = "botonmain.png";
             ImageNotificationChat = "botonnotification.png";
             
@@ -270,6 +273,7 @@ namespace EFDocenteMAUI.ViewModels
             ImMainChat = true;
             ImNotificationChat = false;
             ImageMainChat = "botonmain.png";
+            ProfesorEnabled = IsProfesorEnabled();
         }
         [RelayCommand]
         public void ShowNotificationMsg()
@@ -280,6 +284,7 @@ namespace EFDocenteMAUI.ViewModels
             ImMainChat = false;
             ImNotificationChat = true;
             ImageNotificationChat = "botonnotification.png";
+            ProfesorEnabled = IsProfesorEnabled();
         }
 
         
@@ -514,6 +519,19 @@ namespace EFDocenteMAUI.ViewModels
             {
                 await Toast.Make("Tienes un mensaje de\n"+user).Show();
             }
+        }
+        public bool IsProfesorEnabled()
+        {
+            bool enabled = true;
+            if (!ImMainChat)
+            {
+                if (User.Rol.Equals("Estudiante"))
+                {
+                    enabled = false;
+                }
+            }
+
+            return enabled;
         }
 
     }

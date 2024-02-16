@@ -64,12 +64,6 @@
                                         FontSize="20"
                                         Text="{Binding .}"
                                         TextColor="Black" />
-                                    <Image
-                                        Aspect="AspectFit"
-                                        BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
-                                        HeightRequest="30"
-                                        Source="notificationbell.png"
-                                        WidthRequest="30" />
                                 </HorizontalStackLayout>
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup Name="CommonStates">
@@ -148,7 +142,7 @@
                         </CollectionView>
                     </Border>
 
-                    <HorizontalStackLayout HorizontalOptions="Center">
+                    <HorizontalStackLayout HorizontalOptions="Center" IsVisible="{Binding ProfesorEnabled}">
                         <Entry
                             Margin="0,2,2,2"
                             BackgroundColor="AliceBlue"
