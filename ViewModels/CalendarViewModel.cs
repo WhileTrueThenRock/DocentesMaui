@@ -29,8 +29,13 @@ namespace EFDocenteMAUI.ViewModels
         private ObservableCollection<EventModel> _eventsList = new();
 
         [ObservableProperty]
-        private ObservableCollection<EventModel> _eventsFiltered = new();
+        private ObservableCollection<EventModel> _eventsDateFilter = new();
 
+        [ObservableProperty]
+        private ObservableCollection<EventModel> _eventsTypeFilter = new();
+
+        [ObservableProperty]
+        private ObservableCollection<EventModel> _eventsDescriptionFilter = new();
 
         [ObservableProperty]
         private EventModel _selectedEvent;
@@ -69,7 +74,7 @@ namespace EFDocenteMAUI.ViewModels
         //private DateTime _fechaInicio = new DateTime(2023, 1, 1);
 
         //[ObservableProperty]
-        //private DateTime _fechaFinn = DateTime.Now;
+        //private DateTime _fechaFin = DateTime.Now;
 
         [ObservableProperty]
         private bool _isCreateVisible;
@@ -100,32 +105,86 @@ namespace EFDocenteMAUI.ViewModels
 
 
         [RelayCommand]
-        public async Task GetUsersByFiltro(string descripcion)
+        public async Task GetUsersByFiltro(string type)
         {
             //if (null == Filtro)
             //{
             //    await App.Current.MainPage.DisplayAlert("Info", "Debes selecionar un Campo de busqueda", "ACEPTAR");
 
             //}
-             if (null == descripcion || descripcion.Any(Char.IsWhiteSpace))
+            if (null == type || type.Any(Char.IsWhiteSpace))
             {
                 await App.Current.MainPage.DisplayAlert("Info", "El campo de busqueda no puede estar vacio", "ACEPTAR");
             }
             else
             {
-                string filtro = descripcion.ToLower();
-             //   IsListVisible = true;
+                //string filtro = descripcion.ToLower();
+                //   IsListVisible = true;
                 var request = new RequestModel(method: "GET",
-                                                route: "/users/" + filtro + "/" + descripcion,
+                                                route: "/events/getEventsByFilter/" + type.ToLower(),
                                                 data: User,
                                                 server: APIService.GestionServerUrl);
                 ResponseModel response = await APIService.ExecuteRequest(request);
                 if (response.Success == 0)
                 {
-                    EventsFiltered = JsonConvert.DeserializeObject<ObservableCollection<EventModel>>(response.Data.ToString());
-                    if (EventsFiltered.Count == 0)
+                    ObservableCollection<DayEventsModel> eventsList =
+                    JsonConvert.DeserializeObject<ObservableCollection<DayEventsModel>>
+                        (response.Data.ToString());
+                    EventsTypeFilter.Clear();
+                    foreach (DayEventsModel dem in eventsList)
                     {
-                        await App.Current.MainPage.DisplayAlert("Info", "No se han encontrado resultados", "ACEPTAR");
+                        if (dem.Events.Count > 0)
+                        {
+                            foreach (var eventModel in dem.Events)
+                            {
+                                EventsTypeFilter.Add(eventModel);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    await App.Current.MainPage.DisplayAlert("Info", "No se han encontrado resultados", "ACEPTAR");
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async Task GetUsersByFiltroDescription(string descripcion)
+        {
+            //if (null == Filtro)
+            //{
+            //    await App.Current.MainPage.DisplayAlert("Info", "Debes selecionar un Campo de busqueda", "ACEPTAR");
+
+            //}
+            if (null == descripcion || descripcion.Any(Char.IsWhiteSpace))
+            {
+                await App.Current.MainPage.DisplayAlert("Info", "El campo de busqueda no puede estar vacio", "ACEPTAR");
+            }
+            else
+            {
+                //string filtro = descripcion.ToLower();
+                //   IsListVisible = true;
+                var request = new RequestModel(method: "GET",
+                                                route: "/events/getEventsByDescription/" + descripcion.ToLower(),
+                                                data: User,
+                                                server: APIService.GestionServerUrl);
+                ResponseModel response = await APIService.ExecuteRequest(request);
+                if (response.Success == 0)
+                {
+                    ObservableCollection<DayEventsModel> eventsList =
+                    JsonConvert.DeserializeObject<ObservableCollection<DayEventsModel>>
+                        (response.Data.ToString());
+                    EventsDescriptionFilter.Clear();
+                    foreach (DayEventsModel dem in eventsList)
+                    {
+                        if (dem.Events.Count > 0)
+                        {
+                            foreach (var eventModel in dem.Events)
+                            {
+                                EventsDescriptionFilter.Add(eventModel);
+                            }
+                        }
                     }
                 }
                 else
@@ -145,10 +204,8 @@ namespace EFDocenteMAUI.ViewModels
                 // Manejar el caso en que las fechas no sean válidas
                 return;
             }
-
-            if (fechaInicio <= fechaFin)
-            {
-                Events.Clear();
+           
+           // Events.Clear();
                 string[] dateArray = FechaIni.Split(' ');
                 FechaIni = dateArray[0];
 
@@ -162,32 +219,29 @@ namespace EFDocenteMAUI.ViewModels
                                                data: string.Empty,
                                                server: APIService.GestionServerUrl);
                 var response = await APIService.ExecuteRequest(request);
+
                 if (response.Success == 0)
                 {
                     ObservableCollection<DayEventsModel> eventsList =
                     JsonConvert.DeserializeObject<ObservableCollection<DayEventsModel>>
                         (response.Data.ToString());
-                    EventsFiltered.Clear();
+                    EventsDateFilter.Clear();
                     foreach (DayEventsModel dem in eventsList)
                     {
                         if (dem.Events.Count > 0)
                         {
-                            Events.Add(DateTime.Parse(dem.EventDate), dem.Events);
+                            //Events.Add(DateTime.Parse(dem.EventDate), dem.Events);
 
                             foreach (var eventModel in dem.Events)
                             {
-                                EventsFiltered.Add(eventModel);
+                                EventsDateFilter.Add(eventModel);
                             }
                         }
                     }
                 }
-            }
-            else
-            {
-                await App.Current.MainPage.DisplayAlert("Info", "La fecha de inicio debe ser menor que la fecha final", "ACEPTAR");
-            }
 
         }
+
 
 
 
@@ -253,7 +307,7 @@ namespace EFDocenteMAUI.ViewModels
                 DayEvents.Events.Add(SelectedEvent); //selectedEvent es el popup
                 string[] dateArray = DayEvents.EventDate.Split(' ');
                 DayEvents.EventDate = dateArray[0];
-                SelectedEvent.Image= APIService.ImagenesServerUrl + "/images/" + SelectedEvent.Id.ToString();
+                SelectedEvent.Image = APIService.ImagenesServerUrl + "/images/" + SelectedEvent.Id.ToString();
                 SelectedEvent.Type = EventHeader;
                 var request = new RequestModel(method: "POST",
                                               route: "/events/" + Mode,
@@ -328,14 +382,14 @@ namespace EFDocenteMAUI.ViewModels
                 IsCreateVisible = true;
                 IsUpdateVisible = false;
                 IsDeleteVisible = false;
-                AvatarImage = APIService.ImagenesServerUrl+"/images/default";
+                AvatarImage = APIService.ImagenesServerUrl + "/images/default";
 
 
                 DayEvents.Events.Clear();
                 DayEvents.Id = ObjectId.GenerateNewId().ToString();
                 SelectedEvent = new EventModel();
             }
-            else if(Mode.Equals("update"))
+            else if (Mode.Equals("update"))
             {
                 HeaderTabName = "Editar Evento";
                 IsCreateVisible = false;

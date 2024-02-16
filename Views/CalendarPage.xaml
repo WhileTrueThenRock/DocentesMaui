@@ -122,6 +122,7 @@
                                                         x:Name="pickerIni"
                                                         CancelButtonClicked="pickerIni_CancelButtonClicked"
                                                         HeightRequest="20"
+                                                        MaximumDate="{Binding FechaFin}"
                                                         Mode="Dialog"
                                                         OkButtonClicked="pickerIni_CancelButtonClicked"
                                                         SelectedDate="{Binding FechaIni, Mode=TwoWay}"
@@ -214,7 +215,7 @@
                                                     Grid.Column="1"
                                                     Margin="10,50,0,0"
                                                     BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
-                                                    ItemsSource="{Binding EventsFiltered}"
+                                                    ItemsSource="{Binding EventsDateFilter}"
                                                     SelectionMode="Multiple">
                                                     <CollectionView.ItemTemplate>
                                                         <DataTemplate x:DataType="models:EventModel">
@@ -278,6 +279,51 @@
                                                     HorizontalOptions="Center"
                                                     Text="BUSCAR"
                                                     WidthRequest="200" />
+                                                <CollectionView
+                                                    Grid.Row="2"
+                                                    Grid.Column="1"
+                                                    Margin="10,50,0,0"
+                                                    BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
+                                                    ItemsSource="{Binding EventsTypeFilter}"
+                                                    SelectionMode="Multiple">
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate x:DataType="models:EventModel">
+                                                            <Border>
+                                                                <VerticalStackLayout>
+                                                                    <VerticalStackLayout.GestureRecognizers>
+                                                                        <TapGestureRecognizer
+                                                                            x:DataType="viewmodels:CalendarViewModel"
+                                                                            BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
+                                                                            Command="{Binding ShowEventPopupCommand}"
+                                                                            CommandParameter="update"
+                                                                            NumberOfTapsRequired="2" />
+                                                                    </VerticalStackLayout.GestureRecognizers>
+
+                                                                    <Image
+                                                                        HeightRequest="50"
+                                                                        Source="{Binding Image}"
+                                                                        WidthRequest="50" />
+                                                                    <Label Text="{Binding Type}" />
+                                                                    <Label Text="{Binding Description}" />
+                                                                    <Label Text="{Binding StartAt}" />
+                                                                    <Label Text="{Binding EndAt}" />
+                                                                    <VisualStateManager.VisualStateGroups>
+                                                                        <VisualStateGroup Name="CommonStates">
+                                                                            <VisualState Name="Normal" />
+                                                                            <VisualState Name="Selected">
+                                                                                <VisualState.Setters>
+                                                                                    <Setter Property="Background" Value="Chocolate" />
+                                                                                </VisualState.Setters>
+                                                                            </VisualState>
+                                                                        </VisualStateGroup>
+                                                                    </VisualStateManager.VisualStateGroups>
+                                                                </VerticalStackLayout>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+
+
                                             </VerticalStackLayout>
                                         </ScrollView>
                                     </tabview:SfTabItem.Content>
@@ -298,11 +344,55 @@
                                                     Margin="0,20,0,0"
                                                     Placeholder="Introduce un texto..." />
                                                 <Button
-                                                    Command="{Binding GetUsersByFiltroCommand}"
+                                                    Command="{Binding GetUsersByFiltroDescriptionCommand}"
                                                     CommandParameter="{Binding Source={x:Reference descriptionEntry}, Path=Text}"
                                                     HorizontalOptions="Center"
                                                     Text="BUSCAR"
                                                     WidthRequest="200" />
+
+                                                <CollectionView
+                                                    Grid.Row="2"
+                                                    Grid.Column="1"
+                                                    Margin="10,50,0,0"
+                                                    BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
+                                                    ItemsSource="{Binding EventsDescriptionFilter}"
+                                                    SelectionMode="Multiple">
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate x:DataType="models:EventModel">
+                                                            <Border>
+                                                                <VerticalStackLayout>
+                                                                    <VerticalStackLayout.GestureRecognizers>
+                                                                        <TapGestureRecognizer
+                                                                            x:DataType="viewmodels:CalendarViewModel"
+                                                                            BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
+                                                                            Command="{Binding ShowEventPopupCommand}"
+                                                                            CommandParameter="update"
+                                                                            NumberOfTapsRequired="2" />
+                                                                    </VerticalStackLayout.GestureRecognizers>
+
+                                                                    <Image
+                                                                        HeightRequest="50"
+                                                                        Source="{Binding Image}"
+                                                                        WidthRequest="50" />
+                                                                    <Label Text="{Binding Type}" />
+                                                                    <Label Text="{Binding Description}" />
+                                                                    <Label Text="{Binding StartAt}" />
+                                                                    <Label Text="{Binding EndAt}" />
+                                                                    <VisualStateManager.VisualStateGroups>
+                                                                        <VisualStateGroup Name="CommonStates">
+                                                                            <VisualState Name="Normal" />
+                                                                            <VisualState Name="Selected">
+                                                                                <VisualState.Setters>
+                                                                                    <Setter Property="Background" Value="Chocolate" />
+                                                                                </VisualState.Setters>
+                                                                            </VisualState>
+                                                                        </VisualStateGroup>
+                                                                    </VisualStateManager.VisualStateGroups>
+                                                                </VerticalStackLayout>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
                                             </VerticalStackLayout>
                                         </ScrollView>
                                     </tabview:SfTabItem.Content>
