@@ -73,6 +73,16 @@ namespace EFDocenteMAUI.ViewModels
                 await SaveImageAsync();
             }
         }
+        [RelayCommand]
+        public async Task LoadPDF()
+        {
+            var pdfStream = await PDFUtils.OpenPdf();
+            if (pdfStream != null)
+            {
+                
+               
+            }
+        }
         public async Task<bool> UpdateImage()
         {
             ImageModel imagen = new ImageModel();

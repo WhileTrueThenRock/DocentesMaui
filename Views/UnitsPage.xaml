@@ -75,17 +75,26 @@
                                                 </DataTemplate>
                                             </CollectionView.ItemTemplate>
                                         </CollectionView>
+                                        <Label Text="PDFs" />
+                                        <CollectionView ItemsSource="{Binding Pdfs}" SelectionMode="Single">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Image
+                                                        x:Name="myPdfResource"
+                                                        HeightRequest="30"
+                                                        Source="{Binding .}"
+                                                        WidthRequest="30">
+                                                        <Image.GestureRecognizers>
+                                                            <TapGestureRecognizer
+                                                                Command="{Binding Source={x:Reference unitpage}, Path=BindingContext.ShowResourceCommand}"
+                                                                CommandParameter="{Binding Source={x:Reference myPdfResource}, Path=Source}"
+                                                                NumberOfTapsRequired="1" />
+                                                        </Image.GestureRecognizers>
+                                                    </Image>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
                                     </VerticalStackLayout>
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup Name="CommonStates">
-                                            <VisualState Name="Normal" />
-                                            <VisualState Name="Selected">
-                                                <VisualState.Setters>
-                                                    <Setter Property="Background" Value="LightGray" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
                                 </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
