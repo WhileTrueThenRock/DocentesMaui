@@ -132,8 +132,7 @@
                                                                 Height="40"
                                                                 Background="MediumPurple"
                                                                 DividerColor="Red"
-                                                                Text="Desde" 
-                                                                />
+                                                                Text="Desde" />
                                                         </picker:SfDatePicker.HeaderView>
                                                         <picker:SfDatePicker.FooterView>
                                                             <picker:PickerFooterView
@@ -194,7 +193,7 @@
                                                     <Label
                                                         FontAttributes="Italic"
                                                         FontSize="25"
-                                                        Text="{Binding FechaIni,StringFormat='{}{0:dd/MM-yyyy}'}"
+                                                        Text="{Binding FechaIni, StringFormat='{}{0:dd/MM-yyyy}'}"
                                                         TextColor="Black" />
 
                                                     <Label
