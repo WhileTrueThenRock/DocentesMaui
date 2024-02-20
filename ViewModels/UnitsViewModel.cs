@@ -48,10 +48,14 @@ namespace EFDocenteMAUI.ViewModels
         
 
         [RelayCommand]
-        public void ShowResource()
+        public void ShowResource(object image)
         {
-            ResourceToShow = Resource;
+          
+                var uriURL = (UriImageSource)image;
+                ResourceToShow = uriURL.Uri.AbsoluteUri;
+           
         }
+
         [RelayCommand]
         public async Task ShowUnitPopup()
         {

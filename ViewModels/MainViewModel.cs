@@ -141,6 +141,7 @@ namespace EFDocenteMAUI.ViewModels
             ImageMainChat = "botonmain.png";
             ImageNotificationChat = "botonnotification.png";
             Users = new ObservableCollection<UserModel>();
+
         }
         [RelayCommand]
         public void AddEmoji(string emoji)
@@ -250,10 +251,15 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task ShowPrivateMessagePopup()
         {
-            if (User != null)
+            var tempUsers = new ObservableCollection<UserModel>(Users);
+            foreach (var user in tempUsers)
             {
-                User.IsNotificationEnabled = false;
+                if (user.UserName.Equals(SelectedUser.UserName))
+                {
+                    user.IsNotificationEnabled = false;
+                }
             }
+            Users = new ObservableCollection<UserModel>(tempUsers);
             NotificationColor = Colors.Black;
             PrivateMessagePopup = new PrivateMessagePopup();
             MessagesPrivateReceived = string.Empty;
@@ -473,19 +479,15 @@ namespace EFDocenteMAUI.ViewModels
                             }
                             ShowNotification(messageChatModel.UserId);
 
-                            //if (!privateNotifications.ContainsKey(messageChatModel.UserId))
-                            //{
-                            //    privateNotifications.Add(messageChatModel.UserId, false);
-                            //}
-
-                            //privateNotifications[messageChatModel.UserId] = true;
-                            //PrivateNotification = privateNotifications[messageChatModel.UserId];
-
-                            User = Users.FirstOrDefault(u => u.UserName == messageChatModel.UserId);
-                            if (User != null)
+                          var tempUsers = new ObservableCollection<UserModel>(Users);
+                          foreach(var user in tempUsers)
                             {
-                                User.IsNotificationEnabled = true;
-                            }
+                                if (user.UserName.Equals(messageChatModel.UserId))
+                                {
+                                    user.IsNotificationEnabled = true;
+                                }
+                           }
+                          Users = new ObservableCollection<UserModel>(tempUsers);
 
                         }
                         else if (messageChatModel.Purpose.Equals("BroadcastMsg"))
