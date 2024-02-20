@@ -4,10 +4,11 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+    xmlns:models="clr-namespace:EFDocenteMAUI.Models"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
-    Title="UnitsPage"
+    x:Name="unitpage"
     x:DataType="viewmodels:UnitsViewModel"
     BindingContext="{viewmodels:UnitsViewModel}">
     <ScrollView>
@@ -15,11 +16,82 @@
             <VerticalStackLayout
                 Grid.Row="1"
                 Grid.Column="1"
-                HorizontalOptions="Center">
-                <Label Text="EDUCACIÓN FISICA" />
+                HorizontalOptions="Center"
+                VerticalOptions="FillAndExpand">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer
+                        x:DataType="viewmodels:UnitsViewModel"
+                        BindingContext="{Binding Source={x:Reference unitpage}, Path=BindingContext}"
+                        Command="{Binding ShowUnitPopupCommand}"
+                        CommandParameter="update"
+                        NumberOfTapsRequired="2" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label HorizontalOptions="Center" Text="EDUCACIÓN FISICA" />
+                <Button Command="{Binding ShowUnitPopupCommand}" Text="CREAR TEMARIO" />
+                <ScrollView>
+                    <CollectionView
+                        ItemsSource="{Binding UnitList}"
+                        SelectedItem="{Binding Unit}"
+                        SelectionMode="Single">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:UnitModel">
+                                <Border
+                                    Margin="5"
+                                    Background="Beige"
+                                    Stroke="Black"
+                                    StrokeThickness="4">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" />
+                                    </Border.StrokeShape>
+                                    <Border.Shadow>
+                                        <Shadow
+                                            Brush="Black"
+                                            Opacity="0.3"
+                                            Radius="5"
+                                            Offset="5,5" />
+                                    </Border.Shadow>
+                                    <VerticalStackLayout>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            FontSize="Medium"
+                                            Text="{Binding Titulo}" />
+                                        <Label Text="{Binding Description}" />
+                                        <Label Text="Imagenes" />
+                                        <CollectionView ItemsSource="{Binding Images}" SelectionMode="Single" >
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Image
+                                                        HeightRequest="30"
+                                                        Source="{Binding .}"
+                                                        WidthRequest="30" />
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </VerticalStackLayout>
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup Name="CommonStates">
+                                            <VisualState Name="Normal" />
+                                            <VisualState Name="Selected">
+                                                <VisualState.Setters>
+                                                    <Setter Property="Background" Value="LightGray" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
+
             </VerticalStackLayout>
             <ScrollView Grid.Row="1" Grid.Column="2">
-                <WebView HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" />
+                <WebView
+                    HeightRequest="650"
+                    HorizontalOptions="CenterAndExpand"
+                    Source="{Binding Resource}"
+                    VerticalOptions="CenterAndExpand"
+                    WidthRequest="800" />
             </ScrollView>
         </Grid>
     </ScrollView>

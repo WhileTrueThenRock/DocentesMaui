@@ -4,17 +4,17 @@ using CommunityToolkit.Mvvm.Input;
 using EFDocenteMAUI.Models;
 using EFDocenteMAUI.Utils;
 using EFDocenteMAUI.Views.Popups;
-using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Graphics.Text;
 using MongoDB.Bson;
 using Newtonsoft.Json;
 using Plugin.Maui.Calendar.Models;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace EFDocenteMAUI.ViewModels
 {
-    internal partial class CalendarViewModel : ObservableObject
+    internal partial class CalendarViewModel : ObservableObject, INotifyPropertyChanged
     {
         [ObservableProperty]
         private UserModel _user;
@@ -64,11 +64,39 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private string _resultadoFecha;
 
-        [ObservableProperty]
+        public event PropertyChangedEventHandler PropertyChanged;
+        
         private string _fechaIni;
 
-        [ObservableProperty]
+        public string FechaIni
+        {
+            set
+            {
+                _fechaIni = value.Replace(" 0:00:00", "");
+                //_fechaIni = value;
+                OnPropertyChanged();
+            }
+            get
+            {
+                return _fechaIni;
+            }
+        }
+
         private string _fechaFin;
+
+        public string FechaFin
+        {
+            set
+            {
+                _fechaFin = value.Replace(" 0:00:00", "");
+                
+                OnPropertyChanged();
+            }
+            get
+            {
+                return _fechaFin;
+            }
+        }
 
         //[ObservableProperty]
         //private DateTime _fechaInicio = new DateTime(2023, 1, 1);
@@ -296,7 +324,7 @@ namespace EFDocenteMAUI.ViewModels
                 }
             }
         }
-
+        
         [RelayCommand]
         public async Task ExecuteRequest()
         {
@@ -407,6 +435,9 @@ namespace EFDocenteMAUI.ViewModels
             CalendarPopup.Close();
 
         }
-
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
     }
 }

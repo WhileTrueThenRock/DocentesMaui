@@ -193,7 +193,7 @@
                                                     <Label
                                                         FontAttributes="Italic"
                                                         FontSize="25"
-                                                        Text="{Binding FechaIni, StringFormat='{}{0:d}'}"
+                                                        Text="{Binding FechaIni, StringFormat='{}{0:dd/MM-yyyy}'}"
                                                         TextColor="Black" />
 
                                                     <Label

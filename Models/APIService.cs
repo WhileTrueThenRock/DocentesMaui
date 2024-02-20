@@ -8,7 +8,7 @@ namespace EFDocenteMAUI.Models
 {
     internal class APIService
     {
-        // Constantes que representan las URL de los servidores
+        // Constantes que representan las URL de los servidores  192.168.20.132  127.0.0.1
         public const string GestionServerUrl = "http://127.0.0.1:5000";
         public const string ImagenesServerUrl = "http://127.0.0.1:12061";
 
