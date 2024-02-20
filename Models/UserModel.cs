@@ -20,6 +20,8 @@ namespace EFDocenteMAUI.Models
         public string Avatar { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
+        public bool IsNotificationEnabled { get; set; }
+
         public class DireccionModel
         {
             public string Calle { get; set; }

@@ -46,7 +46,7 @@
                     Grid.Row="2"
                     Grid.Column="1"
                     HeightRequest="450"
-                    ItemsSource="{Binding UserList}"
+                    ItemsSource="{Binding Users}"
                     SelectedItem="{Binding SelectedUser}"
                     SelectionMode="Single">
                     <CollectionView.GestureRecognizers>
@@ -58,12 +58,14 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:MainViewModel">
                             <Border>
-                                <HorizontalStackLayout>
-                                    <Label
-                                        FontAttributes="Bold"
-                                        FontSize="20"
-                                        Text="{Binding .}"
-                                        TextColor="Black" />
+                                <HorizontalStackLayout HorizontalOptions="Center">
+                                    <buttons:SfButton
+                                        x:Name="UserName"
+                                        ImageSource="notificationbell.png"
+                                        IsEnabled="False"
+                                        ShowIcon="{Binding Path=BindingContext.User.IsNotificationEnabled, Source={x:Reference thisPage}}"
+                                        Text="{Binding UserName}" />
+
                                 </HorizontalStackLayout>
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup Name="CommonStates">

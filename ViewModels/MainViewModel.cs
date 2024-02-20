@@ -28,13 +28,16 @@ namespace EFDocenteMAUI.ViewModels
         private ObservableCollection<string> _userList;
 
         [ObservableProperty]
+        private ObservableCollection<UserModel> _users;
+
+        [ObservableProperty]
         private Dictionary<string, string> _messagesDict;
 
         [ObservableProperty]
         private ObservableCollection<string> _emojis;
 
         [ObservableProperty]
-        private string _selectedUser;
+        private UserModel _selectedUser;
 
         [ObservableProperty]
         private string _privateMessagesReceived;
@@ -91,6 +94,8 @@ namespace EFDocenteMAUI.ViewModels
         private bool _imMainChat;
         [ObservableProperty]
         private bool _imNotificationChat;
+        [ObservableProperty]
+        private bool _privateNotification;
 
         [ObservableProperty]
         private Color _notificationColor;
@@ -132,9 +137,10 @@ namespace EFDocenteMAUI.ViewModels
             ImMainChat = true;
             ImNotificationChat = false;
             ProfesorEnabled = true;
+            PrivateNotification = false;
             ImageMainChat = "botonmain.png";
             ImageNotificationChat = "botonnotification.png";
-            
+            Users = new ObservableCollection<UserModel>();
         }
         [RelayCommand]
         public void AddEmoji(string emoji)
@@ -244,11 +250,15 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task ShowPrivateMessagePopup()
         {
+            if (User != null)
+            {
+                User.IsNotificationEnabled = false;
+            }
             NotificationColor = Colors.Black;
             PrivateMessagePopup = new PrivateMessagePopup();
             MessagesPrivateReceived = string.Empty;
             string sessionMessage = null;
-            MessagesDict.TryGetValue(SelectedUser, out sessionMessage);
+            MessagesDict.TryGetValue(SelectedUser.UserName, out sessionMessage);
             if (sessionMessage != null)
             {
                 MessagesPrivateReceived = sessionMessage;
@@ -348,19 +358,20 @@ namespace EFDocenteMAUI.ViewModels
             if (purpose.Equals("Private"))
             {
                 string sessionMessages = string.Empty;
-                MessagesDict.TryGetValue(SelectedUser, out sessionMessages);
+                MessagesDict.TryGetValue(SelectedUser.UserName, out sessionMessages);
                 if (sessionMessages != null)
                 {
                     sessionMessages += messageChat.Content + "\n";
-                    MessagesDict.Remove(SelectedUser);
-                    MessagesDict.Add(SelectedUser, sessionMessages);
+                    MessagesDict.Remove(SelectedUser.UserName);
+                    MessagesDict.Add(SelectedUser.UserName, sessionMessages);
                 }
                 else
                 {
-                    MessagesDict.Add(SelectedUser, PrivateMessageToSend + "\n");
+                    MessagesDict.Add(SelectedUser.UserName, PrivateMessageToSend + "\n");
                 }
                 messageChat.Content = PrivateMessageToSend;
-                messageChat.TargetUserID = SelectedUser;
+                messageChat.TargetUserID = SelectedUser.UserName;
+              
                 MessagesPrivateReceived += PrivateMessageToSend + "\n";
                 PrivateMessageToSend = "";
             }
@@ -427,10 +438,17 @@ namespace EFDocenteMAUI.ViewModels
                         {
                             UserList = JsonConvert.
                                 DeserializeObject<ObservableCollection<string>>(messageChatModel.Content.ToString());
+                            Users = new ObservableCollection<UserModel>();
+                            foreach (string user in UserList){
+                               
+                                UserModel user1 = new UserModel();
+                                user1.UserName = user;
+                                Users.Add(user1);
+                            }
                         }
                         else if (messageChatModel.Purpose.Equals("Private"))
                         {
-                            
+                          
                             string sessionMessages = string.Empty;
                             MessagesDict.TryGetValue(messageChatModel.UserId, out sessionMessages);
                             if (sessionMessages != null)
@@ -446,12 +464,29 @@ namespace EFDocenteMAUI.ViewModels
                             else
                             {
                                 MessagesDict.Add(messageChatModel.UserId, messageChatModel.Content + "\n");
-                                if ( SelectedUser.Equals(messageChatModel.UserId))
-                                {
-                                    MessagesPrivateReceived = messageChatModel.Content + "\n";
-                                }
+
+                                MessagesPrivateReceived = messageChatModel.Content + "\n";
+                                //if ( SelectedUser.Equals(messageChatModel.UserId))
+                                //{
+                                   
+                                //}
                             }
                             ShowNotification(messageChatModel.UserId);
+
+                            //if (!privateNotifications.ContainsKey(messageChatModel.UserId))
+                            //{
+                            //    privateNotifications.Add(messageChatModel.UserId, false);
+                            //}
+
+                            //privateNotifications[messageChatModel.UserId] = true;
+                            //PrivateNotification = privateNotifications[messageChatModel.UserId];
+
+                            User = Users.FirstOrDefault(u => u.UserName == messageChatModel.UserId);
+                            if (User != null)
+                            {
+                                User.IsNotificationEnabled = true;
+                            }
+
                         }
                         else if (messageChatModel.Purpose.Equals("BroadcastMsg"))
                         {
@@ -500,7 +535,9 @@ namespace EFDocenteMAUI.ViewModels
                 }
             }
         }
-        
+        private Dictionary<string, bool> privateNotifications = new Dictionary<string, bool>();
+
+
         public async Task ShowNotification(string user)
         {
             if (DeviceInfo.Platform == DevicePlatform.Android ||
