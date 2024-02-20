@@ -325,6 +325,11 @@ namespace EFDocenteMAUI.ViewModels
         {
             await Shell.Current.GoToAsync("//RegisterUserPage");
         }
+        [RelayCommand]
+        public async Task LoadUnitsPage()
+        {
+            await Shell.Current.GoToAsync("//UnitsPage");
+        }
 
         [RelayCommand]
         public async Task SendMessage(string purpose)

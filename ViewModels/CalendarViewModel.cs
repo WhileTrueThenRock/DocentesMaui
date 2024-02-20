@@ -4,8 +4,6 @@ using CommunityToolkit.Mvvm.Input;
 using EFDocenteMAUI.Models;
 using EFDocenteMAUI.Utils;
 using EFDocenteMAUI.Views.Popups;
-using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Graphics.Text;
 using MongoDB.Bson;
 using Newtonsoft.Json;
 using Plugin.Maui.Calendar.Models;
@@ -296,7 +294,7 @@ namespace EFDocenteMAUI.ViewModels
                 }
             }
         }
-
+        
         [RelayCommand]
         public async Task ExecuteRequest()
         {
