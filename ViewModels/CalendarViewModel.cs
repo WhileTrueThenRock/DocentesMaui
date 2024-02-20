@@ -14,6 +14,7 @@ using System.Runtime.CompilerServices;
 
 namespace EFDocenteMAUI.ViewModels
 {
+    [QueryProperty("User", "User")]
     internal partial class CalendarViewModel : ObservableObject, INotifyPropertyChanged
     {
         [ObservableProperty]

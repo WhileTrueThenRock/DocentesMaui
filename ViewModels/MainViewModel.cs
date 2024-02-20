@@ -222,7 +222,7 @@ namespace EFDocenteMAUI.ViewModels
             ClientWebSocket = new ClientWebSocket();  // Crear una nueva instancia de ClientWebSocket.
 
             // Construir la URI para la conexión WebSocket con el identificador del usuario. 192.168.20.12
-            Uri uri = new Uri($"ws://127.0.0.1:5000/chat-websocket?userId={UserName}");
+            Uri uri = new Uri($"ws://192.168.20.132:5000/chat-websocket?userId={UserName}");
             ClientWebSocket.Options.SetRequestHeader("UserId", UserName);  // Configurar el encabezado UserId.
             string token = await SecureStorage.Default.GetAsync("token");
             ClientWebSocket.Options.SetRequestHeader("Authorization", $"Bearer {token}");
@@ -250,9 +250,12 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task ShowPrivateMessagePopup()
         {
-            if (User != null)
+            foreach (var user in Users)
             {
-                User.IsNotificationEnabled = false;
+                if (user.UserName.Equals(SelectedUser.UserName))
+                {
+                    user.IsNotificationEnabled = false;
+                }
             }
             NotificationColor = Colors.Black;
             PrivateMessagePopup = new PrivateMessagePopup();
@@ -327,7 +330,8 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task LoadCalendarPage()
         {
-            await Shell.Current.GoToAsync("//CalendarPage");
+
+            await Shell.Current.GoToAsync("//CalendarPage", new Dictionary<string, object>() { ["User"] = User });
         }
 
         [RelayCommand]
@@ -481,10 +485,12 @@ namespace EFDocenteMAUI.ViewModels
                             //privateNotifications[messageChatModel.UserId] = true;
                             //PrivateNotification = privateNotifications[messageChatModel.UserId];
 
-                            User = Users.FirstOrDefault(u => u.UserName == messageChatModel.UserId);
-                            if (User != null)
+                            foreach (var user in Users)
                             {
-                                User.IsNotificationEnabled = true;
+                                if (user.UserName.Equals(messageChatModel.UserId))
+                                {
+                                    user.IsNotificationEnabled = true;
+                                }
                             }
 
                         }

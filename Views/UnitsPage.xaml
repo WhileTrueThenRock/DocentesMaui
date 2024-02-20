@@ -57,7 +57,7 @@
                                             Text="{Binding Titulo}" />
                                         <Label Text="{Binding Description}" />
                                         <Label Text="Imagenes" />
-                                        <CollectionView ItemsSource="{Binding Images}" SelectionMode="Single" >
+                                        <CollectionView ItemsSource="{Binding Images}" SelectionMode="Single">
                                             <CollectionView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Image
@@ -67,17 +67,15 @@
                                                 </DataTemplate>
                                             </CollectionView.ItemTemplate>
                                         </CollectionView>
+                                        <Label Text="PDFs"/>
+                                        <CollectionView ItemsSource="{Binding Pdfs}" SelectionMode="Single">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Image Source="{Binding .}"/>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
                                     </VerticalStackLayout>
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup Name="CommonStates">
-                                            <VisualState Name="Normal" />
-                                            <VisualState Name="Selected">
-                                                <VisualState.Setters>
-                                                    <Setter Property="Background" Value="LightGray" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
                                 </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -89,7 +87,7 @@
                 <WebView
                     HeightRequest="650"
                     HorizontalOptions="CenterAndExpand"
-                    Source="{Binding Resource}"
+                    Source="{Binding ResourceToShow}"
                     VerticalOptions="CenterAndExpand"
                     WidthRequest="800" />
             </ScrollView>
