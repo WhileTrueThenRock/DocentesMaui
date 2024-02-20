@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+    xmlns:models="clr-namespace:EFDocenteMAUI.Models"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
@@ -56,16 +57,19 @@
                             NumberOfTapsRequired="2" />
                     </CollectionView.GestureRecognizers>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="viewmodels:MainViewModel">
+                        <DataTemplate x:DataType="models:UserModel">
                             <Border>
-                                <HorizontalStackLayout HorizontalOptions="Center">
-                                    <buttons:SfButton
-                                        x:Name="UserName"
-                                        ImageSource="notificationbell.png"
-                                        IsEnabled="False"
-                                        ShowIcon="{Binding Path=BindingContext.User.IsNotificationEnabled, Source={x:Reference thisPage}}"
+                                <HorizontalStackLayout HorizontalOptions="Start">
+                                    <Label
+                                        Margin="5,5,20,0"
+                                        HeightRequest="30"
                                         Text="{Binding UserName}" />
 
+                                    <Image
+                                        HeightRequest="30"
+                                        IsVisible="{Binding IsNotificationEnabled}"
+                                        Source="notificationbell.png"
+                                        WidthRequest="30" />
                                 </HorizontalStackLayout>
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup Name="CommonStates">
@@ -135,6 +139,7 @@
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Label
+                                        BackgroundColor="Red"
                                         Margin="2"
                                         FontAttributes="Bold"
                                         FontSize="15"

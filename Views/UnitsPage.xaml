@@ -61,17 +61,36 @@
                                             <CollectionView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Image
+                                                        x:Name="myImageResource"
                                                         HeightRequest="30"
                                                         Source="{Binding .}"
-                                                        WidthRequest="30" />
+                                                        WidthRequest="30">
+                                                        <Image.GestureRecognizers>
+                                                            <TapGestureRecognizer
+                                                                Command="{Binding Source={x:Reference unitpage}, Path=BindingContext.ShowResourceCommand}"
+                                                                CommandParameter="{Binding Source={x:Reference myImageResource}, Path=Source}"
+                                                                NumberOfTapsRequired="1" />
+                                                        </Image.GestureRecognizers>
+                                                    </Image>
                                                 </DataTemplate>
                                             </CollectionView.ItemTemplate>
                                         </CollectionView>
-                                        <Label Text="PDFs"/>
+                                        <Label Text="PDFs" />
                                         <CollectionView ItemsSource="{Binding Pdfs}" SelectionMode="Single">
                                             <CollectionView.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Image Source="{Binding .}"/>
+                                                    <Image
+                                                        x:Name="myPdfResource"
+                                                        HeightRequest="30"
+                                                        Source="{Binding .}"
+                                                        WidthRequest="30">
+                                                        <Image.GestureRecognizers>
+                                                            <TapGestureRecognizer
+                                                                Command="{Binding Source={x:Reference unitpage}, Path=BindingContext.ShowResourceCommand}"
+                                                                CommandParameter="{Binding Source={x:Reference myPdfResource}, Path=Source}"
+                                                                NumberOfTapsRequired="1" />
+                                                        </Image.GestureRecognizers>
+                                                    </Image>
                                                 </DataTemplate>
                                             </CollectionView.ItemTemplate>
                                         </CollectionView>

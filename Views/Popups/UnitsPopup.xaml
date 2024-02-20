@@ -80,7 +80,26 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </HorizontalStackLayout>
-
+            <HorizontalStackLayout Grid.Row="3" Grid.Column="1">
+                <Button
+                    BackgroundColor="Green"
+                    Command="{Binding LoadImageCommand}"
+                    HeightRequest="30"
+                    Text="+"
+                    WidthRequest="30" />
+                <CollectionView ItemsSource="{Binding Unit.Pdfs}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodels:UnitsViewModel">
+                            <HorizontalStackLayout>
+                                <Image
+                                    HeightRequest="30"
+                                    Source="{Binding .}"
+                                    WidthRequest="30" />
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </HorizontalStackLayout>
         </Grid>
         <HorizontalStackLayout
             Margin="0,20,0,0"

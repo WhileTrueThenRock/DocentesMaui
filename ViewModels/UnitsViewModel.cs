@@ -48,10 +48,14 @@ namespace EFDocenteMAUI.ViewModels
         
 
         [RelayCommand]
-        public void ShowResource()
+        public void ShowResource(object image)
         {
-            ResourceToShow = Resource;
+          
+                var uriURL = (UriImageSource)image;
+                ResourceToShow = uriURL.Uri.AbsoluteUri;
+           
         }
+
         [RelayCommand]
         public async Task ShowUnitPopup()
         {
@@ -67,6 +71,16 @@ namespace EFDocenteMAUI.ViewModels
                 ImageSource = (ImageSource)imagesDict["imageFromStream"];
                 Image64 = (string)imagesDict["imageBase64"];
                 await SaveImageAsync();
+            }
+        }
+        [RelayCommand]
+        public async Task LoadPDF()
+        {
+            var pdfStream = await PDFUtils.OpenPdf();
+            if (pdfStream != null)
+            {
+                
+               
             }
         }
         public async Task<bool> UpdateImage()

@@ -141,6 +141,7 @@ namespace EFDocenteMAUI.ViewModels
             ImageMainChat = "botonmain.png";
             ImageNotificationChat = "botonnotification.png";
             Users = new ObservableCollection<UserModel>();
+
         }
         [RelayCommand]
         public void AddEmoji(string emoji)
@@ -250,13 +251,15 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task ShowPrivateMessagePopup()
         {
-            foreach (var user in Users)
+            var tempUsers = new ObservableCollection<UserModel>(Users);
+            foreach (var user in tempUsers)
             {
                 if (user.UserName.Equals(SelectedUser.UserName))
                 {
                     user.IsNotificationEnabled = false;
                 }
             }
+            Users = new ObservableCollection<UserModel>(tempUsers);
             NotificationColor = Colors.Black;
             PrivateMessagePopup = new PrivateMessagePopup();
             MessagesPrivateReceived = string.Empty;
@@ -485,12 +488,10 @@ namespace EFDocenteMAUI.ViewModels
                             //privateNotifications[messageChatModel.UserId] = true;
                             //PrivateNotification = privateNotifications[messageChatModel.UserId];
 
-                            foreach (var user in Users)
+                            User = Users.FirstOrDefault(u => u.UserName == messageChatModel.UserId);
+                            if (User != null)
                             {
-                                if (user.UserName.Equals(messageChatModel.UserId))
-                                {
-                                    user.IsNotificationEnabled = true;
-                                }
+                                User.IsNotificationEnabled = true;
                             }
 
                         }
