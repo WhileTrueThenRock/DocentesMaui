@@ -251,6 +251,10 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task ShowPrivateMessagePopup()
         {
+            if(UserName.Equals(SelectedUser.UserName))
+            {
+                return;
+            }
             var tempUsers = new ObservableCollection<UserModel>(Users);
             foreach (var user in tempUsers)
             {

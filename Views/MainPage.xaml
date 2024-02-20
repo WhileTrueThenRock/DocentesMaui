@@ -112,7 +112,7 @@
                     <HorizontalStackLayout HorizontalOptions="Center">
                         <HorizontalStackLayout Padding="2">
                             <Label
-                                FontAttributes="Bold"
+                                FontAttributes="Italic"
                                 FontFamily="Times New Roman"
                                 FontSize="20"
                                 Text="Usuario: " />
@@ -127,9 +127,10 @@
                         <Label Text="{Binding ConnectionState}" />
                     </HorizontalStackLayout>
                     <Border
-                        BackgroundColor="LightSeaGreen"
+                        Background="Blue"
                         HeightRequest="450"
                         HorizontalOptions="Center"
+                        Opacity="0.6"
                         Stroke="Black"
                         WidthRequest="500">
                         <Border.StrokeShape>
@@ -138,9 +139,10 @@
                         <CollectionView ItemsSource="{Binding ShowMessagesList}" ItemsUpdatingScrollMode="KeepLastItemInView">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
+
                                     <Label
-                                        BackgroundColor="Red"
-                                        Margin="2"
+                                        Margin="15,10,0,0"
+                                        BackgroundColor="#E1720F"
                                         FontAttributes="Bold"
                                         FontSize="15"
                                         Text="{Binding}" />
