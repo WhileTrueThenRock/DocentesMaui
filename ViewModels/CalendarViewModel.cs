@@ -26,8 +26,19 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private EventCollection _events = new();
 
-        [ObservableProperty]
-        private ObservableCollection<EventModel> _eventsList = new();
+        private ObservableCollection<EventModel> _eventsList;
+        public ObservableCollection<EventModel> EventsList { 
+            get
+            { 
+                return _eventsList;
+            } 
+            set
+            {
+                _eventsList = value;
+                OnPropertyChanged();
+            }
+                
+        }
 
         [ObservableProperty]
         private ObservableCollection<EventModel> _eventsDateFilter = new();
@@ -118,6 +129,7 @@ namespace EFDocenteMAUI.ViewModels
         {
             
             Culture = CultureInfo.CurrentCulture;
+            EventsList = new ObservableCollection<EventModel>();
             SelectedEvent = new EventModel();
             GetEvents();
             EventHeader = "Actividades de clase";
@@ -128,7 +140,7 @@ namespace EFDocenteMAUI.ViewModels
 
 
         [RelayCommand]
-        public async Task GetUsersByFiltro(string type)
+        public async Task GetUsersByFiltroType(string type)
         {
             
             if (null == type || type.Any(Char.IsWhiteSpace))
@@ -300,6 +312,8 @@ namespace EFDocenteMAUI.ViewModels
                     (response.Data.ToString());
                 foreach (DayEventsModel dem in eventList)
                 {
+
+
                     if (dem.Events.Count > 0)
                     {
                         Events.Add(DateTime.Parse(dem.EventDate), dem.Events);
