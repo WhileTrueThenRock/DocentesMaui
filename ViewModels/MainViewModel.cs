@@ -211,7 +211,7 @@ namespace EFDocenteMAUI.ViewModels
             ClientWebSocket = new ClientWebSocket();  // Crear una nueva instancia de ClientWebSocket.
 
             // Construir la URI para la conexión WebSocket con el identificador del usuario. 192.168.20.12
-            Uri uri = new Uri($"ws://127.0.0.1:5000/chat-websocket?userId={UserName}");
+            Uri uri = new Uri($"ws://192.168.20.132:5000/chat-websocket?userId={UserName}");
             ClientWebSocket.Options.SetRequestHeader("UserId", UserName);  // Configurar el encabezado UserId.
             string token = await SecureStorage.Default.GetAsync("token");
             ClientWebSocket.Options.SetRequestHeader("Authorization", $"Bearer {token}");
@@ -299,17 +299,6 @@ namespace EFDocenteMAUI.ViewModels
         {
             PrivateMessagePopup.Close();
 
-        }
-        public async Task<UserModel> GetUserByUserName()
-        {
-            UserModel user = new UserModel();
-            var request = new RequestModel(route: "/users/byname/" + UserName,
-                                           method: "GET",
-                                           data: User,
-                                           server: APIService.GestionServerUrl);
-            var response = await APIService.ExecuteRequest(request);
-            user = JsonConvert.DeserializeObject<UserModel>(response.Data.ToString());
-            return user;
         }
 
         [RelayCommand]
