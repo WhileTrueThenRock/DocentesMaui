@@ -67,8 +67,8 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task LoadMainPage()
         {
-            //User = await GetUserByUserName();
-            await Shell.Current.GoToAsync("//MainPage");//,new Dictionary<string, object>(){["User"] = User});
+            User = await GetUserByUserName();
+            await Shell.Current.GoToAsync("//MainPage",new Dictionary<string, object>(){["User"] = User});
         }
 
         [RelayCommand]

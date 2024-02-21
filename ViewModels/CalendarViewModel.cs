@@ -99,12 +99,6 @@ namespace EFDocenteMAUI.ViewModels
             }
         }
 
-        //[ObservableProperty]
-        //private DateTime _fechaInicio = new DateTime(2023, 1, 1);
-
-        //[ObservableProperty]
-        //private DateTime _fechaFin = DateTime.Now;
-
         [ObservableProperty]
         private bool _isCreateVisible;
 
@@ -122,33 +116,28 @@ namespace EFDocenteMAUI.ViewModels
 
         public CalendarViewModel()
         {
-            User = new UserModel();
+            
             Culture = CultureInfo.CurrentCulture;
             SelectedEvent = new EventModel();
             GetEvents();
             EventHeader = "Actividades de clase";
             FechaIni = new DateTime(2023, 1, 1).ToString("dd-MM-yyyy");
             FechaFin = DateTime.Now.ToString("dd-MM-yyyy");
-            // ResultadoFecha = $"Años filtrados: {AnioMenor} - {AnioMayor}";
+           
         }
 
 
         [RelayCommand]
         public async Task GetUsersByFiltro(string type)
         {
-            //if (null == Filtro)
-            //{
-            //    await App.Current.MainPage.DisplayAlert("Info", "Debes selecionar un Campo de busqueda", "ACEPTAR");
-
-            //}
+            
             if (null == type || type.Any(Char.IsWhiteSpace))
             {
                 await App.Current.MainPage.DisplayAlert("Info", "El campo de busqueda no puede estar vacio", "ACEPTAR");
             }
             else
             {
-                //string filtro = descripcion.ToLower();
-                //   IsListVisible = true;
+               
                 var request = new RequestModel(method: "GET",
                                                 route: "/events/getEventsByFilter/" + type.ToLower(),
                                                 data: User,
@@ -181,19 +170,14 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task GetUsersByFiltroDescription(string descripcion)
         {
-            //if (null == Filtro)
-            //{
-            //    await App.Current.MainPage.DisplayAlert("Info", "Debes selecionar un Campo de busqueda", "ACEPTAR");
-
-            //}
+            
             if (null == descripcion || descripcion.Any(Char.IsWhiteSpace))
             {
                 await App.Current.MainPage.DisplayAlert("Info", "El campo de busqueda no puede estar vacio", "ACEPTAR");
             }
             else
             {
-                //string filtro = descripcion.ToLower();
-                //   IsListVisible = true;
+                
                 var request = new RequestModel(method: "GET",
                                                 route: "/events/getEventsByDescription/" + descripcion.ToLower(),
                                                 data: User,
@@ -230,11 +214,9 @@ namespace EFDocenteMAUI.ViewModels
             if (!DateTime.TryParse(FechaIni, out DateTime fechaInicio) ||
          !DateTime.TryParse(FechaFin, out DateTime fechaFin))
             {
-                // Manejar el caso en que las fechas no sean válidas
                 return;
             }
-           
-           // Events.Clear();
+                
                 string[] dateArray = FechaIni.Split(' ');
                 FechaIni = dateArray[0];
 
@@ -390,7 +372,7 @@ namespace EFDocenteMAUI.ViewModels
         public async Task<bool> UpdateImage()
         {
             ImageModel imagen = new ImageModel();
-            imagen.Id = SelectedEvent.Id.ToString(); //Linea modificada
+            imagen.Id = SelectedEvent.Id.ToString();
             imagen.Content = AvatarImage64;
             var request = new RequestModel(method: "POST", route: "/images/save", data: imagen, server: APIService.ImagenesServerUrl);
 

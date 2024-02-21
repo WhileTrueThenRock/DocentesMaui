@@ -27,7 +27,10 @@
                         NumberOfTapsRequired="2" />
                 </VerticalStackLayout.GestureRecognizers>
                 <Label HorizontalOptions="Center" Text="EDUCACIÓN FISICA" />
-                <Button Command="{Binding ShowUnitPopupCommand}" Text="CREAR TEMARIO" />
+                <Button
+                    Command="{Binding ShowUnitPopupCommand}"
+                    IsVisible="{Binding User.RolProfesor}"
+                    Text="CREAR TEMARIO" />
                 <ScrollView>
                     <CollectionView
                         ItemsSource="{Binding UnitList}"

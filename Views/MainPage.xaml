@@ -151,7 +151,7 @@
                         </CollectionView>
                     </Border>
 
-                    <HorizontalStackLayout HorizontalOptions="Center" IsVisible="{Binding ProfesorEnabled}">
+                    <HorizontalStackLayout HorizontalOptions="Center" IsVisible="{Binding User.RolProfesor}">
                         <Entry
                             Margin="0,2,2,2"
                             BackgroundColor="AliceBlue"
@@ -203,7 +203,7 @@
                     Background="Transparent"
                     Command="{Binding LoadRegisterPageCommand}"
                     ImageSource="student.png"
-                    IsVisible="{Binding Profesor}"
+                    IsVisible="{Binding User.RolProfesor}"
                     ShowIcon="True"
                     Text="Alumnos"
                     TextColor="Black"

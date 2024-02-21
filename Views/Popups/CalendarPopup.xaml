@@ -149,6 +149,7 @@
                                 <HorizontalStackLayout
                                     Margin="0,20,0,0"
                                     HorizontalOptions="Center"
+                                    IsVisible="{Binding User.RolProfesor}"
                                     WidthRequest="400">
                                     <Button
                                         BackgroundColor="Green"

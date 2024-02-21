@@ -101,10 +101,6 @@ namespace EFDocenteMAUI.ViewModels
         private Color _notificationColor;
         [ObservableProperty]
         private UserModel _user;
-        [ObservableProperty]
-        private bool _profesor;
-        [ObservableProperty]
-        private bool _profesorEnabled;
 
         public MainViewModel()
         {
@@ -136,7 +132,6 @@ namespace EFDocenteMAUI.ViewModels
             ShowMainMsg();
             ImMainChat = true;
             ImNotificationChat = false;
-            ProfesorEnabled = true;
             PrivateNotification = false;
             ImageMainChat = "botonmain.png";
             ImageNotificationChat = "botonnotification.png";
@@ -148,14 +143,7 @@ namespace EFDocenteMAUI.ViewModels
         {
             MessageToSend += emoji;
         }
-        public bool EsProfesor()
-        {
-            if (User.Rol.Equals("Profesor"))
-            {
-                return true;
-            }
-            return false;
-        }
+        
         private void GenerateSource()
         {
             var nodeImageInfo = new ObservableCollection<FileManager>();
@@ -223,7 +211,7 @@ namespace EFDocenteMAUI.ViewModels
             ClientWebSocket = new ClientWebSocket();  // Crear una nueva instancia de ClientWebSocket.
 
             // Construir la URI para la conexión WebSocket con el identificador del usuario. 192.168.20.12
-            Uri uri = new Uri($"ws://192.168.20.132:5000/chat-websocket?userId={UserName}");
+            Uri uri = new Uri($"ws://127.0.0.1:5000/chat-websocket?userId={UserName}");
             ClientWebSocket.Options.SetRequestHeader("UserId", UserName);  // Configurar el encabezado UserId.
             string token = await SecureStorage.Default.GetAsync("token");
             ClientWebSocket.Options.SetRequestHeader("Authorization", $"Bearer {token}");
@@ -243,8 +231,7 @@ namespace EFDocenteMAUI.ViewModels
             {
                 Debug.WriteLine(ex);  // Registrar cualquier excepción durante la conexión.
             }
-            User = await GetUserByUserName();
-            Profesor = EsProfesor();
+            //User = await GetUserByUserName();
         }
 
 
@@ -293,7 +280,6 @@ namespace EFDocenteMAUI.ViewModels
             ImMainChat = true;
             ImNotificationChat = false;
             ImageMainChat = "botonmain.png";
-            ProfesorEnabled = IsProfesorEnabled();
         }
         [RelayCommand]
         public void ShowNotificationMsg()
@@ -304,7 +290,6 @@ namespace EFDocenteMAUI.ViewModels
             ImMainChat = false;
             ImNotificationChat = true;
             ImageNotificationChat = "botonnotification.png";
-            ProfesorEnabled = IsProfesorEnabled();
         }
 
         
@@ -337,7 +322,7 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task LoadCalendarPage()
         {
-
+            
             await Shell.Current.GoToAsync("//CalendarPage", new Dictionary<string, object>() { ["User"] = User });
         }
 
@@ -349,7 +334,7 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task LoadUnitsPage()
         {
-            await Shell.Current.GoToAsync("//UnitsPage");
+            await Shell.Current.GoToAsync("//UnitsPage", new Dictionary<string, object>() { ["User"] = User });
         }
 
         [RelayCommand]
@@ -563,7 +548,7 @@ namespace EFDocenteMAUI.ViewModels
                     NotificationId = 100,
                     Title = "MENSAJE PRIVADO",
                     Sound = "sound",
-                    Description = "Aviso sensor de movimiento"
+                    Description = "Tienes un mensaje de\n" + user
                 };
                 await LocalNotificationCenter.Current.Show(notification);
 
@@ -572,19 +557,6 @@ namespace EFDocenteMAUI.ViewModels
             {
                 await Toast.Make("Tienes un mensaje de\n"+user).Show();
             }
-        }
-        public bool IsProfesorEnabled()
-        {
-            bool enabled = true;
-            if (!ImMainChat)
-            {
-                if (User.Rol.Equals("Estudiante"))
-                {
-                    enabled = false;
-                }
-            }
-
-            return enabled;
         }
 
     }
