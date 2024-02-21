@@ -64,6 +64,7 @@
 	  <None Remove="Resources\Images\calendar.png" />
 	  <None Remove="Resources\Images\chat_background.jpg" />
 	  <None Remove="Resources\Images\crud.png" />
+	  <None Remove="Resources\Images\fondo.png" />
 	  <None Remove="Resources\Images\loupe.png" />
 	  <None Remove="Resources\Images\notificationbell.png" />
 	  <None Remove="Resources\Images\plus.png" />
