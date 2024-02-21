@@ -14,7 +14,7 @@ namespace EFDocenteMAUI.Models
         public string Email { get; set; }
         public int Telefono { get; set; }
         public string FechaNacimiento { get; set; }
-        public string Rol { get; set; }
+        public bool RolProfesor { get; set; }
         public string Curso { get; set; }
         public DireccionModel Direccion { get; set; }
         public string Avatar { get; set; }
@@ -34,7 +34,7 @@ namespace EFDocenteMAUI.Models
         public UserModel() { 
             Id=ObjectId.GenerateNewId().ToString();
             FechaNacimiento = DateTime.Now.ToString();
-            Rol = "Estudiante";
+            RolProfesor = false;
             Avatar = APIService.ImagenesServerUrl + "/avatars/defaultimage";
             Direccion = new DireccionModel();
         }

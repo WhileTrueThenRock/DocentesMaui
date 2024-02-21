@@ -38,6 +38,9 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private string _resourceToShow;
 
+        [ObservableProperty]
+        private UserModel _user;
+
 
         public UnitsViewModel() 
         {
