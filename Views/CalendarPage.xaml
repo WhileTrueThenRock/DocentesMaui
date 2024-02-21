@@ -69,16 +69,22 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <Label Grid.Column="1" Grid.Row="0" Text="User"/>
-            <Label Grid.Column="1" Grid.Row="0" Text="{Binding User.UserName}"/>
+            <Label
+                Grid.Row="0"
+                Grid.Column="1"
+                Text="User" />
+            <Label
+                Grid.Row="0"
+                Grid.Column="1"
+                Text="{Binding User.UserName}" />
             <Button
                 Grid.Row="0"
                 Grid.Column="1"
                 Command="{Binding ShowEventPopupCommand}"
                 CommandParameter="create"
                 HeightRequest="20"
+                IsVisible="{Binding User.RolProfesor}"
                 Text="Crear Evento"
-                Visual="{Binding User.RolProfesor}"
                 WidthRequest="150" />
             <Button
                 Grid.Row="0"
@@ -219,7 +225,7 @@
                                                     Margin="10,50,0,0"
                                                     BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
                                                     ItemsSource="{Binding EventsDateFilter}"
-                                                    SelectionMode="Multiple">
+                                                    SelectionMode="Single">
                                                     <CollectionView.ItemTemplate>
                                                         <DataTemplate x:DataType="models:EventModel">
                                                             <Border>
@@ -277,7 +283,7 @@
                                                     Margin="0,20,0,0"
                                                     Placeholder="Introduce un texto..." />
                                                 <Button
-                                                    Command="{Binding GetUsersByFiltroCommand}"
+                                                    Command="{Binding GetUsersByFiltroTypeCommand}"
                                                     CommandParameter="{Binding Source={x:Reference typeEntry}, Path=Text}"
                                                     HorizontalOptions="Center"
                                                     Text="BUSCAR"
