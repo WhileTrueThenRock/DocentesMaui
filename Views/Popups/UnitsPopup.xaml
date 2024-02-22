@@ -83,7 +83,7 @@
             <HorizontalStackLayout Grid.Row="3" Grid.Column="1">
                 <Button
                     BackgroundColor="#4CAF50"
-                    Command="{Binding LoadImageCommand}"
+                    Command="{Binding LoadPDFCommand}"
                     HeightRequest="30"
                     Text="+"
                     WidthRequest="30" />
