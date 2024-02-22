@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
     xmlns:models="clr-namespace:EFDocenteMAUI.Models"
+    xmlns:pdfviewer="clr-namespace:Syncfusion.Maui.PdfViewer;assembly=Syncfusion.Maui.PdfViewer"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
@@ -93,18 +94,23 @@
                                         <CollectionView ItemsSource="{Binding Pdfs}" SelectionMode="Single">
                                             <CollectionView.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Image
-                                                        x:Name="myPdfResource"
-                                                        HeightRequest="30"
-                                                        Source="{Binding .}"
-                                                        WidthRequest="30">
-                                                        <Image.GestureRecognizers>
-                                                            <TapGestureRecognizer
-                                                                Command="{Binding Source={x:Reference unitpage}, Path=BindingContext.ShowResourceCommand}"
-                                                                CommandParameter="{Binding Source={x:Reference myPdfResource}, Path=Source}"
-                                                                NumberOfTapsRequired="1" />
-                                                        </Image.GestureRecognizers>
-                                                    </Image>
+                                                    <HorizontalStackLayout>
+                                                        <Image
+                                                            HeightRequest="30"
+                                                            Source="pdf.png"
+                                                            WidthRequest="30">
+                                                            <Image.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                    Command="{Binding Source={x:Reference unitpage}, Path=BindingContext.ShowResourcePdfCommand}"
+                                                                    CommandParameter="{Binding Source={x:Reference pdfViewer}, Path=DocumentSource}"
+                                                                    NumberOfTapsRequired="1" />
+                                                            </Image.GestureRecognizers>
+                                                        </Image>
+                                                        <pdfviewer:SfPdfViewer
+                                                            x:Name="pdfViewer"
+                                                            DocumentSource="{Binding .}"
+                                                            IsVisible="False" />
+                                                    </HorizontalStackLayout>
                                                 </DataTemplate>
                                             </CollectionView.ItemTemplate>
                                         </CollectionView>
@@ -114,7 +120,6 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </ScrollView>
-
             </VerticalStackLayout>
             <ScrollView Grid.Row="1" Grid.Column="2">
                 <WebView

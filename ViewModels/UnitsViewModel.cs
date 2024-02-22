@@ -32,7 +32,7 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private ImageSource _imageSource;
         [ObservableProperty]
-        private FileImageSource _pdfSource;
+        private ImageSource _pdfSource;
         [ObservableProperty]
         private string _pdf64;
         [ObservableProperty]
@@ -65,6 +65,14 @@ namespace EFDocenteMAUI.ViewModels
         }
 
         [RelayCommand]
+        public void ShowResourcePdf(object image)
+        {
+
+            ResourceToShow = image.ToString();
+
+        }
+
+        [RelayCommand]
         public async Task ShowUnitPopup()
         {
             UnitsPopup = new UnitsPopup();
@@ -87,7 +95,7 @@ namespace EFDocenteMAUI.ViewModels
             var pdfDict = await PDFUtils.OpenPDF();
             if (pdfDict != null)
             {
-                PdfSource = (FileImageSource)pdfDict["pdfFromStream"];
+                PdfSource = (ImageSource)pdfDict["pdfFromStream"];
                 Pdf64 = (string)pdfDict["pdfBase64"];
                 await SavePDFAsync();
             }
@@ -108,9 +116,9 @@ namespace EFDocenteMAUI.ViewModels
             PDFModel pdf = new PDFModel();
             pdf.Id = ObjectId.GenerateNewId().ToString();
             pdf.Content = Pdf64;
-            var request = new RequestModel(method: "POST", route: "/pdf/save", data: pdf, server: APIService.ImagenesServerUrl);
+            var request = new RequestModel(method: "POST", route: "/pdfs/save", data: pdf, server: APIService.ImagenesServerUrl);
             ResponseModel response = await APIService.ExecuteRequest(request);
-            Unit.Pdfs.Add(APIService.ImagenesServerUrl + "/pdf/" + pdf.Id.ToString());
+            Unit.Pdfs.Add(APIService.ImagenesServerUrl + "/pdfs/" + pdf.Id.ToString());
             return response.Success == 0;
         }
         public async Task SaveImageAsync()

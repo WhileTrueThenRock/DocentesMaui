@@ -23,7 +23,7 @@ namespace EFDocenteMAUI.Utils
                 var streamForPDFBase64 = await result.OpenReadAsync();
 
                 // Almacena la imagen como fuente de pdf en el diccionario
-                pdfSources["pdfFromStream"] = FileImageSource.FromStream(() => stream);
+                pdfSources["pdfFromStream"] = ImageSource.FromStream(() => stream);
 
                 // Crea un MemoryStream para copiar el contenido del flujo de lectura
                 var msstream = new MemoryStream();

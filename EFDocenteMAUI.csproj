@@ -68,6 +68,7 @@
 	  <None Remove="Resources\Images\fondo.png" />
 	  <None Remove="Resources\Images\loupe.png" />
 	  <None Remove="Resources\Images\notificationbell.png" />
+	  <None Remove="Resources\Images\pdf.png" />
 	  <None Remove="Resources\Images\plus.png" />
 	  <None Remove="Resources\Images\ricardo.jpg" />
 	  <None Remove="Resources\Images\student.png" />
