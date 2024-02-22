@@ -32,6 +32,10 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private ImageSource _imageSource;
         [ObservableProperty]
+        private FileImageSource _pdfSource;
+        [ObservableProperty]
+        private string _pdf64;
+        [ObservableProperty]
         private UnitsPopup _unitsPopup;
 
         [ObservableProperty]
@@ -77,7 +81,18 @@ namespace EFDocenteMAUI.ViewModels
                 await SaveImageAsync();
             }
         }
-        
+        [RelayCommand]
+        public async Task LoadPDF()
+        {
+            var pdfDict = await PDFUtils.OpenPDF();
+            if (pdfDict != null)
+            {
+                PdfSource = (FileImageSource)pdfDict["pdfFromStream"];
+                Pdf64 = (string)pdfDict["pdfBase64"];
+                await SavePDFAsync();
+            }
+        }
+
         public async Task<bool> UpdateImage()
         {
             ImageModel imagen = new ImageModel();
@@ -86,6 +101,16 @@ namespace EFDocenteMAUI.ViewModels
             var request = new RequestModel(method: "POST", route: "/images/save", data: imagen, server: APIService.ImagenesServerUrl);
             ResponseModel response = await APIService.ExecuteRequest(request);
             Unit.Images.Add(APIService.ImagenesServerUrl + "/images/" + imagen.Id.ToString());
+            return response.Success == 0;
+        }
+        public async Task<bool> UpdatePDF()
+        {
+            PDFModel pdf = new PDFModel();
+            pdf.Id = ObjectId.GenerateNewId().ToString();
+            pdf.Content = Pdf64;
+            var request = new RequestModel(method: "POST", route: "/pdf/save", data: pdf, server: APIService.ImagenesServerUrl);
+            ResponseModel response = await APIService.ExecuteRequest(request);
+            Unit.Pdfs.Add(APIService.ImagenesServerUrl + "/pdf/" + pdf.Id.ToString());
             return response.Success == 0;
         }
         public async Task SaveImageAsync()
@@ -100,7 +125,19 @@ namespace EFDocenteMAUI.ViewModels
                 await App.Current.MainPage.DisplayAlert("Temario", "Error al añadir imagen", "Aceptar");
             }
         }
-            [RelayCommand]
+        public async Task SavePDFAsync()
+        {
+            bool okSavePDF = await UpdatePDF();
+            if (okSavePDF)
+            {
+                await App.Current.MainPage.DisplayAlert("Temario", "PDF añadida correctamente", "Aceptar");
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Temario", "Error al añadir PDF", "Aceptar");
+            }
+        }
+        [RelayCommand]
         public async Task ExecuteRequest()
         {  
                 var request = new RequestModel(method: "POST",
