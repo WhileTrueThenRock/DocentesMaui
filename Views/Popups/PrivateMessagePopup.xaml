@@ -7,8 +7,9 @@
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
     x:DataType="viewmodels:MainViewModel"
     CanBeDismissedByTappingOutsideOfPopup="False"
-    Color="Black">
-    <VerticalStackLayout Background="Black" BackgroundColor="Yellow">
+    Color="White">
+
+    <VerticalStackLayout>
         <HorizontalStackLayout BackgroundColor="Red">
             <Label
                 HorizontalOptions="Center"
@@ -28,7 +29,7 @@
             HeightRequest="400"
             HorizontalOptions="Center"
             IsReadOnly="True"
-            Text="{Binding PrivateMessagesReceived}"
+            Text="{Binding MessagesPrivateReceived}"
             WidthRequest="490" />
         <HorizontalStackLayout
             Grid.Row="3"
@@ -55,9 +56,10 @@
             </Picker>
             <Button
                 Background="LightGreen"
+                Command="{Binding SendMessageCommand}"
                 CommandParameter="Private"
                 HorizontalOptions="Center"
-                Text="SendMessageCommand"
+                Text="ENVIAR"
                 WidthRequest="80" />
         </HorizontalStackLayout>
         <Button

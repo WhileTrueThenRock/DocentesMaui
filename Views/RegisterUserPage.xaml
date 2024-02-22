@@ -3,189 +3,449 @@
     x:Class="EFDocenteMAUI.Views.RegisterUserPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+    xmlns:mdc="clr-namespace:Material.Components.Maui;assembly=Material.Components.Maui"
+    xmlns:models="clr-namespace:EFDocenteMAUI.Models"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
     x:DataType="viewmodels:RegisterUserViewModel"
+    BackgroundImageSource="fondo.png"
     BindingContext="{viewmodels:RegisterUserViewModel}">
+
+    <ContentPage.Resources>
+        <toolkit:IsNotNullConverter x:Key="IsNotNullConverter" />
+        <Style x:Key="InvalidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Red" />
+        </Style>
+        <Style x:Key="ValidEntryStyle" TargetType="Entry">
+            <Setter Property="TextColor" Value="Black" />
+        </Style>
+    </ContentPage.Resources>
     <ScrollView>
-        <Grid ColumnDefinitions="*,450,550,*" RowDefinitions="*,400,400,*">
-            <VerticalStackLayout
+        <Grid ColumnDefinitions="40,450,550,*" RowDefinitions="*,400,400,*">
+            <Border
                 Grid.Row="1"
                 Grid.Column="1"
-                Margin="10">
-                <Label Text="para busqueda" />
-            </VerticalStackLayout>
+                Margin="10"
+                BackgroundColor="#66FFCC"
+                HorizontalOptions="FillAndExpand">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow
+                        Brush="white"
+                        Opacity="0.3"
+                        Radius="20"
+                        Offset="15,15" />
+                </Border.Shadow>
+                <VerticalStackLayout Padding="5">
+                    <Button
+                        Margin="2"
+                        BackgroundColor="#00CC33"
+                        Command="{Binding EnableCreateUserCommand}"
+                        HorizontalOptions="Center"
+                        Text="CREAR USUARIO"
+                        WidthRequest="200" />
+                    <Button
+                        Margin="2"
+                        BackgroundColor="#00CC33"
+                        Command="{Binding GetUsersCommand}"
+                        HorizontalOptions="Center"
+                        Text="MOSTRAR USUARIOS"
+                        WidthRequest="200" />
+                    <HorizontalStackLayout Margin="5">
+                        <Picker
+                            ItemsSource="{Binding ParametrosBusqueda}"
+                            SelectedIndex="1"
+                            SelectedItem="{Binding Filtro}"
+                            WidthRequest="180" />
+                        <Entry
+                            x:Name="entrdaBusqueda"
+                            Text="{Binding Busqueda}"
+                            WidthRequest="220" />
+                    </HorizontalStackLayout>
+                    <Button
+                        BackgroundColor="#00CC33"
+                        Command="{Binding GetUsersByFiltroCommand}"
+                        CommandParameter="{Binding Source={x:Reference entrdaBusqueda}, Path=Text}"
+                        HorizontalOptions="Center"
+                        Text="BUSCAR"
+                        WidthRequest="200" />
+                </VerticalStackLayout>
+            </Border>
             <Border
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="10"
+                BackgroundColor="#66FFCC"
+                HorizontalOptions="FillAndExpand"
+                IsVisible="{Binding IsListVisible}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow
+                        Brush="White"
+                        Opacity="0.3"
+                        Radius="20"
+                        Offset="15,15" />
+                </Border.Shadow>
+                <VerticalStackLayout>
+                    <CollectionView
+                        HeightRequest="350"
+                        ItemsSource="{Binding UserList}"
+                        SelectedItem="{Binding User}"
+                        SelectionChangedCommand="{Binding ShowUserInfoCommand}"
+                        SelectionMode="Single"
+                        WidthRequest="430">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:UserModel">
+                                <Border
+                                    Margin="5"
+                                    Background="#66FFCC"
+                                    Stroke="Black"
+                                    StrokeThickness="4">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" />
+                                    </Border.StrokeShape>
+                                    <Border.Shadow>
+                                        <Shadow
+                                            Brush="White"
+                                            Opacity="0.3"
+                                            Radius="20"
+                                            Offset="15,15" />
+                                    </Border.Shadow>
+                                    <Grid ColumnDefinitions="110,*">
+                                        <Image
+                                            Grid.Column="0"
+                                            Margin="5"
+                                            HeightRequest="100"
+                                            Source="{Binding Avatar}"
+                                            WidthRequest="100" />
+                                        <VerticalStackLayout Grid.Column="1" Margin="5">
+                                            <Label Text="{Binding Nombre}" />
+                                            <Label Text="{Binding Dni}" />
+                                            <Label Text="{Binding FechaNacimiento}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup Name="CommonStates">
+                                            <VisualState Name="Normal" />
+                                            <VisualState Name="Selected">
+                                                <VisualState.Setters>
+                                                    <Setter Property="Background" Value="LightGray" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+            <ScrollView
                 Grid.Row="1"
                 Grid.RowSpan="2"
                 Grid.Column="2"
-                Margin="10">
-                <Border.Shadow>
-                    <Shadow
-                        Brush="Black"
-                        Opacity=".5"
-                        Radius="12"
-                        Offset="10,10" />
-                </Border.Shadow>
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="20,0,0,0" />
-                </Border.StrokeShape>
-                <VerticalStackLayout Padding="10" Background="WhiteSmoke">
-                    <Label Text="AQUI VA LA FOTO" />
-                    <Grid ColumnDefinitions="150,350" RowDefinitions="*,*,*,*,*,*,*,*,*,*,*,*,*,*">
-                        <Label
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Margin="0,0,10,0"
-                            HorizontalTextAlignment="End"
-                            Text="ID:"
-                            VerticalOptions="Center" />
-                        <Entry
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            IsEnabled="False"
-                            Text="{Binding User.Id}" />
-                        <Label
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Margin="0,0,10,0"
-                            HorizontalTextAlignment="End"
-                            Text="Nombre:"
-                            VerticalOptions="Center" />
-                        <Entry
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Text="{Binding User.Nombre}" />
+                Margin="10"
+                IsVisible="{Binding IsSelectedUser}">
+                <Border>
+                    <Border.Shadow>
+                        <Shadow
+                            Brush="Black"
+                            Opacity=".5"
+                            Radius="12"
+                            Offset="10,10" />
+                    </Border.Shadow>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20,0,0,0" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Padding="10" Background="#66FFCC">
+                        <toolkit:AvatarView
+                            Margin="10,0,0,0"
+                            Padding="0"
+                            CornerRadius="300"
+                            HeightRequest="200"
+                            ImageSource="{Binding AvatarImage}"
+                            IsEnabled="{Binding IsDataEnabled}"
+                            StrokeThickness="2"
+                            WidthRequest="200">
+                            <toolkit:AvatarView.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding LoadImageCommand}" NumberOfTapsRequired="1" />
+                            </toolkit:AvatarView.GestureRecognizers>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Normal" />
+                                    <VisualState Name="PointerOver">
+                                        <VisualState.Setters>
+                                            <Setter Property="BorderColor" Value="Red" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </toolkit:AvatarView>
+                        <Grid ColumnDefinitions="150,350" RowDefinitions="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*">
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Margin="0,20,10,0"
+                                HorizontalTextAlignment="End"
+                                Text="ID:"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="0,20,0,0"
+                                IsEnabled="False"
+                                Text="{Binding User.Id}" />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Margin="0,0,10,0"
+                                HorizontalTextAlignment="End"
+                                Text="Nombre:"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                IsEnabled="{Binding IsDataEnabled}"
+                                Text="{Binding User.Nombre}" />
 
-                        <Label
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            Margin="0,0,10,0"
-                            HorizontalTextAlignment="End"
-                            Text="Apellidos:"
-                            VerticalOptions="Center" />
-                        <Entry
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            Text="{Binding User.Apellidos}" />
-                        <Label
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            Margin="0,0,10,0"
-                            HorizontalTextAlignment="End"
-                            Text="Dni:"
-                            VerticalOptions="Center" />
-                        <Entry
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            Text="{Binding User.Dni}" />
+                            <Label
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Margin="0,0,10,0"
+                                HorizontalTextAlignment="End"
+                                Text="Apellidos:"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                IsEnabled="{Binding IsDataEnabled}"
+                                Text="{Binding User.Apellidos}" />
+                            <Label
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                Margin="0,0,10,0"
+                                HorizontalTextAlignment="End"
+                                Text="Dni:"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                IsEnabled="{Binding IsDataEnabled}"
+                                Text="{Binding User.Dni}" />
 
-                        <Label
-                            Grid.Row="4"
-                            Grid.Column="0"
-                            Margin="0,0,10,0"
-                            HorizontalTextAlignment="End"
-                            Text="E-mail"
-                            VerticalOptions="Center" />
-                        <Entry
-                            Grid.Row="4"
-                            Grid.Column="1"
-                            Text="{Binding User.Email}" />
-                        <Label
-                            Grid.Row="5"
-                            Grid.Column="0"
-                            Margin="0,0,10,0"
-                            HorizontalTextAlignment="End"
-                            Text="Telefono"
-                            VerticalOptions="Center" />
-                        <Entry
-                            Grid.Row="5"
-                            Grid.Column="1"
-                            Text="{Binding User.Telefono}" />
+                            <Label
+                                Grid.Row="4"
+                                Grid.Column="0"
+                                Margin="0,0,10,0"
+                                HorizontalTextAlignment="End"
+                                Text="E-mail"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                IsEnabled="{Binding IsDataEnabled}"
+                                Text="{Binding User.Email}" />
+                            <Label
+                                Grid.Row="5"
+                                Grid.Column="0"
+                                Margin="0,0,10,0"
+                                HorizontalTextAlignment="End"
+                                Text="Telefono"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Row="5"
+                                Grid.Column="1"
+                                IsEnabled="{Binding IsDataEnabled}"
+                                Keyboard="Numeric"
+                                Text="{Binding TelefonoString}">
+                                <Entry.Behaviors>
+                                    <toolkit:NumericValidationBehavior
+                                        Flags="ValidateOnValueChanged"
+                                        InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                        MaximumDecimalPlaces="0"
+                                        MaximumValue="999999999"
+                                        MinimumValue="600000000"
+                                        ValidStyle="{StaticResource ValidEntryStyle}" />
+                                </Entry.Behaviors>
+                            </Entry>
+                            <Label
+                                Grid.Row="7"
+                                Grid.Column="0"
+                                Margin="0,0,10,0"
+                                HorizontalTextAlignment="End"
+                                Text="Fecha de nacimiento:"
+                                VerticalOptions="Center" />
+                            <DatePicker
+                                Grid.Row="7"
+                                Grid.Column="1"
+                                Date="{Binding User.FechaNacimiento}"
+                                Format="dd/MM/yyyy"
+                                IsEnabled="{Binding IsDataEnabled}"
+                                WidthRequest="350" />
+                            <Label
+                                Grid.Row="8"
+                                Grid.Column="0"
+                                Margin="0,0,10,0"
+                                HorizontalTextAlignment="End"
+                                Text="Curso:"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Row="8"
+                                Grid.Column="1"
+                                IsEnabled="{Binding IsDataEnabled}"
+                                Text="{Binding User.Curso}" />
+                            <Label
+                                Grid.Row="9"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                HorizontalOptions="Center"
+                                Text="DIRECCIÓN" />
+                            <Label
+                                Grid.Row="10"
+                                Grid.Column="0"
+                                Margin="0,0,10,0"
+                                HorizontalTextAlignment="End"
+                                Text="Calle:"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Row="10"
+                                Grid.Column="1"
+                                IsEnabled="{Binding IsDataEnabled}"
+                                Text="{Binding User.Direccion.Calle}" />
+                            <Label
+                                Grid.Row="11"
+                                Grid.Column="0"
+                                Margin="0,0,10,0"
+                                HorizontalTextAlignment="End"
+                                Text="Número:"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Row="11"
+                                Grid.Column="1"
+                                IsEnabled="{Binding IsDataEnabled}"
+                                Text="{Binding User.Direccion.Numero}" />
+                            <Label
+                                Grid.Row="12"
+                                Grid.Column="0"
+                                Margin="0,0,10,0"
+                                HorizontalTextAlignment="End"
+                                Text="Poblacion:"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Row="12"
+                                Grid.Column="1"
+                                IsEnabled="{Binding IsDataEnabled}"
+                                Text="{Binding User.Direccion.Poblacion}" />
+                            <Label
+                                Grid.Row="13"
+                                Grid.Column="0"
+                                Margin="0,0,10,0"
+                                HorizontalTextAlignment="End"
+                                Text="CP:"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Row="13"
+                                Grid.Column="1"
+                                IsEnabled="{Binding IsDataEnabled}"
+                                Text="{Binding CpString}">
+                                <Entry.Behaviors>
+                                    <toolkit:NumericValidationBehavior
+                                        Flags="ValidateOnValueChanged"
+                                        InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                        MaximumDecimalPlaces="0"
+                                        MaximumValue="99999"
+                                        MinimumValue="0"
+                                        ValidStyle="{StaticResource ValidEntryStyle}" />
+                                </Entry.Behaviors>
+                            </Entry>
+                            <Label
+                                Grid.Row="14"
+                                Grid.Column="0"
+                                Margin="0,0,10,0"
+                                HorizontalTextAlignment="End"
+                                Text="Nombre de Usuario:"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Row="14"
+                                Grid.Column="1"
+                                Margin="0,0,10,0"
+                                IsEnabled="{Binding IsDataEnabled}"
+                                Text="{Binding User.UserName}" />
+                            <Label
+                                Grid.Row="15"
+                                Grid.Column="0"
+                                Margin="0,0,10,0"
+                                HorizontalTextAlignment="End"
+                                Text="Contraseña:"
+                                VerticalOptions="Center" />
+                            <Entry
+                                Grid.Row="16"
+                                Grid.Column="1"
+                                Margin="0,0,10,0"
+                                IsEnabled="{Binding IsCreateMode}"
+                                Text="{Binding User.Password}" />
+                        </Grid>
+                        <HorizontalStackLayout HorizontalOptions="Center">
+                            <Button
+                                Margin="2"
+                                Command="{Binding EditEnabledCommand}"
+                                IsVisible="{Binding IsEditMode}"
+                                Text="EDITAR" />
+                            <Button
+                                Margin="2"
+                                BackgroundColor="#4CAF50"
+                                Command="{Binding CreateUserCommand}"
+                                IsEnabled="{Binding IsDataEnabled}"
+                                Text="GUARDAR"
+                                WidthRequest="200" />
+                            <Button
+                                Margin="2"
+                                BackgroundColor="Red"
+                                Command="{Binding DeleteUserCommand}"
+                                IsVisible="{Binding IsEditMode}"
+                                Text="BORRAR" />
+                        </HorizontalStackLayout>
 
-                        <Label
-                            Grid.Row="7"
-                            Grid.Column="0"
-                            Margin="0,0,10,0"
-                            HorizontalTextAlignment="End"
-                            Text="Fecha de nacimiento:"
-                            VerticalOptions="Center" />
-                        <DatePicker
-                            Grid.Row="7"
-                            Grid.Column="1"
-                            Date="{Binding User.FechaNacimiento}"
-                            Format="dd/MM/yyyy"
-                            WidthRequest="350" />
-                        <Label
-                            Grid.Row="8"
-                            Grid.Column="0"
-                            Margin="0,0,10,0"
-                            HorizontalTextAlignment="End"
-                            Text="Curso:"
-                            VerticalOptions="Center" />
-                        <Entry
-                            Grid.Row="8"
-                            Grid.Column="1"
-                            Text="{Binding User.Curso}" />
-                        <Label
-                            Grid.Row="9"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2"
-                            HorizontalOptions="Center"
-                            Text="DIRECCIÓN" />
-                        <Label
-                            Grid.Row="10"
-                            Grid.Column="0"
-                            Margin="0,0,10,0"
-                            HorizontalTextAlignment="End"
-                            Text="Calle:"
-                            VerticalOptions="Center" />
-                        <Entry
-                            Grid.Row="10"
-                            Grid.Column="1"
-                            Text="{Binding User.Direccion.Calle}" />
-                        <Label
-                            Grid.Row="11"
-                            Grid.Column="0"
-                            Margin="0,0,10,0"
-                            HorizontalTextAlignment="End"
-                            Text="Número:"
-                            VerticalOptions="Center" />
-                        <Entry
-                            Grid.Row="11"
-                            Grid.Column="1"
-                            Text="{Binding User.Direccion.Numero}" />
-                        <Label
-                            Grid.Row="12"
-                            Grid.Column="0"
-                            Margin="0,0,10,0"
-                            HorizontalTextAlignment="End"
-                            Text="Poblacion:"
-                            VerticalOptions="Center" />
-                        <Entry
-                            Grid.Row="12"
-                            Grid.Column="1"
-                            Text="{Binding User.Direccion.Poblacion}" />
-                        <Label
-                            Grid.Row="13"
-                            Grid.Column="0"
-                            Margin="0,0,10,0"
-                            HorizontalTextAlignment="End"
-                            Text="CP:"
-                            VerticalOptions="Center" />
-                        <Entry
-                            Grid.Row="13"
-                            Grid.Column="1"
-                            Text="{Binding User.Direccion.Cp}" />
-                    </Grid>
+                    </VerticalStackLayout>
 
-                    <Button
-                        BackgroundColor="#4CAF50"
-                        Text="Registrar"
-                        TextColor="White" />
-                </VerticalStackLayout>
+                </Border>
+            </ScrollView>
+            <VerticalStackLayout Grid.Row="1" Grid.Column="3">
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadCalendarPageCommand}"
+                    ImageSource="calendar.png"
+                    ShowIcon="True"
+                    Text="Calendario"
+                    TextColor="Black"
+                    WidthRequest="120" />
 
-            </Border>
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadChatPageCommand}"
+                    ImageSource="chat.png"
+                    ShowIcon="True"
+                    Text="Chat"
+                    TextColor="Black"
+                    WidthRequest="120" />
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadUnitsPageCommand}"
+                    ImageSource="temario.png"
+                    ShowIcon="True"
+                    Text="Temario"
+                    TextColor="Black"
+                    WidthRequest="120" />
+            </VerticalStackLayout>
         </Grid>
     </ScrollView>
 

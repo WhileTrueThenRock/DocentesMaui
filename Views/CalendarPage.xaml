@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="EFDocenteMAUI.Views.CalendarPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+    xmlns:cal="clr-namespace:Plugin.Maui.Calendar.Controls;assembly=Plugin.Maui.Calendar"
+    xmlns:models="clr-namespace:EFDocenteMAUI.Models"
+    xmlns:picker="clr-namespace:Syncfusion.Maui.Picker;assembly=Syncfusion.Maui.Picker"
+    xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Expander;assembly=Syncfusion.Maui.Expander"
+    xmlns:tabview="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+    xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
+    x:Name="thisPage"
+    x:DataType="viewmodels:CalendarViewModel"
+    BackgroundImageSource="fondo.png"
+    BindingContext="{viewmodels:CalendarViewModel}">
+    <ScrollView>
+        <Grid ColumnDefinitions="0,550,550,*" RowDefinitions="*,400,400,*">
+            <!--  Calendario en la fila 2, columna 2  -->
+            <cal:Calendar
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="0,150,0,0"
+                Culture="{Binding Culture}"
+                Events="{Binding Events}"
+                HeightRequest="500"
+                SelectedDate="{Binding DayEvents.EventDate}"
+                SelectedDateColor="Black"
+                SelectedDayBackgroundColor="Red"
+                SelectedDayEvents="{Binding EventsList, Mode=TwoWay}"
+                TodayOutlineColor="#66FFCC"
+                WidthRequest="450" />
+
+            <!--  Colección de eventos en la fila 3, columna 3  -->
+            <CollectionView
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="10,150,0,0"
+                ItemsSource="{Binding EventsList}"
+                SelectedItem="{Binding SelectedEvent}"
+                SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:EventModel">
+                        <Border>
+                            <VerticalStackLayout>
+                                <VerticalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        x:DataType="viewmodels:CalendarViewModel"
+                                        BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
+                                        Command="{Binding ShowEventPopupCommand}"
+                                        CommandParameter="update"
+                                        NumberOfTapsRequired="2" />
+                                </VerticalStackLayout.GestureRecognizers>
+                                <Label Text="{Binding Type}" />
+                                <Label Text="{Binding Description}" />
+                                <Label Text="{Binding StartAt}" />
+                                <Label Text="{Binding EndAt}" />
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup Name="CommonStates">
+                                        <VisualState Name="Normal" />
+                                        <VisualState Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="Background" Value="Chocolate" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Button
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0,10,0,0"
+                BackgroundColor="#4CAF50"
+                Command="{Binding ShowEventPopupCommand}"
+                CommandParameter="create"
+                HeightRequest="20"
+                IsVisible="{Binding User.RolProfesor}"
+                Text="Crear Evento"
+                WidthRequest="150" />
+
+            <ScrollView
+                Grid.Row="1"
+                Grid.RowSpan="2"
+                Grid.Column="2"
+                Margin="10"
+                IsVisible="True">
+                <Border>
+                    <Border.Shadow>
+                        <Shadow
+                            Brush="White"
+                            Opacity=".3"
+                            Radius="20"
+                            Offset="15,15" />
+                    </Border.Shadow>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Padding="10" Background="#66FFCC">
+                        <!--  TAB 2  -->
+                        <tabview:SfTabView
+                            x:Name="tabView"
+                            HeightRequest="750"
+                            WidthRequest="500">
+                            <tabview:SfTabView.Items>
+                                <tabview:SfTabItem Header="Fecha">
+                                    <tabview:SfTabItem.Content>
+                                        <ScrollView>
+                                            <VerticalStackLayout>
+
+                                                <!--  Boton para filtrar por fecha  -->
+                                                <HorizontalStackLayout BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}" HeightRequest="100">
+
+                                                    <picker:SfDatePicker
+                                                        x:Name="pickerIni"
+                                                        CancelButtonClicked="pickerIni_CancelButtonClicked"
+                                                        HeightRequest="20"
+                                                        MaximumDate="{Binding FechaFin}"
+                                                        Mode="Dialog"
+                                                        OkButtonClicked="pickerIni_CancelButtonClicked"
+                                                        SelectedDate="{Binding FechaIni, Mode=TwoWay}"
+                                                        WidthRequest="50">
+                                                        <picker:SfDatePicker.HeaderView>
+                                                            <picker:PickerHeaderView
+                                                                Height="40"
+                                                                Background="MediumPurple"
+                                                                DividerColor="Red"
+                                                                Text="Desde" />
+                                                        </picker:SfDatePicker.HeaderView>
+                                                        <picker:SfDatePicker.FooterView>
+                                                            <picker:PickerFooterView
+                                                                Height="40"
+                                                                Background="Red"
+                                                                CancelButtonText="Cancelar"
+                                                                OkButtonText="Ok"
+                                                                ShowOkButton="True" />
+                                                        </picker:SfDatePicker.FooterView>
+                                                    </picker:SfDatePicker>
+                                                    <Button
+                                                        x:Name="pickerButtonIni"
+                                                        Margin="0,28,0,0"
+                                                        Background="#4CAF50"
+                                                        Clicked="Button_ClickedIni"
+                                                        HeightRequest="5"
+                                                        Text="Primera fecha"
+                                                        TextColor="Black"
+                                                        VerticalOptions="Start"
+                                                        WidthRequest="150" />
+                                                    <Button
+                                                        x:Name="pickerButtonFin"
+                                                        Margin="130,0,0,0"
+                                                        Background="#4CAF50"
+                                                        Clicked="Button_ClickedFin"
+                                                        HeightRequest="5"
+                                                        Text="Segunda fecha"
+                                                        TextColor="Black"
+                                                        WidthRequest="150" />
+
+                                                </HorizontalStackLayout>
+                                                <HorizontalStackLayout>
+                                                    <picker:SfDatePicker
+                                                        x:Name="pickerFin"
+                                                        CancelButtonClicked="pickerFin_OkButtonClicked"
+                                                        HeightRequest="20"
+                                                        Mode="Dialog"
+                                                        OkButtonClicked="pickerFin_OkButtonClicked"
+                                                        SelectedDate="{Binding FechaFin, Mode=TwoWay}"
+                                                        WidthRequest="50">
+                                                        <picker:SfDatePicker.HeaderView>
+                                                            <picker:PickerHeaderView
+                                                                Height="40"
+                                                                Background="MediumPurple"
+                                                                DividerColor="Red"
+                                                                Text="Hasta" />
+                                                        </picker:SfDatePicker.HeaderView>
+                                                        <picker:SfDatePicker.FooterView>
+                                                            <picker:PickerFooterView
+                                                                Height="40"
+                                                                Background="Red"
+                                                                CancelButtonText="Cancelar"
+                                                                OkButtonText="Ok"
+                                                                ShowOkButton="True" />
+                                                        </picker:SfDatePicker.FooterView>
+                                                    </picker:SfDatePicker>
+
+                                                    <Label
+                                                        FontAttributes="Italic"
+                                                        FontSize="25"
+                                                        Text="{Binding FechaIni, StringFormat='{}{0:dd/MM-yyyy}'}"
+                                                        TextColor="Black" />
+
+                                                    <Label
+                                                        Margin="150,0,0,0"
+                                                        FontAttributes="Italic"
+                                                        FontSize="25"
+                                                        Text="{Binding FechaFin, StringFormat='{}{0:dd/MM-yyyy}'}"
+                                                        TextColor="Black" />
+                                                </HorizontalStackLayout>
+
+                                                <Button
+                                                    Margin="0,20,0,0"
+                                                    BackgroundColor="#4CAF50"
+                                                    Command="{Binding FiltrarFechaCommand}"
+                                                    Text="Filtrar"
+                                                    WidthRequest="100" />
+
+                                                <CollectionView
+                                                    Grid.Row="2"
+                                                    Grid.Column="1"
+                                                    Margin="10,50,0,0"
+                                                    BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
+                                                    ItemsSource="{Binding EventsDateFilter}"
+                                                    SelectionMode="Single">
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate x:DataType="models:EventModel">
+                                                            <Border>
+                                                                <VerticalStackLayout>
+                                                                    <VerticalStackLayout.GestureRecognizers>
+                                                                        <TapGestureRecognizer
+                                                                            x:DataType="viewmodels:CalendarViewModel"
+                                                                            BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
+                                                                            Command="{Binding ShowEventPopupCommand}"
+                                                                            CommandParameter="update"
+                                                                            NumberOfTapsRequired="2" />
+                                                                    </VerticalStackLayout.GestureRecognizers>
+
+                                                                    <Image
+                                                                        HeightRequest="50"
+                                                                        Source="{Binding Image}"
+                                                                        WidthRequest="50" />
+                                                                    <Label Text="{Binding Type}" />
+                                                                    <Label Text="{Binding Description}" />
+                                                                    <Label Text="{Binding StartAt}" />
+                                                                    <Label Text="{Binding EndAt}" />
+                                                                    <VisualStateManager.VisualStateGroups>
+                                                                        <VisualStateGroup Name="CommonStates">
+                                                                            <VisualState Name="Normal" />
+                                                                            <VisualState Name="Selected">
+                                                                                <VisualState.Setters>
+                                                                                    <Setter Property="Background" Value="Chocolate" />
+                                                                                </VisualState.Setters>
+                                                                            </VisualState>
+                                                                        </VisualStateGroup>
+                                                                    </VisualStateManager.VisualStateGroups>
+                                                                </VerticalStackLayout>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+
+                                            </VerticalStackLayout>
+                                        </ScrollView>
+                                    </tabview:SfTabItem.Content>
+                                </tabview:SfTabItem>
+
+                                <tabview:SfTabItem Header="Tipo">
+                                    <tabview:SfTabItem.Content>
+                                        <ScrollView>
+                                            <VerticalStackLayout>
+                                                <Entry
+                                                    x:Name="typeEntry"
+                                                    Margin="0,20,0,0"
+                                                    Placeholder="Introduce un texto..." />
+                                                <Button
+                                                    Margin="10"
+                                                    BackgroundColor="#4CAF50"
+                                                    Command="{Binding GetUsersByFiltroTypeCommand}"
+                                                    CommandParameter="{Binding Source={x:Reference typeEntry}, Path=Text}"
+                                                    HorizontalOptions="Center"
+                                                    Text="BUSCAR"
+                                                    WidthRequest="200" />
+                                                <CollectionView
+                                                    Grid.Row="2"
+                                                    Grid.Column="1"
+                                                    Margin="10,50,0,0"
+                                                    BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
+                                                    ItemsSource="{Binding EventsTypeFilter}"
+                                                    SelectionMode="Multiple">
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate x:DataType="models:EventModel">
+                                                            <Border>
+                                                                <VerticalStackLayout>
+                                                                    <VerticalStackLayout.GestureRecognizers>
+                                                                        <TapGestureRecognizer
+                                                                            x:DataType="viewmodels:CalendarViewModel"
+                                                                            BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
+                                                                            Command="{Binding ShowEventPopupCommand}"
+                                                                            CommandParameter="update"
+                                                                            NumberOfTapsRequired="2" />
+                                                                    </VerticalStackLayout.GestureRecognizers>
+
+                                                                    <Image
+                                                                        HeightRequest="50"
+                                                                        Source="{Binding Image}"
+                                                                        WidthRequest="50" />
+                                                                    <Label Text="{Binding Type}" />
+                                                                    <Label Text="{Binding Description}" />
+                                                                    <Label Text="{Binding StartAt}" />
+                                                                    <Label Text="{Binding EndAt}" />
+                                                                    <VisualStateManager.VisualStateGroups>
+                                                                        <VisualStateGroup Name="CommonStates">
+                                                                            <VisualState Name="Normal" />
+                                                                            <VisualState Name="Selected">
+                                                                                <VisualState.Setters>
+                                                                                    <Setter Property="Background" Value="Chocolate" />
+                                                                                </VisualState.Setters>
+                                                                            </VisualState>
+                                                                        </VisualStateGroup>
+                                                                    </VisualStateManager.VisualStateGroups>
+                                                                </VerticalStackLayout>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+
+
+                                            </VerticalStackLayout>
+                                        </ScrollView>
+                                    </tabview:SfTabItem.Content>
+                                </tabview:SfTabItem>
+
+                                <tabview:SfTabItem Header="Descripción">
+                                    <tabview:SfTabItem.Content>
+                                        <ScrollView>
+                                            <VerticalStackLayout>
+                                                <Entry
+                                                    x:Name="descriptionEntry"
+                                                    Margin="0,20,0,0"
+                                                    Placeholder="Introduce un texto..." />
+                                                <Button
+                                                    Margin="10"
+                                                    BackgroundColor="#4CAF50"
+                                                    Command="{Binding GetUsersByFiltroDescriptionCommand}"
+                                                    CommandParameter="{Binding Source={x:Reference descriptionEntry}, Path=Text}"
+                                                    HorizontalOptions="Center"
+                                                    Text="BUSCAR"
+                                                    WidthRequest="200" />
+
+                                                <CollectionView
+                                                    Grid.Row="2"
+                                                    Grid.Column="1"
+                                                    Margin="10,50,0,0"
+                                                    BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
+                                                    ItemsSource="{Binding EventsDescriptionFilter}"
+                                                    SelectionMode="Multiple">
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate x:DataType="models:EventModel">
+                                                            <Border>
+                                                                <VerticalStackLayout>
+                                                                    <VerticalStackLayout.GestureRecognizers>
+                                                                        <TapGestureRecognizer
+                                                                            x:DataType="viewmodels:CalendarViewModel"
+                                                                            BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
+                                                                            Command="{Binding ShowEventPopupCommand}"
+                                                                            CommandParameter="update"
+                                                                            NumberOfTapsRequired="2" />
+                                                                    </VerticalStackLayout.GestureRecognizers>
+
+                                                                    <Image
+                                                                        HeightRequest="50"
+                                                                        Source="{Binding Image}"
+                                                                        WidthRequest="50" />
+                                                                    <Label Text="{Binding Type}" />
+                                                                    <Label Text="{Binding Description}" />
+                                                                    <Label Text="{Binding StartAt}" />
+                                                                    <Label Text="{Binding EndAt}" />
+                                                                    <VisualStateManager.VisualStateGroups>
+                                                                        <VisualStateGroup Name="CommonStates">
+                                                                            <VisualState Name="Normal" />
+                                                                            <VisualState Name="Selected">
+                                                                                <VisualState.Setters>
+                                                                                    <Setter Property="Background" Value="Chocolate" />
+                                                                                </VisualState.Setters>
+                                                                            </VisualState>
+                                                                        </VisualStateGroup>
+                                                                    </VisualStateManager.VisualStateGroups>
+                                                                </VerticalStackLayout>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+                                            </VerticalStackLayout>
+                                        </ScrollView>
+                                    </tabview:SfTabItem.Content>
+                                </tabview:SfTabItem>
+                            </tabview:SfTabView.Items>
+                        </tabview:SfTabView>
+
+
+                    </VerticalStackLayout>
+                </Border>
+
+            </ScrollView>
+            <VerticalStackLayout Grid.Row="1" Grid.Column="3">
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadRegisterUserPageCommand}"
+                    ImageSource="student.png"
+                    IsVisible="{Binding User.RolProfesor}"
+                    ShowIcon="True"
+                    Text="Estudiantes"
+                    TextColor="Black"
+                    WidthRequest="120" />
+
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadChatPageCommand}"
+                    ImageSource="chat.png"
+                    ShowIcon="True"
+                    Text="Chat"
+                    TextColor="Black"
+                    WidthRequest="120" />
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadUnitsPageCommand}"
+                    ImageSource="temario.png"
+                    ShowIcon="True"
+                    Text="Temario"
+                    TextColor="Black"
+                    WidthRequest="120" />
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>

@@ -3,21 +3,35 @@
     x:Class="EFDocenteMAUI.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+    xmlns:models="clr-namespace:EFDocenteMAUI.Models"
+    xmlns:syncfusion="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
+    x:Name="thisPage"
     x:DataType="viewmodels:MainViewModel"
+    BackgroundImageSource="fondo.png"
     BindingContext="{viewmodels:MainViewModel}">
 
     <ScrollView>
         <Grid ColumnDefinitions="*,180,650,250,*" RowDefinitions="*,600,*">
-            <VerticalStackLayout
-                Grid.Row="1"
-                Grid.Column="0"
-                BackgroundColor="gray" />
 
             <VerticalStackLayout
                 Grid.Row="1"
                 Grid.Column="1"
-                BackgroundColor="Blue">
+                Padding="5">
+                <ImageButton
+                    Margin="2"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ShowMainMsgCommand}"
+                    CornerRadius="5"
+                    Source="{Binding ImageMainChat}" />
+                <ImageButton
+                    Margin="2"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ShowNotificationMsgCommand}"
+                    CornerRadius="5"
+                    Source="{Binding ImageNotificationChat}" />
                 <Label
                     Grid.Row="1"
                     Grid.Column="1"
@@ -29,7 +43,7 @@
                     Grid.Row="2"
                     Grid.Column="1"
                     HeightRequest="450"
-                    ItemsSource="{Binding UserList}"
+                    ItemsSource="{Binding Users}"
                     SelectedItem="{Binding SelectedUser}"
                     SelectionMode="Single">
                     <CollectionView.GestureRecognizers>
@@ -39,19 +53,26 @@
                             NumberOfTapsRequired="2" />
                     </CollectionView.GestureRecognizers>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="viewmodels:MainViewModel">
+                        <DataTemplate x:DataType="models:UserModel">
                             <Border>
-                                <Label
-                                    FontAttributes="Bold"
-                                    FontSize="20"
-                                    Text="{Binding}"
-                                    TextColor="Red" />
+                                <HorizontalStackLayout HorizontalOptions="Start">
+                                    <Label
+                                        Margin="5,5,20,0"
+                                        HeightRequest="30"
+                                        Text="{Binding UserName}" />
+
+                                    <Image
+                                        HeightRequest="30"
+                                        IsVisible="{Binding IsNotificationEnabled}"
+                                        Source="notificationbell.png"
+                                        WidthRequest="30" />
+                                </HorizontalStackLayout>
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup Name="CommonStates">
                                         <VisualState Name="Normal" />
                                         <VisualState Name="Selected">
                                             <VisualState.Setters>
-                                                <Setter Property="Background" Value="Chocolate" />
+                                                <Setter Property="Background" Value="#4CAF50" />
                                             </VisualState.Setters>
                                         </VisualState>
                                     </VisualStateGroup>
@@ -62,19 +83,168 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </VerticalStackLayout>
+            <Border
+                Grid.Row="1"
+                Grid.Column="2"
+                Margin="5"
+                HorizontalOptions="FillAndExpand"
+                Stroke="Black">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow
+                        Opacity="0.3"
+                        Radius="20"
+                        Offset="15,15" />
+                </Border.Shadow>
+                <VerticalStackLayout>
+                    <Label
+                        FontAttributes="Bold"
+                        FontFamily="Times New Roman"
+                        FontSize="20"
+                        HorizontalOptions="Center"
+                        Text="{Binding ChatSelection}" />
+                    <HorizontalStackLayout HorizontalOptions="Center">
+                        <HorizontalStackLayout Padding="2">
+                            <Label
+                                FontAttributes="Italic"
+                                FontFamily="Times New Roman"
+                                FontSize="20"
+                                Text="Usuario: " />
+                            <Label
+                                FontFamily="Times New Roman"
+                                FontSize="20"
+                                HorizontalOptions="Center"
+                                Text="{Binding User.UserName}" />
+                        </HorizontalStackLayout>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Padding="2" HorizontalOptions="Center">
+                        <Label Text="{Binding ConnectionState}" />
+                    </HorizontalStackLayout>
+                    <Border
+                        Background="Blue"
+                        HeightRequest="450"
+                        HorizontalOptions="Center"
+                        Opacity="0.6"
+                        Stroke="Black"
+                        WidthRequest="500">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+                        <CollectionView ItemsSource="{Binding ShowMessagesList}" ItemsUpdatingScrollMode="KeepLastItemInView">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
 
-            <VerticalStackLayout Grid.Row="1" Grid.Column="2">
-                <Button Command="{Binding ShowPrivateMessagePopupCommand}" Text="Open popup" />
-            </VerticalStackLayout>
+                                    <Label
+                                        Margin="15,10,0,0"
+                                        BackgroundColor="#E1720F"
+                                        FontAttributes="Bold"
+                                        FontSize="15"
+                                        Text="{Binding}" />
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Border>
+
+                    <HorizontalStackLayout HorizontalOptions="Center" IsVisible="{Binding Profesor}">
+                        <Entry
+                            Margin="0,2,2,2"
+                            BackgroundColor="AliceBlue"
+                            HorizontalOptions="Center"
+                            Placeholder="Introduce un mensaje"
+                            Text="{Binding MessageToSend}"
+                            WidthRequest="315" />
+                        <Picker
+                            x:Name="pk_emojis"
+                            Margin="2"
+                            BackgroundColor="AliceBlue"
+                            HorizontalOptions="Center"
+                            ItemsSource="{Binding Emojis}"
+                            WidthRequest="75">
+                            <Picker.Behaviors>
+                                <toolkit:EventToCommandBehavior
+                                    Command="{Binding AddEmojiCommand}"
+                                    CommandParameter="{Binding Source={x:Reference pk_emojis}, Path=SelectedItem}"
+                                    EventName="SelectedIndexChanged" />
+                            </Picker.Behaviors>
+                        </Picker>
+                        <Button
+                            Margin="2"
+                            BackgroundColor="#4CAF50"
+                            Command="{Binding SendMessageCommand}"
+                            CommandParameter="BroadCast"
+                            HorizontalOptions="Center"
+                            Text="ENVIAR"
+                            WidthRequest="100" />
+
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+            </Border>
+
 
             <VerticalStackLayout Grid.Row="1" Grid.Column="3">
-                <Label Text="Agregar TreeView" />
-            </VerticalStackLayout>
+                <buttons:SfButton
+                    Background="#4CAF50"
+                    Command="{Binding LoadCalendarPageCommand}"
+                    ImageSource="calendar.png"
+                    ShowIcon="True"
+                    Text="Calendario"
+                    TextColor="Black"
+                    WidthRequest="120" />
 
-            <VerticalStackLayout
-                Grid.Row="1"
-                Grid.Column="4"
-                BackgroundColor="Gray" />
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadRegisterPageCommand}"
+                    ImageSource="student.png"
+                    IsVisible="{Binding User.RolProfesor}"
+                    ShowIcon="True"
+                    Text="Alumnos"
+                    TextColor="Black"
+                    WidthRequest="120" />
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadUnitsPageCommand}"
+                    ImageSource="temario.png"
+                    ShowIcon="True"
+                    Text="Temario"
+                    TextColor="Black"
+                    WidthRequest="120" />
+
+                <syncfusion:SfTreeView
+                    x:Name="treeView"
+                    AutoExpandMode="AllNodesExpanded"
+                    ChildPropertyName="SubFiles"
+                    ItemsSource="{Binding ImageNodeInfo}">
+                    <syncfusion:SfTreeView.GestureRecognizers />
+                    <syncfusion:SfTreeView.ItemTemplate>
+                        <DataTemplate>
+                            <HorizontalStackLayout Grid.Row="1" Grid.Column="3">
+                                <Image
+                                    Margin="20,0,0,0"
+                                    HeightRequest="34"
+                                    Source="{Binding ImageIcon}"
+                                    WidthRequest="64">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            x:DataType="viewmodels:MainViewModel"
+                                            Command="{Binding Source={x:Reference thisPage}, Path=BindingContext.LoadCalendarPageCommand}"
+                                            NumberOfTapsRequired="1" />
+                                    </Image.GestureRecognizers>
+                                </Image>
+                                <Label
+                                    Margin="0,0,0,0"
+                                    HeightRequest="50"
+                                    Text="{Binding ItemName}"
+                                    WidthRequest="100" />
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </syncfusion:SfTreeView.ItemTemplate>
+                </syncfusion:SfTreeView>
+            </VerticalStackLayout>
 
         </Grid>
     </ScrollView>
