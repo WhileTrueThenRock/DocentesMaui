@@ -7,7 +7,7 @@
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
     x:DataType="viewmodels:UnitsViewModel"
     CanBeDismissedByTappingOutsideOfPopup="False">
-    <VerticalStackLayout BackgroundColor="White">
+    <VerticalStackLayout BackgroundColor="#66FFCC" HeightRequest="600">
         <Button
             BackgroundColor="Black"
             Command="{Binding ClosePopUpCommand}"
@@ -62,7 +62,7 @@
                 VerticalOptions="Center" />
             <HorizontalStackLayout Grid.Row="2" Grid.Column="1">
                 <Button
-                    BackgroundColor="Green"
+                    BackgroundColor="#4CAF50"
                     Command="{Binding LoadImageCommand}"
                     HeightRequest="30"
                     Text="+"
@@ -82,7 +82,7 @@
             </HorizontalStackLayout>
             <HorizontalStackLayout Grid.Row="3" Grid.Column="1">
                 <Button
-                    BackgroundColor="Green"
+                    BackgroundColor="#4CAF50"
                     Command="{Binding LoadImageCommand}"
                     HeightRequest="30"
                     Text="+"
@@ -104,6 +104,7 @@
         <HorizontalStackLayout
             Margin="0,20,0,0"
             HorizontalOptions="Center"
+            IsVisible="{Binding User.RolProfesor}"
             WidthRequest="400">
             <Button
                 BackgroundColor="Green"

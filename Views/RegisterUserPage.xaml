@@ -3,12 +3,14 @@
     x:Class="EFDocenteMAUI.Views.RegisterUserPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
     xmlns:mdc="clr-namespace:Material.Components.Maui;assembly=Material.Components.Maui"
     xmlns:models="clr-namespace:EFDocenteMAUI.Models"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
     x:DataType="viewmodels:RegisterUserViewModel"
+    BackgroundImageSource="fondo.png"
     BindingContext="{viewmodels:RegisterUserViewModel}">
 
     <ContentPage.Resources>
@@ -21,19 +23,19 @@
         </Style>
     </ContentPage.Resources>
     <ScrollView>
-        <Grid ColumnDefinitions="*,450,550,*" RowDefinitions="*,400,400,*">
+        <Grid ColumnDefinitions="40,450,550,*" RowDefinitions="*,400,400,*">
             <Border
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="10"
-                BackgroundColor="Beige"
+                BackgroundColor="#66FFCC"
                 HorizontalOptions="FillAndExpand">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="10,10,10,10" />
                 </Border.StrokeShape>
                 <Border.Shadow>
                     <Shadow
-                        Brush="Blue"
+                        Brush="white"
                         Opacity="0.3"
                         Radius="20"
                         Offset="15,15" />
@@ -41,12 +43,14 @@
                 <VerticalStackLayout Padding="5">
                     <Button
                         Margin="2"
+                        BackgroundColor="#00CC33"
                         Command="{Binding EnableCreateUserCommand}"
                         HorizontalOptions="Center"
                         Text="CREAR USUARIO"
                         WidthRequest="200" />
                     <Button
                         Margin="2"
+                        BackgroundColor="#00CC33"
                         Command="{Binding GetUsersCommand}"
                         HorizontalOptions="Center"
                         Text="MOSTRAR USUARIOS"
@@ -54,6 +58,7 @@
                     <HorizontalStackLayout Margin="5">
                         <Picker
                             ItemsSource="{Binding ParametrosBusqueda}"
+                            SelectedIndex="1"
                             SelectedItem="{Binding Filtro}"
                             WidthRequest="180" />
                         <Entry
@@ -62,6 +67,7 @@
                             WidthRequest="220" />
                     </HorizontalStackLayout>
                     <Button
+                        BackgroundColor="#00CC33"
                         Command="{Binding GetUsersByFiltroCommand}"
                         CommandParameter="{Binding Source={x:Reference entrdaBusqueda}, Path=Text}"
                         HorizontalOptions="Center"
@@ -73,7 +79,7 @@
                 Grid.Row="2"
                 Grid.Column="1"
                 Margin="10"
-                BackgroundColor="Beige"
+                BackgroundColor="#66FFCC"
                 HorizontalOptions="FillAndExpand"
                 IsVisible="{Binding IsListVisible}">
                 <Border.StrokeShape>
@@ -81,7 +87,7 @@
                 </Border.StrokeShape>
                 <Border.Shadow>
                     <Shadow
-                        Brush="Blue"
+                        Brush="White"
                         Opacity="0.3"
                         Radius="20"
                         Offset="15,15" />
@@ -98,7 +104,7 @@
                             <DataTemplate x:DataType="models:UserModel">
                                 <Border
                                     Margin="5"
-                                    Background="Beige"
+                                    Background="#66FFCC"
                                     Stroke="Black"
                                     StrokeThickness="4">
                                     <Border.StrokeShape>
@@ -106,10 +112,10 @@
                                     </Border.StrokeShape>
                                     <Border.Shadow>
                                         <Shadow
-                                            Brush="Black"
+                                            Brush="White"
                                             Opacity="0.3"
-                                            Radius="5"
-                                            Offset="5,5" />
+                                            Radius="20"
+                                            Offset="15,15" />
                                     </Border.Shadow>
                                     <Grid ColumnDefinitions="110,*">
                                         <Image
@@ -157,7 +163,7 @@
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="20,0,0,0" />
                     </Border.StrokeShape>
-                    <VerticalStackLayout Padding="10" Background="WhiteSmoke">
+                    <VerticalStackLayout Padding="10" Background="#66FFCC">
                         <toolkit:AvatarView
                             Margin="10,0,0,0"
                             Padding="0"
@@ -410,7 +416,36 @@
 
                 </Border>
             </ScrollView>
+            <VerticalStackLayout Grid.Row="1" Grid.Column="3">
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadCalendarPageCommand}"
+                    ImageSource="calendar.png"
+                    ShowIcon="True"
+                    Text="Calendario"
+                    TextColor="Black"
+                    WidthRequest="120" />
 
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadChatPageCommand}"
+                    ImageSource="chat.png"
+                    ShowIcon="True"
+                    Text="Chat"
+                    TextColor="Black"
+                    WidthRequest="120" />
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadUnitsPageCommand}"
+                    ImageSource="temario.png"
+                    ShowIcon="True"
+                    Text="Temario"
+                    TextColor="Black"
+                    WidthRequest="120" />
+            </VerticalStackLayout>
         </Grid>
     </ScrollView>
 

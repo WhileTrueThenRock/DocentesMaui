@@ -101,7 +101,8 @@ namespace EFDocenteMAUI.ViewModels
         private Color _notificationColor;
         [ObservableProperty]
         private UserModel _user;
-
+        [ObservableProperty]
+        private bool _profesor;
         public MainViewModel()
         {
             Inicio();
@@ -211,7 +212,7 @@ namespace EFDocenteMAUI.ViewModels
             ClientWebSocket = new ClientWebSocket();  // Crear una nueva instancia de ClientWebSocket.
 
             // Construir la URI para la conexión WebSocket con el identificador del usuario. 192.168.20.12
-            Uri uri = new Uri($"ws://192.168.20.132:5000/chat-websocket?userId={UserName}");
+            Uri uri = new Uri($"ws://127.0.0.1:5000/chat-websocket?userId={UserName}");
             ClientWebSocket.Options.SetRequestHeader("UserId", UserName);  // Configurar el encabezado UserId.
             string token = await SecureStorage.Default.GetAsync("token");
             ClientWebSocket.Options.SetRequestHeader("Authorization", $"Bearer {token}");
@@ -280,6 +281,7 @@ namespace EFDocenteMAUI.ViewModels
             ImMainChat = true;
             ImNotificationChat = false;
             ImageMainChat = "botonmain.png";
+            Profesor = true;
         }
         [RelayCommand]
         public void ShowNotificationMsg()
@@ -290,6 +292,7 @@ namespace EFDocenteMAUI.ViewModels
             ImMainChat = false;
             ImNotificationChat = true;
             ImageNotificationChat = "botonnotification.png";
+            Profesor = User.RolProfesor;
         }
 
         
@@ -318,7 +321,7 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task LoadRegisterPage()
         {
-            await Shell.Current.GoToAsync("//RegisterUserPage");
+            await Shell.Current.GoToAsync("//RegisterUserPage", new Dictionary<string, object>() { ["User"] = User });
         }
         [RelayCommand]
         public async Task LoadUnitsPage()

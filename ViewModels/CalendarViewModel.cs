@@ -17,8 +17,18 @@ namespace EFDocenteMAUI.ViewModels
     [QueryProperty("User", "User")]
     internal partial class CalendarViewModel : ObservableObject, INotifyPropertyChanged
     {
-        [ObservableProperty]
+        
         private UserModel _user;
+        public UserModel User
+        {
+            get { 
+                return _user; 
+            }
+            set { 
+                _user = value; 
+                OnPropertyChanged(); 
+            }
+        }
 
         [ObservableProperty]
         private CultureInfo _culture;
@@ -435,6 +445,22 @@ namespace EFDocenteMAUI.ViewModels
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+        [RelayCommand]
+        public async Task LoadRegisterUserPage()
+        {
+
+            await Shell.Current.GoToAsync("//RegisterUserPage", new Dictionary<string, object>() { ["User"] = User });
+        }
+        [RelayCommand]
+        public async Task LoadUnitsPage()
+        {
+            await Shell.Current.GoToAsync("//UnitsPage", new Dictionary<string, object>() { ["User"] = User });
+        }
+        [RelayCommand]
+        public async Task LoadChatPage()
+        {
+            await Shell.Current.GoToAsync("//MainPage", new Dictionary<string, object>() { ["User"] = User });
         }
     }
 }

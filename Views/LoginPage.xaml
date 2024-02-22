@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
     x:DataType="viewmodels:LoginViewModel"
+    BackgroundImageSource="fondo.png"
     BindingContext="{viewmodels:LoginViewModel}">
     <Border HeightRequest="250" WidthRequest="385">
         <Border.Shadow>
@@ -17,14 +18,13 @@
         <Border.StrokeShape>
             <RoundRectangle CornerRadius="25" />
         </Border.StrokeShape>
-        <VerticalStackLayout Padding="15" Background="#EAEAEA">
+        <VerticalStackLayout Padding="15" Background="#66FFCC">
             <Label
                 Margin="0,0,0,15"
                 FontSize="Large"
                 HorizontalOptions="CenterAndExpand"
                 Text="ACCEDER"
                 TextColor="#333333" />
-
             <Entry
                 x:Name="EntryUsuario"
                 Margin="0,0,0,10"
@@ -40,7 +40,7 @@
                 TextColor="#333333" />
 
             <Button
-                BackgroundColor="#4285F4"
+                BackgroundColor="#00CC33"
                 Command="{Binding LoginCommand}"
                 Text="Iniciar Sesión"
                 TextColor="White" />
