@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 
 namespace EFDocenteMAUI.ViewModels
 {
+    [QueryProperty("User", "User")]
     internal partial class UnitsViewModel : ObservableObject
     {
 
@@ -160,6 +161,22 @@ namespace EFDocenteMAUI.ViewModels
                     UnitList.Add(dem);
                 }
             }
+        }
+        [RelayCommand]
+        public async Task LoadRegisterUserPage()
+        {
+
+            await Shell.Current.GoToAsync("//RegisterUserPage", new Dictionary<string, object>() { ["User"] = User });
+        }
+        [RelayCommand]
+        public async Task LoadCalendarPage()
+        {
+            await Shell.Current.GoToAsync("//CalendarPage", new Dictionary<string, object>() { ["User"] = User });
+        }
+        [RelayCommand]
+        public async Task LoadChatPage()
+        {
+            await Shell.Current.GoToAsync("//MainPage", new Dictionary<string, object>() { ["User"] = User });
         }
     }
 }

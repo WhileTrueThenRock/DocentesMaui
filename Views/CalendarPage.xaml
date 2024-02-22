@@ -12,9 +12,10 @@
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
     x:Name="thisPage"
     x:DataType="viewmodels:CalendarViewModel"
+    BackgroundImageSource="fondo.png"
     BindingContext="{viewmodels:CalendarViewModel}">
     <ScrollView>
-        <Grid ColumnDefinitions="0,580,600,*" RowDefinitions="*,400,400,*">
+        <Grid ColumnDefinitions="0,550,550,*" RowDefinitions="*,400,400,*">
             <!--  Calendario en la fila 2, columna 2  -->
             <cal:Calendar
                 Grid.Row="1"
@@ -27,7 +28,7 @@
                 SelectedDateColor="Black"
                 SelectedDayBackgroundColor="Red"
                 SelectedDayEvents="{Binding EventsList, Mode=TwoWay}"
-                TodayOutlineColor="Aqua"
+                TodayOutlineColor="#66FFCC"
                 WidthRequest="450" />
 
             <!--  Colección de eventos en la fila 3, columna 3  -->
@@ -69,30 +70,16 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <Label
-                Grid.Row="0"
-                Grid.Column="1"
-                Text="User" />
-            <Label
-                Grid.Row="0"
-                Grid.Column="1"
-                Text="{Binding User.UserName}" />
             <Button
                 Grid.Row="0"
                 Grid.Column="1"
+                Margin="0,10,0,0"
+                BackgroundColor="#4CAF50"
                 Command="{Binding ShowEventPopupCommand}"
                 CommandParameter="create"
                 HeightRequest="20"
                 IsVisible="{Binding User.RolProfesor}"
                 Text="Crear Evento"
-                WidthRequest="150" />
-            <Button
-                Grid.Row="0"
-                Grid.Column="2"
-                Command="{Binding ShowEventPopupCommand}"
-                CommandParameter="create"
-                HeightRequest="20"
-                Text="Filtrar por..."
                 WidthRequest="150" />
 
             <ScrollView
@@ -104,15 +91,15 @@
                 <Border>
                     <Border.Shadow>
                         <Shadow
-                            Brush="Black"
-                            Opacity=".5"
-                            Radius="12"
-                            Offset="10,10" />
+                            Brush="White"
+                            Opacity=".3"
+                            Radius="20"
+                            Offset="15,15" />
                     </Border.Shadow>
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="20,0,0,0" />
+                        <RoundRectangle CornerRadius="20" />
                     </Border.StrokeShape>
-                    <VerticalStackLayout Padding="10" Background="WhiteSmoke">
+                    <VerticalStackLayout Padding="10" Background="#66FFCC">
                         <!--  TAB 2  -->
                         <tabview:SfTabView
                             x:Name="tabView"
@@ -155,7 +142,7 @@
                                                     <Button
                                                         x:Name="pickerButtonIni"
                                                         Margin="0,28,0,0"
-                                                        Background="MediumPurple"
+                                                        Background="#4CAF50"
                                                         Clicked="Button_ClickedIni"
                                                         HeightRequest="5"
                                                         Text="Primera fecha"
@@ -165,7 +152,7 @@
                                                     <Button
                                                         x:Name="pickerButtonFin"
                                                         Margin="130,0,0,0"
-                                                        Background="MediumPurple"
+                                                        Background="#4CAF50"
                                                         Clicked="Button_ClickedFin"
                                                         HeightRequest="5"
                                                         Text="Segunda fecha"
@@ -215,6 +202,7 @@
 
                                                 <Button
                                                     Margin="0,20,0,0"
+                                                    BackgroundColor="#4CAF50"
                                                     Command="{Binding FiltrarFechaCommand}"
                                                     Text="Filtrar"
                                                     WidthRequest="100" />
@@ -272,17 +260,13 @@
                                     <tabview:SfTabItem.Content>
                                         <ScrollView>
                                             <VerticalStackLayout>
-                                                <Label
-                                                    FontAttributes="Bold"
-                                                    FontSize="20"
-                                                    HorizontalOptions="Center"
-                                                    Text="Filtro por Tipo del evento"
-                                                    TextColor="Red" />
                                                 <Entry
                                                     x:Name="typeEntry"
                                                     Margin="0,20,0,0"
                                                     Placeholder="Introduce un texto..." />
                                                 <Button
+                                                    Margin="10"
+                                                    BackgroundColor="#4CAF50"
                                                     Command="{Binding GetUsersByFiltroTypeCommand}"
                                                     CommandParameter="{Binding Source={x:Reference typeEntry}, Path=Text}"
                                                     HorizontalOptions="Center"
@@ -342,17 +326,13 @@
                                     <tabview:SfTabItem.Content>
                                         <ScrollView>
                                             <VerticalStackLayout>
-                                                <Label
-                                                    FontAttributes="Bold"
-                                                    FontSize="20"
-                                                    HorizontalOptions="Center"
-                                                    Text="Filtro por descripción del evento"
-                                                    TextColor="Red" />
                                                 <Entry
                                                     x:Name="descriptionEntry"
                                                     Margin="0,20,0,0"
                                                     Placeholder="Introduce un texto..." />
                                                 <Button
+                                                    Margin="10"
+                                                    BackgroundColor="#4CAF50"
                                                     Command="{Binding GetUsersByFiltroDescriptionCommand}"
                                                     CommandParameter="{Binding Source={x:Reference descriptionEntry}, Path=Text}"
                                                     HorizontalOptions="Center"
@@ -412,7 +392,39 @@
 
                     </VerticalStackLayout>
                 </Border>
+
             </ScrollView>
+            <VerticalStackLayout Grid.Row="1" Grid.Column="3">
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadRegisterUserPageCommand}"
+                    ImageSource="student.png"
+                    IsVisible="{Binding User.RolProfesor}"
+                    ShowIcon="True"
+                    Text="Estudiantes"
+                    TextColor="Black"
+                    WidthRequest="120" />
+
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadChatPageCommand}"
+                    ImageSource="chat.png"
+                    ShowIcon="True"
+                    Text="Chat"
+                    TextColor="Black"
+                    WidthRequest="120" />
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadUnitsPageCommand}"
+                    ImageSource="temario.png"
+                    ShowIcon="True"
+                    Text="Temario"
+                    TextColor="Black"
+                    WidthRequest="120" />
+            </VerticalStackLayout>
         </Grid>
     </ScrollView>
 </ContentPage>

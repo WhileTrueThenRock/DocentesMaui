@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace EFDocenteMAUI.ViewModels
 {
+    [QueryProperty("User", "User")]
     internal partial class RegisterUserViewModel : ObservableObject
     {
         [ObservableProperty]
@@ -399,6 +400,22 @@ namespace EFDocenteMAUI.ViewModels
             response.Success = 0;
 
             return response.Success == 0;
+        }
+        [RelayCommand]
+        public async Task LoadCalendarPage()
+        {
+
+            await Shell.Current.GoToAsync("//CalendarPage", new Dictionary<string, object>() { ["User"] = User });
+        }
+        [RelayCommand]
+        public async Task LoadUnitsPage()
+        {
+            await Shell.Current.GoToAsync("//UnitsPage", new Dictionary<string, object>() { ["User"] = User });
+        }
+        [RelayCommand]
+        public async Task LoadChatPage()
+        {
+            await Shell.Current.GoToAsync("//MainPage", new Dictionary<string, object>() { ["User"] = User });
         }
     }
     

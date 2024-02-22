@@ -3,6 +3,7 @@
     x:Class="EFDocenteMAUI.Views.RegisterUserPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
     xmlns:mdc="clr-namespace:Material.Components.Maui;assembly=Material.Components.Maui"
     xmlns:models="clr-namespace:EFDocenteMAUI.Models"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
@@ -22,7 +23,7 @@
         </Style>
     </ContentPage.Resources>
     <ScrollView>
-        <Grid ColumnDefinitions="*,450,550,*" RowDefinitions="*,400,400,*">
+        <Grid ColumnDefinitions="40,450,550,*" RowDefinitions="*,400,400,*">
             <Border
                 Grid.Row="1"
                 Grid.Column="1"
@@ -57,7 +58,7 @@
                     <HorizontalStackLayout Margin="5">
                         <Picker
                             ItemsSource="{Binding ParametrosBusqueda}"
-                            SelectedIndex="0"
+                            SelectedIndex="1"
                             SelectedItem="{Binding Filtro}"
                             WidthRequest="180" />
                         <Entry
@@ -415,7 +416,36 @@
 
                 </Border>
             </ScrollView>
+            <VerticalStackLayout Grid.Row="1" Grid.Column="3">
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadCalendarPageCommand}"
+                    ImageSource="calendar.png"
+                    ShowIcon="True"
+                    Text="Calendario"
+                    TextColor="Black"
+                    WidthRequest="120" />
 
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadChatPageCommand}"
+                    ImageSource="chat.png"
+                    ShowIcon="True"
+                    Text="Chat"
+                    TextColor="Black"
+                    WidthRequest="120" />
+                <buttons:SfButton
+                    Margin="0,10,0,0"
+                    Background="#4CAF50"
+                    Command="{Binding LoadUnitsPageCommand}"
+                    ImageSource="temario.png"
+                    ShowIcon="True"
+                    Text="Temario"
+                    TextColor="Black"
+                    WidthRequest="120" />
+            </VerticalStackLayout>
         </Grid>
     </ScrollView>
 
