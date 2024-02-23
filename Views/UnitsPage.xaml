@@ -3,6 +3,7 @@
     x:Class="EFDocenteMAUI.Views.UnitsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:accordion="clr-namespace:Syncfusion.Maui.Accordion;assembly=Syncfusion.Maui.Expander"
     xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
     xmlns:models="clr-namespace:EFDocenteMAUI.Models"
     xmlns:pdfviewer="clr-namespace:Syncfusion.Maui.PdfViewer;assembly=Syncfusion.Maui.PdfViewer"
@@ -41,97 +42,146 @@
                     CommandParameter="True"
                     IsVisible="{Binding User.RolProfesor}"
                     Text="CREAR TEMARIO" />
-                <ScrollView>
-                    <CollectionView
-                        ItemsSource="{Binding UnitList}"
-                        SelectedItem="{Binding Unit}"
-                        SelectionMode="Single">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:UnitModel">
-                                <Border
-                                    Margin="5"
-                                    Background="#66FFCC"
-                                    Stroke="Black"
-                                    StrokeThickness="4">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="10" />
-                                    </Border.StrokeShape>
-                                    <Border.Shadow>
-                                        <Shadow
-                                            Brush="Black"
-                                            Opacity="0.3"
-                                            Radius="5"
-                                            Offset="5,5" />
-                                    </Border.Shadow>
-                                    <VerticalStackLayout>
-                                        <Label
-                                            FontAttributes="Bold"
-                                            FontSize="Medium"
-                                            HorizontalTextAlignment="Center"
-                                            Text="{Binding Titulo}" />
-                                        <Label Margin="5,0,0,0" Text="{Binding Description}" />
-                                        <Label Margin="5,0,0,0" Text="Imagenes:" />
-                                        <CollectionView ItemsSource="{Binding Images}" SelectionMode="Single">
-                                            <CollectionView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Image
-                                                        x:Name="myImageResource"
-                                                        HeightRequest="30"
-                                                        Source="{Binding .}"
-                                                        WidthRequest="30">
-                                                        <Image.GestureRecognizers>
-                                                            <TapGestureRecognizer
-                                                                Command="{Binding Source={x:Reference unitpage}, Path=BindingContext.ShowResourceCommand}"
-                                                                CommandParameter="{Binding Source={x:Reference myImageResource}, Path=Source}"
-                                                                NumberOfTapsRequired="1" />
-                                                        </Image.GestureRecognizers>
-                                                    </Image>
-                                                </DataTemplate>
-                                            </CollectionView.ItemTemplate>
-                                        </CollectionView>
-                                        <Label Margin="5,0,0,0" Text="PDFs:" />
+                <CollectionView
+                    ItemsSource="{Binding UnitList}"
+                    SelectedItem="{Binding Unit}"
+                    SelectionMode="Single">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:UnitModel">
+                            <Border
+                                Margin="5"
+                                Background="#66FFCC"
+                                Stroke="Black"
+                                StrokeThickness="4">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" />
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow
+                                        Brush="Black"
+                                        Opacity="0.3"
+                                        Radius="5"
+                                        Offset="5,5" />
+                                </Border.Shadow>
 
 
-                                        <CollectionView ItemsSource="{Binding Pdfs}" SelectionMode="Single">
-                                            <CollectionView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <HorizontalStackLayout>
-                                                        <Image
-                                                            HeightRequest="30"
-                                                            Source="pdf.png"
-                                                            WidthRequest="30">
-                                                            <Image.GestureRecognizers>
-                                                                <TapGestureRecognizer
-                                                                    Command="{Binding Source={x:Reference unitpage}, Path=BindingContext.ShowResourcePdfCommand}"
-                                                                    CommandParameter="{Binding Source={x:Reference pdfViewer}, Path=DocumentSource}"
-                                                                    NumberOfTapsRequired="1" />
-                                                            </Image.GestureRecognizers>
-                                                        </Image>
-                                                        <pdfviewer:SfPdfViewer
-                                                            x:Name="pdfViewer"
-                                                            DocumentSource="{Binding .}"
-                                                            IsVisible="False" />
-                                                    </HorizontalStackLayout>
-                                                </DataTemplate>
-                                            </CollectionView.ItemTemplate>
-                                        </CollectionView>
-                                    </VerticalStackLayout>
-                                </Border>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </ScrollView>
+                                <VerticalStackLayout>
+
+                                    <accordion:SfAccordion
+                                        x:Name="Accordion"
+                                        AnimationDuration="250"
+                                        AnimationEasing="SinInOut"
+                                        ExpandMode="SingleOrNone">
+                                        <accordion:SfAccordion.Items>
+                                            <accordion:AccordionItem>
+                                                <accordion:AccordionItem.Header>
+                                                    <Grid>
+                                                        <Label
+                                                            FontAttributes="Bold"
+                                                            FontSize="Medium"
+                                                            HorizontalTextAlignment="Center"
+                                                            Text="{Binding Titulo}" />
+                                                    </Grid>
+                                                </accordion:AccordionItem.Header>
+                                                <accordion:AccordionItem.Content>
+                                                    <Grid RowDefinitions="30,30,30,30,30">
+                                                        <Label
+                                                            Grid.Row="0"
+                                                            Margin="5,0,0,0"
+                                                            Text="{Binding Description}" />
+                                                        <Label
+                                                            Grid.Row="1"
+                                                            Margin="5,0,0,0"
+                                                            Text="Imagenes:" />
+
+                                                        <CollectionView
+                                                            Grid.Row="2"
+                                                            ItemsSource="{Binding Images}"
+                                                            SelectionMode="Single">
+                                                            <CollectionView.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Image
+                                                                        x:Name="myImageResource"
+                                                                        Margin="0,0,150,0"
+                                                                        HeightRequest="30"
+                                                                        Source="{Binding .}"
+                                                                        WidthRequest="30">
+                                                                        <Image.GestureRecognizers>
+                                                                            <TapGestureRecognizer
+                                                                                Command="{Binding Source={x:Reference unitpage}, Path=BindingContext.ShowResourceCommand}"
+                                                                                CommandParameter="{Binding Source={x:Reference myImageResource}, Path=Source}"
+                                                                                NumberOfTapsRequired="1" />
+                                                                        </Image.GestureRecognizers>
+                                                                    </Image>
+                                                                </DataTemplate>
+                                                            </CollectionView.ItemTemplate>
+                                                        </CollectionView>
+
+                                                        <Label
+                                                            Grid.Row="3"
+                                                            Margin="5,0,0,0"
+                                                            Text="PDFs:" />
+
+
+                                                        <CollectionView
+                                                            Grid.Row="4"
+                                                            ItemsSource="{Binding Pdfs}"
+                                                            SelectionMode="Single">
+                                                            <CollectionView.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <HorizontalStackLayout>
+                                                                        <Image
+                                                                            HeightRequest="30"
+                                                                            Source="pdf.png"
+                                                                            WidthRequest="30">
+                                                                            <Image.GestureRecognizers>
+                                                                                <TapGestureRecognizer
+                                                                                    Command="{Binding Source={x:Reference unitpage}, Path=BindingContext.ShowResourcePdfCommand}"
+                                                                                    CommandParameter="{Binding Source={x:Reference pdfViewer}, Path=DocumentSource}"
+                                                                                    NumberOfTapsRequired="1" />
+                                                                            </Image.GestureRecognizers>
+                                                                        </Image>
+                                                                        <pdfviewer:SfPdfViewer
+                                                                            x:Name="pdfViewer"
+                                                                            DocumentSource="{Binding .}"
+                                                                            IsVisible="False" />
+                                                                    </HorizontalStackLayout>
+                                                                </DataTemplate>
+                                                            </CollectionView.ItemTemplate>
+                                                        </CollectionView>
+
+                                                    </Grid>
+                                                </accordion:AccordionItem.Content>
+                                            </accordion:AccordionItem>
+                                        </accordion:SfAccordion.Items>
+                                    </accordion:SfAccordion>
+
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </VerticalStackLayout>
-            <ScrollView Grid.Row="1" Grid.Column="2">
+            <ScrollView
+                Grid.Row="1"
+                Grid.Column="2"
+                BackgroundColor="Transparent">
+
                 <WebView
                     Margin="10"
                     Background="Transparent"
                     BackgroundColor="Transparent"
                     HeightRequest="630"
+                    HorizontalOptions="CenterAndExpand"
                     Source="{Binding ResourceToShow}"
+                    VerticalOptions="CenterAndExpand"
                     WidthRequest="780" />
+
             </ScrollView>
-            <VerticalStackLayout Grid.Row="1" Grid.Column="3" HorizontalOptions="Start">
+            <VerticalStackLayout
+                Grid.Row="1"
+                Grid.Column="3"
+                HorizontalOptions="Start">
                 <buttons:SfButton
                     Margin="0,10,0,0"
                     Background="#4CAF50"
