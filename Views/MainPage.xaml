@@ -120,10 +120,10 @@
                         </HorizontalStackLayout>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Padding="2" HorizontalOptions="Center">
-                        <Label Text="{Binding ConnectionState}" />
+                        <Label FontAttributes="Bold" Text="{Binding ConnectionState}" />
                     </HorizontalStackLayout>
                     <Border
-                        Background="Blue"
+                        Background="#66FFCC"
                         HeightRequest="450"
                         HorizontalOptions="Center"
                         Opacity="0.6"
@@ -134,15 +134,12 @@
                         </Border.StrokeShape>
                         <CollectionView ItemsSource="{Binding ShowMessagesList}" ItemsUpdatingScrollMode="KeepLastItemInView">
                             <CollectionView.ItemTemplate>
-                                <DataTemplate>
-
+                                <DataTemplate x:DataType="models:MessageChatModel">
                                     <Label
-                                        Margin="15,10,0,0"
-                                        BackgroundColor="#E1720F"
+                                        Margin="5,10,50,0"
                                         FontAttributes="Bold"
                                         FontSize="15"
                                         Text="{Binding}" />
-
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
@@ -185,7 +182,10 @@
             </Border>
 
 
-            <VerticalStackLayout Grid.Row="1" Grid.Column="3">
+            <VerticalStackLayout
+                Grid.Row="1"
+                Grid.Column="3"
+                HorizontalOptions="Start">
                 <buttons:SfButton
                     Background="#4CAF50"
                     Command="{Binding LoadCalendarPageCommand}"
@@ -202,7 +202,7 @@
                     ImageSource="student.png"
                     IsVisible="{Binding User.RolProfesor}"
                     ShowIcon="True"
-                    Text="Alumnos"
+                    Text="Estudiantes"
                     TextColor="Black"
                     WidthRequest="120" />
                 <buttons:SfButton
