@@ -21,15 +21,19 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="0,150,0,0"
+                ArrowsBackgroundColor="#00CC33"
+                ArrowsColor="Black"
                 Culture="{Binding Culture}"
                 Events="{Binding Events}"
                 HeightRequest="500"
+                MonthLabelColor="Black"
                 SelectedDate="{Binding DayEvents.EventDate}"
                 SelectedDateColor="Black"
                 SelectedDayBackgroundColor="Red"
                 SelectedDayEvents="{Binding EventsList, Mode=TwoWay}"
                 TodayOutlineColor="#66FFCC"
-                WidthRequest="450" />
+                WidthRequest="450"
+                YearLabelColor="Black" />
 
             <!--  Colección de eventos en la fila 3, columna 3  -->
             <CollectionView
@@ -41,8 +45,15 @@
                 SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:EventModel">
-                        <Border>
-                            <VerticalStackLayout>
+                        <Border
+                            BackgroundColor="#66FFCC"
+                            Stroke="Black"
+                            StrokeThickness="3"
+                            WidthRequest="400">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Margin="5,0,0,0" Spacing="5">
                                 <VerticalStackLayout.GestureRecognizers>
                                     <TapGestureRecognizer
                                         x:DataType="viewmodels:CalendarViewModel"
@@ -51,21 +62,21 @@
                                         CommandParameter="update"
                                         NumberOfTapsRequired="2" />
                                 </VerticalStackLayout.GestureRecognizers>
-                                <Label Text="{Binding Type}" />
-                                <Label Text="{Binding Description}" />
-                                <Label Text="{Binding StartAt}" />
-                                <Label Text="{Binding EndAt}" />
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup Name="CommonStates">
-                                        <VisualState Name="Normal" />
-                                        <VisualState Name="Selected">
-                                            <VisualState.Setters>
-                                                <Setter Property="Background" Value="Chocolate" />
-                                            </VisualState.Setters>
-                                        </VisualState>
-                                    </VisualStateGroup>
-                                </VisualStateManager.VisualStateGroups>
+                                <Label HorizontalTextAlignment="Center" Text="{Binding Type}" />
+                                <Label HorizontalTextAlignment="Center" Text="{Binding Description}" />
+                                <Label HorizontalTextAlignment="Center" Text="{Binding StartAt}" />
+                                <Label HorizontalTextAlignment="Center" Text="{Binding EndAt}" />
                             </VerticalStackLayout>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Normal" />
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="Background" Value="#00CC33" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -213,11 +224,19 @@
                                                     Margin="10,50,0,0"
                                                     BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
                                                     ItemsSource="{Binding EventsDateFilter}"
+                                                    SelectedItem="{Binding SelectedEvent}"
                                                     SelectionMode="Single">
                                                     <CollectionView.ItemTemplate>
                                                         <DataTemplate x:DataType="models:EventModel">
-                                                            <Border>
-                                                                <VerticalStackLayout>
+                                                            <Border
+                                                                BackgroundColor="#66FFCC"
+                                                                Stroke="Black"
+                                                                StrokeThickness="3"
+                                                                WidthRequest="400">
+                                                                <Border.StrokeShape>
+                                                                    <RoundRectangle CornerRadius="10" />
+                                                                </Border.StrokeShape>
+                                                                <VerticalStackLayout HorizontalOptions="Center">
                                                                     <VerticalStackLayout.GestureRecognizers>
                                                                         <TapGestureRecognizer
                                                                             x:DataType="viewmodels:CalendarViewModel"
@@ -231,21 +250,21 @@
                                                                         HeightRequest="50"
                                                                         Source="{Binding Image}"
                                                                         WidthRequest="50" />
-                                                                    <Label Text="{Binding Type}" />
-                                                                    <Label Text="{Binding Description}" />
-                                                                    <Label Text="{Binding StartAt}" />
-                                                                    <Label Text="{Binding EndAt}" />
-                                                                    <VisualStateManager.VisualStateGroups>
-                                                                        <VisualStateGroup Name="CommonStates">
-                                                                            <VisualState Name="Normal" />
-                                                                            <VisualState Name="Selected">
-                                                                                <VisualState.Setters>
-                                                                                    <Setter Property="Background" Value="Chocolate" />
-                                                                                </VisualState.Setters>
-                                                                            </VisualState>
-                                                                        </VisualStateGroup>
-                                                                    </VisualStateManager.VisualStateGroups>
+                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding Type}" />
+                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding Description}" />
+                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding StartAt}" />
+                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding EndAt}" />
                                                                 </VerticalStackLayout>
+                                                                <VisualStateManager.VisualStateGroups>
+                                                                    <VisualStateGroup Name="CommonStates">
+                                                                        <VisualState Name="Normal" />
+                                                                        <VisualState Name="Selected">
+                                                                            <VisualState.Setters>
+                                                                                <Setter Property="Background" Value="#00CC33" />
+                                                                            </VisualState.Setters>
+                                                                        </VisualState>
+                                                                    </VisualStateGroup>
+                                                                </VisualStateManager.VisualStateGroups>
                                                             </Border>
                                                         </DataTemplate>
                                                     </CollectionView.ItemTemplate>
@@ -278,11 +297,19 @@
                                                     Margin="10,50,0,0"
                                                     BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
                                                     ItemsSource="{Binding EventsTypeFilter}"
-                                                    SelectionMode="Multiple">
+                                                    SelectedItem="{Binding SelectedEvent}"
+                                                    SelectionMode="Single">
                                                     <CollectionView.ItemTemplate>
                                                         <DataTemplate x:DataType="models:EventModel">
-                                                            <Border>
-                                                                <VerticalStackLayout>
+                                                            <Border
+                                                                BackgroundColor="#66FFCC"
+                                                                Stroke="Black"
+                                                                StrokeThickness="3"
+                                                                WidthRequest="400">
+                                                                <Border.StrokeShape>
+                                                                    <RoundRectangle CornerRadius="10" />
+                                                                </Border.StrokeShape>
+                                                                <VerticalStackLayout HorizontalOptions="Center">
                                                                     <VerticalStackLayout.GestureRecognizers>
                                                                         <TapGestureRecognizer
                                                                             x:DataType="viewmodels:CalendarViewModel"
@@ -296,21 +323,21 @@
                                                                         HeightRequest="50"
                                                                         Source="{Binding Image}"
                                                                         WidthRequest="50" />
-                                                                    <Label Text="{Binding Type}" />
-                                                                    <Label Text="{Binding Description}" />
-                                                                    <Label Text="{Binding StartAt}" />
-                                                                    <Label Text="{Binding EndAt}" />
-                                                                    <VisualStateManager.VisualStateGroups>
-                                                                        <VisualStateGroup Name="CommonStates">
-                                                                            <VisualState Name="Normal" />
-                                                                            <VisualState Name="Selected">
-                                                                                <VisualState.Setters>
-                                                                                    <Setter Property="Background" Value="Chocolate" />
-                                                                                </VisualState.Setters>
-                                                                            </VisualState>
-                                                                        </VisualStateGroup>
-                                                                    </VisualStateManager.VisualStateGroups>
+                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding Type}" />
+                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding Description}" />
+                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding StartAt}" />
+                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding EndAt}" />
                                                                 </VerticalStackLayout>
+                                                                <VisualStateManager.VisualStateGroups>
+                                                                    <VisualStateGroup Name="CommonStates">
+                                                                        <VisualState Name="Normal" />
+                                                                        <VisualState Name="Selected">
+                                                                            <VisualState.Setters>
+                                                                                <Setter Property="Background" Value="#00CC33" />
+                                                                            </VisualState.Setters>
+                                                                        </VisualState>
+                                                                    </VisualStateGroup>
+                                                                </VisualStateManager.VisualStateGroups>
                                                             </Border>
                                                         </DataTemplate>
                                                     </CollectionView.ItemTemplate>
@@ -345,11 +372,19 @@
                                                     Margin="10,50,0,0"
                                                     BindingContext="{Binding Source={x:Reference thisPage}, Path=BindingContext}"
                                                     ItemsSource="{Binding EventsDescriptionFilter}"
-                                                    SelectionMode="Multiple">
+                                                    SelectedItem="{Binding SelectedEvent}"
+                                                    SelectionMode="Single">
                                                     <CollectionView.ItemTemplate>
                                                         <DataTemplate x:DataType="models:EventModel">
-                                                            <Border>
-                                                                <VerticalStackLayout>
+                                                            <Border
+                                                                BackgroundColor="#66FFCC"
+                                                                Stroke="Black"
+                                                                StrokeThickness="3"
+                                                                WidthRequest="400">
+                                                                <Border.StrokeShape>
+                                                                    <RoundRectangle CornerRadius="10" />
+                                                                </Border.StrokeShape>
+                                                                <VerticalStackLayout HorizontalOptions="Center">
                                                                     <VerticalStackLayout.GestureRecognizers>
                                                                         <TapGestureRecognizer
                                                                             x:DataType="viewmodels:CalendarViewModel"
@@ -363,21 +398,21 @@
                                                                         HeightRequest="50"
                                                                         Source="{Binding Image}"
                                                                         WidthRequest="50" />
-                                                                    <Label Text="{Binding Type}" />
-                                                                    <Label Text="{Binding Description}" />
-                                                                    <Label Text="{Binding StartAt}" />
-                                                                    <Label Text="{Binding EndAt}" />
-                                                                    <VisualStateManager.VisualStateGroups>
-                                                                        <VisualStateGroup Name="CommonStates">
-                                                                            <VisualState Name="Normal" />
-                                                                            <VisualState Name="Selected">
-                                                                                <VisualState.Setters>
-                                                                                    <Setter Property="Background" Value="Chocolate" />
-                                                                                </VisualState.Setters>
-                                                                            </VisualState>
-                                                                        </VisualStateGroup>
-                                                                    </VisualStateManager.VisualStateGroups>
+                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding Type}" />
+                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding Description}" />
+                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding StartAt}" />
+                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding EndAt}" />
                                                                 </VerticalStackLayout>
+                                                                <VisualStateManager.VisualStateGroups>
+                                                                    <VisualStateGroup Name="CommonStates">
+                                                                        <VisualState Name="Normal" />
+                                                                        <VisualState Name="Selected">
+                                                                            <VisualState.Setters>
+                                                                                <Setter Property="Background" Value="#00CC33" />
+                                                                            </VisualState.Setters>
+                                                                        </VisualState>
+                                                                    </VisualStateGroup>
+                                                                </VisualStateManager.VisualStateGroups>
                                                             </Border>
                                                         </DataTemplate>
                                                     </CollectionView.ItemTemplate>

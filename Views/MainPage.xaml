@@ -142,6 +142,7 @@
                                         FontAttributes="Bold"
                                         FontSize="15"
                                         Text="{Binding}" />
+
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>

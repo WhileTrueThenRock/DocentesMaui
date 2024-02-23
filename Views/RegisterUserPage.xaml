@@ -23,7 +23,7 @@
         </Style>
     </ContentPage.Resources>
     <ScrollView>
-        <Grid ColumnDefinitions="40,450,550,*" RowDefinitions="*,400,400,*">
+        <Grid ColumnDefinitions="40,450,550,*" RowDefinitions="*,250,550,*">
             <Border
                 Grid.Row="1"
                 Grid.Column="1"
@@ -94,9 +94,8 @@
                 </Border.Shadow>
                 <VerticalStackLayout>
                     <CollectionView
-                        HeightRequest="350"
                         ItemsSource="{Binding UserList}"
-                        SelectedItem="{Binding User}"
+                        SelectedItem="{Binding UserSelected}"
                         SelectionChangedCommand="{Binding ShowUserInfoCommand}"
                         SelectionMode="Single"
                         WidthRequest="430">
@@ -135,7 +134,7 @@
                                             <VisualState Name="Normal" />
                                             <VisualState Name="Selected">
                                                 <VisualState.Setters>
-                                                    <Setter Property="Background" Value="LightGray" />
+                                                    <Setter Property="Background" Value="#00CC33" />
                                                 </VisualState.Setters>
                                             </VisualState>
                                         </VisualStateGroup>
@@ -161,7 +160,7 @@
                             Offset="10,10" />
                     </Border.Shadow>
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="20,0,0,0" />
+                        <RoundRectangle CornerRadius="10" />
                     </Border.StrokeShape>
                     <VerticalStackLayout Padding="10" Background="#66FFCC">
                         <toolkit:AvatarView
@@ -200,7 +199,7 @@
                                 Grid.Column="1"
                                 Margin="0,20,0,0"
                                 IsEnabled="False"
-                                Text="{Binding User.Id}" />
+                                Text="{Binding UserSelected.Id}" />
                             <Label
                                 Grid.Row="1"
                                 Grid.Column="0"
@@ -212,7 +211,7 @@
                                 Grid.Row="1"
                                 Grid.Column="1"
                                 IsEnabled="{Binding IsDataEnabled}"
-                                Text="{Binding User.Nombre}" />
+                                Text="{Binding UserSelected.Nombre}" />
 
                             <Label
                                 Grid.Row="2"
@@ -225,7 +224,7 @@
                                 Grid.Row="2"
                                 Grid.Column="1"
                                 IsEnabled="{Binding IsDataEnabled}"
-                                Text="{Binding User.Apellidos}" />
+                                Text="{Binding UserSelected.Apellidos}" />
                             <Label
                                 Grid.Row="3"
                                 Grid.Column="0"
@@ -237,7 +236,7 @@
                                 Grid.Row="3"
                                 Grid.Column="1"
                                 IsEnabled="{Binding IsDataEnabled}"
-                                Text="{Binding User.Dni}" />
+                                Text="{Binding UserSelected.Dni}" />
 
                             <Label
                                 Grid.Row="4"
@@ -250,7 +249,7 @@
                                 Grid.Row="4"
                                 Grid.Column="1"
                                 IsEnabled="{Binding IsDataEnabled}"
-                                Text="{Binding User.Email}" />
+                                Text="{Binding UserSelected.Email}" />
                             <Label
                                 Grid.Row="5"
                                 Grid.Column="0"
@@ -284,7 +283,7 @@
                             <DatePicker
                                 Grid.Row="7"
                                 Grid.Column="1"
-                                Date="{Binding User.FechaNacimiento}"
+                                Date="{Binding UserSelected.FechaNacimiento}"
                                 Format="dd/MM/yyyy"
                                 IsEnabled="{Binding IsDataEnabled}"
                                 WidthRequest="350" />
@@ -299,7 +298,7 @@
                                 Grid.Row="8"
                                 Grid.Column="1"
                                 IsEnabled="{Binding IsDataEnabled}"
-                                Text="{Binding User.Curso}" />
+                                Text="{Binding UserSelected.Curso}" />
                             <Label
                                 Grid.Row="9"
                                 Grid.Column="0"
@@ -317,7 +316,7 @@
                                 Grid.Row="10"
                                 Grid.Column="1"
                                 IsEnabled="{Binding IsDataEnabled}"
-                                Text="{Binding User.Direccion.Calle}" />
+                                Text="{Binding UserSelected.Direccion.Calle}" />
                             <Label
                                 Grid.Row="11"
                                 Grid.Column="0"
@@ -329,7 +328,7 @@
                                 Grid.Row="11"
                                 Grid.Column="1"
                                 IsEnabled="{Binding IsDataEnabled}"
-                                Text="{Binding User.Direccion.Numero}" />
+                                Text="{Binding UserSelected.Direccion.Numero}" />
                             <Label
                                 Grid.Row="12"
                                 Grid.Column="0"
@@ -341,7 +340,7 @@
                                 Grid.Row="12"
                                 Grid.Column="1"
                                 IsEnabled="{Binding IsDataEnabled}"
-                                Text="{Binding User.Direccion.Poblacion}" />
+                                Text="{Binding UserSelected.Direccion.Poblacion}" />
                             <Label
                                 Grid.Row="13"
                                 Grid.Column="0"
@@ -376,7 +375,7 @@
                                 Grid.Column="1"
                                 Margin="0,0,10,0"
                                 IsEnabled="{Binding IsDataEnabled}"
-                                Text="{Binding User.UserName}" />
+                                Text="{Binding UserSelected.UserName}" />
                             <Label
                                 Grid.Row="15"
                                 Grid.Column="0"
@@ -389,7 +388,7 @@
                                 Grid.Column="1"
                                 Margin="0,0,10,0"
                                 IsEnabled="{Binding IsCreateMode}"
-                                Text="{Binding User.Password}" />
+                                Text="{Binding UserSelected.Password}" />
                         </Grid>
                         <HorizontalStackLayout HorizontalOptions="Center">
                             <Button

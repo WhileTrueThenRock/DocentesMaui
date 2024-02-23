@@ -12,7 +12,8 @@ namespace EFDocenteMAUI.ViewModels
     {
         [ObservableProperty]
         private UserModel _user;
-
+        [ObservableProperty]
+        private UserModel _userSelected;
         [ObservableProperty]
         private bool _isCreateMode;
         [ObservableProperty]
@@ -70,12 +71,12 @@ namespace EFDocenteMAUI.ViewModels
             bool okSaveImage = await UpdateImage();
             if (okSaveImage)
             {   
-                string[] fechamodificada = User.FechaNacimiento.Replace(" 0:00:00", " ").Split(' ');
-                User.FechaNacimiento = fechamodificada[0];
-                User.Avatar = APIService.ImagenesServerUrl + "/images/" + User.Id.ToString();
+                string[] fechamodificada = UserSelected.FechaNacimiento.Replace(" 0:00:00", " ").Split(' ');
+                UserSelected.FechaNacimiento = fechamodificada[0];
+                UserSelected.Avatar = APIService.ImagenesServerUrl + "/images/" + UserSelected.Id.ToString();
                 var request = new RequestModel(method: "POST",
                                                 route: "/events/update",
-                                                data: User,
+                                                data: UserSelected,
                                                 server: APIService.GestionServerUrl);
                 ResponseModel response = await APIService.ExecuteRequest(request);
                 AvatarImage64 = null;
@@ -91,7 +92,7 @@ namespace EFDocenteMAUI.ViewModels
             IsListVisible = true;
             var request = new RequestModel(method: "GET",
                                             route: "/users/all",
-                                            data: User,
+                                            data: UserSelected,
                                             server: APIService.GestionServerUrl);
             ResponseModel response = await APIService.ExecuteRequest(request);
             if (response.Success == 0)
@@ -117,7 +118,7 @@ namespace EFDocenteMAUI.ViewModels
                 IsListVisible = true;
                 var request = new RequestModel(method: "GET",
                                                 route: "/users/" + filtro + "/" + name,
-                                                data: User,
+                                                data: UserSelected,
                                                 server: APIService.GestionServerUrl);
                 ResponseModel response = await APIService.ExecuteRequest(request);
                 if (response.Success == 0)
@@ -151,7 +152,7 @@ namespace EFDocenteMAUI.ViewModels
         }
         private bool ValidateName()
         {
-            if (null == User.Nombre || User.Nombre.Any(Char.IsWhiteSpace))
+            if (null == UserSelected.Nombre || UserSelected.Nombre.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Nombre, no puede estar vacio";
                 return false;
@@ -160,7 +161,7 @@ namespace EFDocenteMAUI.ViewModels
         }
         private bool ValidateSurname()
         {
-            if (null == User.Apellidos || User.Apellidos.Any(Char.IsWhiteSpace))
+            if (null == UserSelected.Apellidos || UserSelected.Apellidos.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Apellidos, no puede estar vacio";
                 return false;
@@ -169,7 +170,7 @@ namespace EFDocenteMAUI.ViewModels
         }
         private bool ValidateDni()
         {
-            if (null == User.Dni || User.Dni.Any(Char.IsWhiteSpace))
+            if (null == UserSelected.Dni || UserSelected.Dni.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo DNI no puede estar vacio";
                 return false;
@@ -178,7 +179,7 @@ namespace EFDocenteMAUI.ViewModels
         }
         private bool ValidateEmail()
         {
-            if (null == User.Email || User.Email.Any(Char.IsWhiteSpace))
+            if (null == UserSelected.Email || UserSelected.Email.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo E-mail, no puede estar vacio";
                 return false;
@@ -202,13 +203,13 @@ namespace EFDocenteMAUI.ViewModels
             }
             else
             {
-                User.Telefono = numericValue;
+                UserSelected.Telefono = numericValue;
             }
             return true;
         }
         private bool ValidateGrade()
         {
-            if (null == User.Curso || User.Curso.Any(Char.IsWhiteSpace))
+            if (null == UserSelected.Curso || UserSelected.Curso.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Curso, no puede estar vacio";
                 return false;
@@ -218,7 +219,7 @@ namespace EFDocenteMAUI.ViewModels
 
         private bool ValidateStreet()
         {
-            if (null == User.Direccion.Calle || User.Direccion.Calle.Any(Char.IsWhiteSpace))
+            if (null == UserSelected.Direccion.Calle || UserSelected.Direccion.Calle.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Calle, no puede estar vacio";
                 return false;
@@ -227,7 +228,7 @@ namespace EFDocenteMAUI.ViewModels
         }
         private bool ValidateNumber()
         {
-            if (null == User.Direccion.Numero || User.Direccion.Numero.Any(Char.IsWhiteSpace))
+            if (null == UserSelected.Direccion.Numero || UserSelected.Direccion.Numero.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Número, no puede estar vacio";
                 return false;
@@ -236,7 +237,7 @@ namespace EFDocenteMAUI.ViewModels
         }
         private bool ValidateCity()
         {
-            if (null == User.Direccion.Poblacion || User.Direccion.Poblacion.Any(Char.IsWhiteSpace))
+            if (null == UserSelected.Direccion.Poblacion || UserSelected.Direccion.Poblacion.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Población, no puede estar vacio";
                 return false;
@@ -263,7 +264,7 @@ namespace EFDocenteMAUI.ViewModels
         private bool ValidateUserName()
         {
             
-            if (null == User.UserName || User.UserName.Any(Char.IsWhiteSpace))
+            if (null == UserSelected.UserName || UserSelected.UserName.Any(Char.IsWhiteSpace))
             {
                 MensajeError = "El campo Nombre de Usuario,\n no puede estar vacio";
                 return false;
@@ -298,17 +299,17 @@ namespace EFDocenteMAUI.ViewModels
                     bool okSaveImage = await UpdateImage();
                     if (okSaveImage)
                     {
-                        string[] fechamodificada = User.FechaNacimiento.Replace(" 0:00:00", " ").Split(' ');
-                        User.FechaNacimiento = fechamodificada[0];
-                        User.Avatar = APIService.ImagenesServerUrl + "/avatars/" + User.Id.ToString();
+                        string[] fechamodificada = UserSelected.FechaNacimiento.Replace(" 0:00:00", " ").Split(' ');
+                        UserSelected.FechaNacimiento = fechamodificada[0];
+                        UserSelected.Avatar = APIService.ImagenesServerUrl + "/avatars/" + UserSelected.Id.ToString();
                         var request = new RequestModel(method: "POST",
                                                         route: "/auth/register",
-                                                        data: User,
+                                                        data: UserSelected,
                                                         server: APIService.GestionServerUrl);
                         ResponseModel response = await APIService.ExecuteRequest(request);
 
                         await App.Current.MainPage.DisplayAlert("Info", response.Message, "ACEPTAR");
-                        User = new UserModel();
+                        UserSelected = new UserModel();
                         AvatarImage64 = null;
                         GetUsers();
                     }
@@ -330,11 +331,11 @@ namespace EFDocenteMAUI.ViewModels
                 "¿Estás seguro de que quieres eliminar este estudiante?", "Sí", "No");
             if (DeleteUser)
             {
-                string[] fechamodificada = User.FechaNacimiento.Replace(" 0:00:00", " ").Split(' ');
-                User.FechaNacimiento = fechamodificada[0];
+                string[] fechamodificada = UserSelected.FechaNacimiento.Replace(" 0:00:00", " ").Split(' ');
+                UserSelected.FechaNacimiento = fechamodificada[0];
                 var request = new RequestModel(method: "POST",
                                                 route: "/users/delete",
-                                                data: User,
+                                                data: UserSelected,
                                                 server: APIService.GestionServerUrl);
                 ResponseModel response = await APIService.ExecuteRequest(request);
 
@@ -346,12 +347,12 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public void EnableCreateUser()
         {
-            User = new UserModel();
+            UserSelected = new UserModel();
             IsSelectedUser = true;
             IsCreateMode = true;
             IsEditMode = false;
             IsDataEnabled = true;
-            AvatarImage = User.Avatar;
+            AvatarImage = UserSelected.Avatar;
             ImageChanged = false;
 
         }
@@ -362,9 +363,9 @@ namespace EFDocenteMAUI.ViewModels
             IsEditMode = true;
             IsCreateMode = false;
             IsDataEnabled = false;
-            AvatarImage = User.Avatar;
-            TelefonoString = User.Telefono.ToString();
-            CpString = User.Direccion.Cp.ToString();
+            AvatarImage = UserSelected.Avatar;
+            TelefonoString = UserSelected.Telefono.ToString();
+            CpString = UserSelected.Direccion.Cp.ToString();
             ImageChanged = false;
         }
         [RelayCommand]
@@ -390,7 +391,7 @@ namespace EFDocenteMAUI.ViewModels
             if (ImageChanged)
             {
                 ImageModel imagen = new ImageModel();
-                imagen.Id = User.Id.ToString();
+                imagen.Id = UserSelected.Id.ToString();
                 imagen.Content = AvatarImage64;
                 var request = new RequestModel(method: "POST", route: "/avatars/save", data: imagen, server: APIService.ImagenesServerUrl);
 
