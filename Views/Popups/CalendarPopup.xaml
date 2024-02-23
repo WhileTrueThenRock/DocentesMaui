@@ -13,6 +13,7 @@
     x:DataType="viewmodels:CalendarViewModel"
     CanBeDismissedByTappingOutsideOfPopup="False"
     Color="Beige">
+
     <VerticalStackLayout HeightRequest="650" WidthRequest="500">
         <Button
             BackgroundColor="Black"
