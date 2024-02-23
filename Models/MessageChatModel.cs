@@ -18,8 +18,6 @@ namespace EFDocenteMAUI.Models
         public string Purpose { get; set; }
         public string TargetUserID { get; set; }
         public DateTime SendAt {  get; set; }
-        public string Imagen { get; set; }
-        public string Pdf { get; set; }
 
         public MessageChatModel() 
         {
