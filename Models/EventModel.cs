@@ -22,6 +22,7 @@ namespace EFDocenteMAUI.Models
         public EventModel()
         {
             Id = ObjectId.GenerateNewId().ToString();
+            Image = APIService.ImagenesServerUrl + "/images/default";
         }
     }
 }

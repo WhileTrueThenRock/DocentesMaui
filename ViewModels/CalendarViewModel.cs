@@ -95,7 +95,6 @@ namespace EFDocenteMAUI.ViewModels
             set
             {
                 _fechaIni = value.Replace(" 0:00:00", "");
-                //_fechaIni = value;
                 OnPropertyChanged();
             }
             get
@@ -111,7 +110,6 @@ namespace EFDocenteMAUI.ViewModels
             set
             {
                 _fechaFin = value.Replace(" 0:00:00", "");
-                
                 OnPropertyChanged();
             }
             get
@@ -361,7 +359,7 @@ namespace EFDocenteMAUI.ViewModels
 
         [RelayCommand]
         public async Task CreateEvent()
-        {
+        {   
             Mode = "create";
             ExecuteRequest();
         }
@@ -417,7 +415,7 @@ namespace EFDocenteMAUI.ViewModels
                 IsCreateVisible = true;
                 IsUpdateVisible = false;
                 IsDeleteVisible = false;
-                AvatarImage = APIService.ImagenesServerUrl + "/images/default";
+                AvatarImage = SelectedEvent.Image;
 
 
                 DayEvents.Events.Clear();

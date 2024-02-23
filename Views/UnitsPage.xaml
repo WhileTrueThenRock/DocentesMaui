@@ -14,7 +14,7 @@
     BackgroundImageSource="fondo.png"
     BindingContext="{viewmodels:UnitsViewModel}">
     <ScrollView>
-        <Grid ColumnDefinitions="40,200,800,*" RowDefinitions="*,650,*">
+        <Grid ColumnDefinitions="40,200,800,300,*" RowDefinitions="*,650,*">
             <VerticalStackLayout
                 Grid.Row="1"
                 Grid.Column="1"
@@ -25,7 +25,7 @@
                         x:DataType="viewmodels:UnitsViewModel"
                         BindingContext="{Binding Source={x:Reference unitpage}, Path=BindingContext}"
                         Command="{Binding ShowUnitPopupCommand}"
-                        CommandParameter="update"
+                        CommandParameter="False"
                         NumberOfTapsRequired="2" />
                 </VerticalStackLayout.GestureRecognizers>
                 <Label
@@ -38,6 +38,7 @@
                     Margin="10"
                     BackgroundColor="#4CAF50"
                     Command="{Binding ShowUnitPopupCommand}"
+                    CommandParameter="True"
                     IsVisible="{Binding User.RolProfesor}"
                     Text="CREAR TEMARIO" />
                 <ScrollView>
@@ -130,7 +131,7 @@
                     Source="{Binding ResourceToShow}"
                     WidthRequest="780" />
             </ScrollView>
-            <VerticalStackLayout Grid.Row="1" Grid.Column="3">
+            <VerticalStackLayout Grid.Row="1" Grid.Column="3" HorizontalOptions="Start">
                 <buttons:SfButton
                     Margin="0,10,0,0"
                     Background="#4CAF50"

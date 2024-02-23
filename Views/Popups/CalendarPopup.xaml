@@ -151,7 +151,7 @@
                                     Margin="0,20,0,0"
                                     HorizontalOptions="Center"
                                     IsVisible="{Binding User.RolProfesor}"
-                                    WidthRequest="400">
+                                    WidthRequest="400" Spacing="20">
                                     <Button
                                         BackgroundColor="Green"
                                         Command="{Binding CreateEventCommand}"

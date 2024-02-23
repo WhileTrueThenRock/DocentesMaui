@@ -454,20 +454,9 @@ namespace EFDocenteMAUI.ViewModels
                                 MessagesDict.Add(messageChatModel.UserId, messageChatModel.Content + "\n");
 
                                 MessagesPrivateReceived = messageChatModel.Content + "\n";
-                                //if ( SelectedUser.Equals(messageChatModel.UserId))
-                                //{
-                                   
-                                //}
                             }
                             ShowNotification(messageChatModel.UserId);
 
-                            //if (!privateNotifications.ContainsKey(messageChatModel.UserId))
-                            //{
-                            //    privateNotifications.Add(messageChatModel.UserId, false);
-                            //}
-
-                            //privateNotifications[messageChatModel.UserId] = true;
-                            //PrivateNotification = privateNotifications[messageChatModel.UserId];
 
                             User = Users.FirstOrDefault(u => u.UserName == messageChatModel.UserId);
                             if (User != null)

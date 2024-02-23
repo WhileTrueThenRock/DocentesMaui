@@ -45,6 +45,8 @@ namespace EFDocenteMAUI.ViewModels
 
         [ObservableProperty]
         private UserModel _user;
+        [ObservableProperty]
+        private bool _modoCrear;
 
 
         public UnitsViewModel() 
@@ -73,8 +75,13 @@ namespace EFDocenteMAUI.ViewModels
         }
 
         [RelayCommand]
-        public async Task ShowUnitPopup()
-        {
+        public async Task ShowUnitPopup(string opcion)
+        {   
+            ModoCrear = bool.Parse(opcion);
+            if (ModoCrear)
+            {
+                Unit = new UnitModel();
+            }
             UnitsPopup = new UnitsPopup();
             await App.Current.MainPage.ShowPopupAsync(UnitsPopup);
         }
@@ -178,9 +185,15 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task DeleteUnit()
         {
-            Mode = "delete";
-            ExecuteRequest();
-            ClosePopUp();
+            bool deleteUnit = await App.Current.MainPage.DisplayAlert("Confirmación",
+                "¿Estás seguro de que quieres eliminar esta Unidad?", "Sí", "No");
+            if (deleteUnit)
+            {
+                Mode = "delete";
+                ExecuteRequest();
+                ClosePopUp();
+            }
+            
         }
         [RelayCommand]
         public async Task ClosePopUp()
