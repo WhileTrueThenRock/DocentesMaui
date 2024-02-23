@@ -25,7 +25,7 @@
                         x:DataType="viewmodels:UnitsViewModel"
                         BindingContext="{Binding Source={x:Reference unitpage}, Path=BindingContext}"
                         Command="{Binding ShowUnitPopupCommand}"
-                        CommandParameter="update"
+                        CommandParameter="False"
                         NumberOfTapsRequired="2" />
                 </VerticalStackLayout.GestureRecognizers>
                 <Label
@@ -38,6 +38,7 @@
                     Margin="10"
                     BackgroundColor="#4CAF50"
                     Command="{Binding ShowUnitPopupCommand}"
+                    CommandParameter="True"
                     IsVisible="{Binding User.RolProfesor}"
                     Text="CREAR TEMARIO" />
                 <ScrollView>
