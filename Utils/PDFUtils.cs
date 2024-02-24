@@ -12,7 +12,10 @@ namespace EFDocenteMAUI.Utils
         internal static async Task<Dictionary<string, object>> OpenPDF()
         {
 
-            var result = await FilePicker.PickAsync();
+            var result = await FilePicker.PickAsync(new PickOptions
+            {
+                FileTypes = FilePickerFileType.Pdf, PickerTitle = "Selecione un pdf"
+            });
             if (result != null)
             {
                 var pdfSources = new Dictionary<string, object>();

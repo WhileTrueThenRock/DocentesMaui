@@ -133,7 +133,14 @@
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="10" />
                         </Border.StrokeShape>
-                        <CollectionView ItemsSource="{Binding ShowMessagesList}" ItemsUpdatingScrollMode="KeepLastItemInView">
+                        <CollectionView
+                            ItemsSource="{Binding ShowMessagesList}"
+                            ItemsUpdatingScrollMode="KeepLastItemInView"
+                            SelectedItem="{Binding MessageMedia}"
+                            SelectionMode="Single">
+                            <CollectionView.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ShowVisorPopupCommand}" NumberOfTapsRequired="2" />
+                            </CollectionView.GestureRecognizers>
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="models:MessageMediaModel">
                                     <HorizontalStackLayout>
@@ -193,7 +200,10 @@
                                 BackgroundColor="#4CAF50"
                                 Command="{Binding LoadImageCommand}"
                                 Text="ENVIAR IMAGEN" />
-                            <Button BackgroundColor="#4CAF50" Text="ENVIAR PDF" />
+                            <Button
+                                BackgroundColor="#4CAF50"
+                                Command="{Binding LoadPDFCommand}"
+                                Text="ENVIAR PDF" />
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
 

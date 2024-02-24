@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EFDocenteMAUI.Models;
 using EFDocenteMAUI.Utils;
+using EFDocenteMAUI.Views.Popups;
 using GestorChat.Views.Popups;
 using MongoDB.Bson;
 using Newtonsoft.Json;
@@ -110,6 +111,16 @@ namespace EFDocenteMAUI.ViewModels
 
         [ObservableProperty]
         private ImageSource _imageSource;
+        [ObservableProperty]
+        private ImageSource _pdfSource;
+        [ObservableProperty]
+        private string _pdf64;
+        [ObservableProperty]
+        private string _resourceToShow;
+        [ObservableProperty]
+        private MessageMediaModel _messageMedia;
+        [ObservableProperty]
+        private VisorArchivosPopup _visorPopup;
         public MainViewModel()
         {
             Inicio();
@@ -302,14 +313,37 @@ namespace EFDocenteMAUI.ViewModels
             ImageNotificationChat = "botonnotification.png";
             Profesor = User.RolProfesor;
         }
-
-        
+        [RelayCommand]
+        private async Task ShowVisorPopup()
+        {
+            VisorPopup = new VisorArchivosPopup();
+            if (null!=MessageMedia.Pdf && MessageMedia.Pdf.Contains("/pdfs"))
+            {
+                ResourceToShow = MessageMedia.Pdf;
+                await App.Current.MainPage.ShowPopupAsync(VisorPopup);
+            }
+            else if (null != MessageMedia.Imagen && MessageMedia.Imagen.Contains("/images"))
+            {
+                ResourceToShow = MessageMedia.Imagen;
+                await App.Current.MainPage.ShowPopupAsync(VisorPopup);
+            }
+            else
+            {
+                return;
+            }
+            
+            
+        }
+        [RelayCommand]
+        public async Task CloseVisorPopUp()
+        {
+            VisorPopup.Close();
+        }
 
         [RelayCommand]
         public async Task ClosePopUp()
         {
             PrivateMessagePopup.Close();
-
         }
 
         [RelayCommand]
@@ -369,6 +403,40 @@ namespace EFDocenteMAUI.ViewModels
             var request = new RequestModel(method: "POST", route: "/images/save", data: imagen, server: APIService.ImagenesServerUrl);
             ResponseModel response = await APIService.ExecuteRequest(request);
             MessageToSend =APIService.ImagenesServerUrl + "/images/" + imagen.Id.ToString();
+            return response.Success == 0;
+        }
+        [RelayCommand]
+        public async Task LoadPDF()
+        {
+            var pdfDict = await PDFUtils.OpenPDF();
+            if (pdfDict != null)
+            {
+                PdfSource = (ImageSource)pdfDict["pdfFromStream"];
+                Pdf64 = (string)pdfDict["pdfBase64"];
+                await SavePDFAsync();
+            }
+        }
+        public async Task SavePDFAsync()
+        {
+            bool okSavePDF = await UpdatePDF();
+            if (okSavePDF)
+            {
+                await SendMessage("BroadCast");
+            }
+            else
+            {
+                MessageToSend = "";
+                await App.Current.MainPage.DisplayAlert("ERROR", "Error al enviar pdf", "Aceptar");
+            }
+        }
+        public async Task<bool> UpdatePDF()
+        {
+            PDFModel pdf = new PDFModel();
+            pdf.Id = ObjectId.GenerateNewId().ToString();
+            pdf.Content = Pdf64;
+            var request = new RequestModel(method: "POST", route: "/pdfs/save", data: pdf, server: APIService.ImagenesServerUrl);
+            ResponseModel response = await APIService.ExecuteRequest(request);
+            MessageToSend = APIService.ImagenesServerUrl + "/pdfs/" + pdf.Id.ToString();
             return response.Success == 0;
         }
         [RelayCommand]

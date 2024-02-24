@@ -131,7 +131,10 @@
                     Source="{Binding ResourceToShow}"
                     WidthRequest="780" />
             </ScrollView>
-            <VerticalStackLayout Grid.Row="1" Grid.Column="3" HorizontalOptions="Start">
+            <VerticalStackLayout
+                Grid.Row="1"
+                Grid.Column="3"
+                HorizontalOptions="Start">
                 <buttons:SfButton
                     Margin="0,10,0,0"
                     Background="#4CAF50"
