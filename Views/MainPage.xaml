@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
     xmlns:models="clr-namespace:EFDocenteMAUI.Models"
+    xmlns:pdfviewer="clr-namespace:Syncfusion.Maui.PdfViewer;assembly=Syncfusion.Maui.PdfViewer"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
@@ -14,7 +15,7 @@
     BindingContext="{viewmodels:MainViewModel}">
 
     <ScrollView>
-        <Grid ColumnDefinitions="*,180,650,250,*" RowDefinitions="*,600,*">
+        <Grid ColumnDefinitions="*,180,650,250,*" RowDefinitions="*,650,*">
 
             <VerticalStackLayout
                 Grid.Row="1"
@@ -137,56 +138,92 @@
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="10" />
                         </Border.StrokeShape>
-                        <CollectionView ItemsSource="{Binding ShowMessagesList}" ItemsUpdatingScrollMode="KeepLastItemInView">
+                        <CollectionView
+                            ItemsSource="{Binding ShowMessagesList}"
+                            ItemsUpdatingScrollMode="KeepLastItemInView"
+                            SelectedItem="{Binding MessageMedia}"
+                            SelectionMode="Single">
+                            <CollectionView.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ShowVisorPopupCommand}" NumberOfTapsRequired="2" />
+                            </CollectionView.GestureRecognizers>
                             <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="models:MessageChatModel">
-                                    <Label
-                                        Margin="5,10,50,0"
-                                        FontAttributes="Bold"
-                                        FontSize="15"
-                                        Text="{Binding}" />
+                                <DataTemplate x:DataType="models:MessageMediaModel">
+                                    <HorizontalStackLayout>
+                                        <Label
+                                            Margin="5,10,5,0"
+                                            FontAttributes="Bold"
+                                            FontSize="15"
+                                            Text="{Binding Mensaje}" />
+                                        <Image
+                                            HeightRequest="30"
+                                            Source="{Binding Imagen}"
+                                            WidthRequest="30" />
+                                        <pdfviewer:SfPdfViewer
+                                            x:Name="pdfViewer"
+                                            DocumentSource="{Binding Pdf}"
+                                            IsVisible="False" />
+                                        <pdfviewer:SfPdfViewer
+                                            x:Name="videoViewer"
+                                            DocumentSource="{Binding Video}"
+                                            IsVisible="False" />
+                                    </HorizontalStackLayout>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
                     </Border>
+                    <VerticalStackLayout HorizontalOptions="Center" IsVisible="{Binding Profesor}">
+                        <HorizontalStackLayout>
+                            <Entry
+                                Margin="0,2,2,2"
+                                BackgroundColor="AliceBlue"
+                                HorizontalOptions="Center"
+                                Placeholder="Introduce un mensaje"
+                                Text="{Binding MessageToSend}"
+                                WidthRequest="315" />
+                            <Picker
+                                x:Name="pk_emojis"
+                                Margin="2"
+                                BackgroundColor="AliceBlue"
+                                HorizontalOptions="Center"
+                                ItemsSource="{Binding Emojis}"
+                                WidthRequest="75">
+                                <Picker.Behaviors>
+                                    <toolkit:EventToCommandBehavior
+                                        Command="{Binding AddEmojiCommand}"
+                                        CommandParameter="{Binding Source={x:Reference pk_emojis}, Path=SelectedItem}"
+                                        EventName="SelectedIndexChanged" />
+                                </Picker.Behaviors>
+                            </Picker>
+                            <Button
+                                Margin="2"
+                                BackgroundColor="#4CAF50"
+                                Command="{Binding SendMessageCommand}"
+                                CommandParameter="BroadCast"
+                                HorizontalOptions="Center"
+                                Text="ENVIAR"
+                                WidthRequest="100" />
 
-                    <HorizontalStackLayout HorizontalOptions="Center" IsVisible="{Binding Profesor}">
-                        <Entry
-                            Margin="0,2,2,2"
-                            BackgroundColor="AliceBlue"
-                            HorizontalOptions="Center"
-                            Placeholder="Introduce un mensaje"
-                            Text="{Binding MessageToSend}"
-                            WidthRequest="315" />
-                        <Picker
-                            x:Name="pk_emojis"
-                            Margin="2"
-                            BackgroundColor="AliceBlue"
-                            HorizontalOptions="Center"
-                            ItemsSource="{Binding Emojis}"
-                            WidthRequest="75">
-                            <Picker.Behaviors>
-                                <toolkit:EventToCommandBehavior
-                                    Command="{Binding AddEmojiCommand}"
-                                    CommandParameter="{Binding Source={x:Reference pk_emojis}, Path=SelectedItem}"
-                                    EventName="SelectedIndexChanged" />
-                            </Picker.Behaviors>
-                        </Picker>
-                        <Button
-                            Margin="2"
-                            BackgroundColor="#4CAF50"
-                            Command="{Binding SendMessageCommand}"
-                            CommandParameter="BroadCast"
-                            HorizontalOptions="Center"
-                            Text="ENVIAR"
-                            WidthRequest="100" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="25">
+                            <buttons:SfButton Stroke="Black"
+                                Background="#4CAF50"
+                                Command="{Binding LoadImageCommand}"
+                                Text="+ IMAGEN" />
+                            <buttons:SfButton
+                                Stroke="Black"
+                                Background="#4CAF50"
+                                Command="{Binding LoadPDFCommand}"
+                                Text="+ PDF" />
+                            <buttons:SfButton Stroke="Black"
+                                Background="#4CAF50"
+                                Command="{Binding LoadVideoCommand}"
+                                Text="+ VIDEO" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
 
-                    </HorizontalStackLayout>
                 </VerticalStackLayout>
 
             </Border>
-
-
             <VerticalStackLayout
                 Grid.Row="1"
                 Grid.Column="3"

@@ -117,6 +117,30 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </HorizontalStackLayout>
+            <HorizontalStackLayout
+                Grid.Row="4"
+                Grid.Column="1"
+                Margin="3">
+                <Button
+                    BackgroundColor="#4CAF50"
+                    Command="{Binding LoadVideoCommand}"
+                    HeightRequest="20"
+                    IsVisible="{Binding User.RolProfesor}"
+                    Text="+"
+                    WidthRequest="20" />
+                <CollectionView ItemsSource="{Binding Unit.Resources}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodels:UnitsViewModel">
+                            <HorizontalStackLayout>
+                                <Image
+                                    HeightRequest="30"
+                                    Source="video.png"
+                                    WidthRequest="30" />
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </HorizontalStackLayout>
         </Grid>
         <HorizontalStackLayout
             Margin="0,20,0,0"

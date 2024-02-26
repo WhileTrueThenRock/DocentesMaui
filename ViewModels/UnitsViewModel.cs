@@ -36,6 +36,10 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private string _pdf64;
         [ObservableProperty]
+        private ImageSource _videoSource;
+        [ObservableProperty]
+        private string _video64;
+        [ObservableProperty]
         private UnitsPopup _unitsPopup;
 
         [ObservableProperty]
@@ -59,19 +63,15 @@ namespace EFDocenteMAUI.ViewModels
 
         [RelayCommand]
         public void ShowResource(object image)
-        {
-          
+        {     
                 var uriURL = (UriImageSource)image;
                 ResourceToShow = uriURL.Uri.AbsoluteUri;
-           
         }
 
         [RelayCommand]
         public void ShowResourcePdf(object image)
         {
-
             ResourceToShow = image.ToString();
-
         }
 
         [RelayCommand]
@@ -107,6 +107,17 @@ namespace EFDocenteMAUI.ViewModels
                 await SavePDFAsync();
             }
         }
+        [RelayCommand]
+        public async Task LoadVideo()
+        {
+            var videoDict = await VideoUtils.OpenVideo();
+            if (videoDict != null)
+            {
+                VideoSource = (ImageSource)videoDict["videoFromStream"];
+                Video64 = (string)videoDict["videoBase64"];
+                await SaveVideoAsync();
+            }
+        }
 
         public async Task<bool> UpdateImage()
         {
@@ -125,7 +136,23 @@ namespace EFDocenteMAUI.ViewModels
             pdf.Content = Pdf64;
             var request = new RequestModel(method: "POST", route: "/pdfs/save", data: pdf, server: APIService.ImagenesServerUrl);
             ResponseModel response = await APIService.ExecuteRequest(request);
-            Unit.Pdfs.Add(APIService.ImagenesServerUrl + "/pdfs/" + pdf.Id.ToString());
+            if (response.Success == 0)
+            {
+                Unit.Pdfs.Add(APIService.ImagenesServerUrl + "/pdfs/" + pdf.Id.ToString());
+            }
+            return response.Success == 0;
+        }
+        public async Task<bool> UpdateVideo()
+        {
+            VideoModel video = new VideoModel();
+            video.Id = ObjectId.GenerateNewId().ToString();
+            video.Content = Video64;
+            var request = new RequestModel(method: "POST", route: "/videos/save", data: video, server: APIService.ImagenesServerUrl);
+            ResponseModel response = await APIService.ExecuteRequest(request);
+            if (response.Success == 0)
+            {
+                Unit.Resources.Add(APIService.ImagenesServerUrl + "/videos/" + video.Id.ToString());
+            }        
             return response.Success == 0;
         }
         public async Task SaveImageAsync()
@@ -150,6 +177,18 @@ namespace EFDocenteMAUI.ViewModels
             else
             {
                 await App.Current.MainPage.DisplayAlert("Temario", "Error al añadir PDF", "Aceptar");
+            }
+        }
+        public async Task SaveVideoAsync()
+        {
+            bool okSaveVideo = await UpdateVideo();
+            if (okSaveVideo)
+            {
+                await App.Current.MainPage.DisplayAlert("Temario", "Video añadida correctamente", "Aceptar");
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Temario", "Error al añadir Video", "Aceptar");
             }
         }
         [RelayCommand]
