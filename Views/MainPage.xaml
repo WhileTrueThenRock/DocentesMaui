@@ -55,8 +55,13 @@
                     </CollectionView.GestureRecognizers>
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:UserModel">
-                            <Border>
+                            <Border StrokeShape="RoundRectangle 10,10,10,10" StrokeThickness="2">
                                 <HorizontalStackLayout HorizontalOptions="Start">
+                                    <Image
+                                        Margin="5,0,0,0"
+                                        HeightRequest="30"
+                                        Source="{Binding Avatar}"
+                                        WidthRequest="30" />
                                     <Label
                                         Margin="5,5,20,0"
                                         HeightRequest="30"

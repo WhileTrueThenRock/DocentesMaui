@@ -62,10 +62,18 @@
                                         CommandParameter="update"
                                         NumberOfTapsRequired="2" />
                                 </VerticalStackLayout.GestureRecognizers>
-                                <Label HorizontalTextAlignment="Center" Text="{Binding Type}" />
-                                <Label HorizontalTextAlignment="Center" Text="{Binding Description}" />
-                                <Label HorizontalTextAlignment="Center" Text="{Binding StartAt}" />
-                                <Label HorizontalTextAlignment="Center" Text="{Binding EndAt}" />
+                                <VerticalStackLayout>
+                                    <Label HorizontalTextAlignment="Center" Text="{Binding Type}" />
+                                    <Label HorizontalTextAlignment="Center" Text="{Binding Description}" />
+                                    <Label HorizontalTextAlignment="Center" Text="{Binding StartAt}" />
+                                    <Label HorizontalTextAlignment="Center" Text="{Binding EndAt}" />
+
+                                    <Image
+                                        HeightRequest="100"
+                                        Source="{Binding Image}"
+                                        WidthRequest="100" />
+                                </VerticalStackLayout>
+
                             </VerticalStackLayout>
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup Name="CommonStates">

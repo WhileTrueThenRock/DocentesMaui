@@ -3,6 +3,7 @@
     x:Class="EFDocenteMAUI.Views.UnitsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:accordion="clr-namespace:Syncfusion.Maui.Accordion;assembly=Syncfusion.Maui.Expander"
     xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
     xmlns:models="clr-namespace:EFDocenteMAUI.Models"
     xmlns:pdfviewer="clr-namespace:Syncfusion.Maui.PdfViewer;assembly=Syncfusion.Maui.PdfViewer"
@@ -144,14 +145,21 @@
                     </CollectionView>
                 </ScrollView>
             </VerticalStackLayout>
-            <ScrollView Grid.Row="1" Grid.Column="2">
+            <ScrollView
+                Grid.Row="1"
+                Grid.Column="2"
+                BackgroundColor="Transparent">
+
                 <WebView
                     Margin="10"
                     Background="Transparent"
                     BackgroundColor="Transparent"
                     HeightRequest="630"
+                    HorizontalOptions="CenterAndExpand"
                     Source="{Binding ResourceToShow}"
+                    VerticalOptions="CenterAndExpand"
                     WidthRequest="780" />
+
             </ScrollView>
             <VerticalStackLayout
                 Grid.Row="1"

@@ -58,7 +58,7 @@
                     <HorizontalStackLayout Margin="5">
                         <Picker
                             ItemsSource="{Binding ParametrosBusqueda}"
-                            SelectedIndex="1"
+                            SelectedIndex="0"
                             SelectedItem="{Binding Filtro}"
                             WidthRequest="180" />
                         <Entry
