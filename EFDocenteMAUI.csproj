@@ -73,6 +73,7 @@
 	  <None Remove="Resources\Images\ricardo.jpg" />
 	  <None Remove="Resources\Images\student.png" />
 	  <None Remove="Resources\Images\temario.png" />
+	  <None Remove="Resources\Images\video.png" />
 	</ItemGroup>
 
 	<ItemGroup>

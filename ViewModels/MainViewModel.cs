@@ -116,6 +116,10 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private string _pdf64;
         [ObservableProperty]
+        private ImageSource _videoSource;
+        [ObservableProperty]
+        private string _video64;
+        [ObservableProperty]
         private string _resourceToShow;
         [ObservableProperty]
         private MessageMediaModel _messageMedia;
@@ -327,6 +331,11 @@ namespace EFDocenteMAUI.ViewModels
                 ResourceToShow = MessageMedia.Imagen;
                 await App.Current.MainPage.ShowPopupAsync(VisorPopup);
             }
+            else if (null != MessageMedia.Video && MessageMedia.Video.Contains("/videos"))
+            {
+                ResourceToShow = MessageMedia.Video;
+                await App.Current.MainPage.ShowPopupAsync(VisorPopup);
+            }
             else
             {
                 return;
@@ -440,6 +449,40 @@ namespace EFDocenteMAUI.ViewModels
             return response.Success == 0;
         }
         [RelayCommand]
+        public async Task LoadVideo()
+        {
+            var videoDict = await VideoUtils.OpenVideo();
+            if (videoDict != null)
+            {
+                VideoSource = (ImageSource)videoDict["videoFromStream"];
+                Video64 = (string)videoDict["videoBase64"];
+                await SaveVideoAsync();
+            }
+        }
+        public async Task SaveVideoAsync()
+        {
+            bool okSaveVideo = await UpdateVideo();
+            if (okSaveVideo)
+            {
+                await SendMessage("BroadCast");
+            }
+            else
+            {
+                MessageToSend = "";
+                await App.Current.MainPage.DisplayAlert("ERROR", "Error al enviar video", "Aceptar");
+            }
+        }
+        public async Task<bool> UpdateVideo()
+        {
+            VideoModel video = new VideoModel();
+            video.Id = ObjectId.GenerateNewId().ToString();
+            video.Content = Video64;
+            var request = new RequestModel(method: "POST", route: "/videos/save", data: video, server: APIService.ImagenesServerUrl);
+            ResponseModel response = await APIService.ExecuteRequest(request);
+            MessageToSend = APIService.ImagenesServerUrl + "/videos/" + video.Id.ToString();
+            return response.Success == 0;
+        }
+        [RelayCommand]
         public async Task SendMessage(string purpose)
         {
             // Crear una nueva instancia del modelo de mensaje de chat.
@@ -547,6 +590,15 @@ namespace EFDocenteMAUI.ViewModels
                                 sms.Pdf = arrayMensajes[2];
                                 ListMediaMessages.Add(sms);
                             }
+                            else if (mensaje.Contains("/videos"))
+                            {
+                                var arrayMensajes = mensaje.Split(' ');
+                                var sms = new MessageMediaModel();
+                                sms.Mensaje = arrayMensajes[0] + " " + arrayMensajes[1];
+                                sms.Imagen = "video.png";
+                                sms.Video = arrayMensajes[2];
+                                ListMediaMessages.Add(sms);
+                            }
                             else
                             {
                                 var sms = new MessageMediaModel();
@@ -618,6 +670,15 @@ namespace EFDocenteMAUI.ViewModels
                                     sms.Mensaje = arrayMensajes[0] + " " + arrayMensajes[1];
                                     sms.Imagen = "pdf.png";
                                     sms.Pdf = arrayMensajes[2];
+                                    ListMediaMessages.Add(sms);
+                                }
+                                else if (mensaje.Contains("/videos"))
+                                {
+                                    var arrayMensajes = mensaje.Split(' ');
+                                    var sms = new MessageMediaModel();
+                                    sms.Mensaje = arrayMensajes[0] + " " + arrayMensajes[1];
+                                    sms.Imagen = "video.png";
+                                    sms.Video = arrayMensajes[2];
                                     ListMediaMessages.Add(sms);
                                 }
                                 else

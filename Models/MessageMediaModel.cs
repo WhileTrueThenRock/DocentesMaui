@@ -6,5 +6,6 @@ namespace EFDocenteMAUI.Models
         public string Mensaje {  get; set; }
         public string Imagen { get; set; }
         public string Pdf { get; set; }
+        public string Video { get; set; }
     }
 }

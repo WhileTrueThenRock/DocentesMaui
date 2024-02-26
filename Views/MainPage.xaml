@@ -157,6 +157,10 @@
                                             x:Name="pdfViewer"
                                             DocumentSource="{Binding Pdf}"
                                             IsVisible="False" />
+                                        <pdfviewer:SfPdfViewer
+                                            x:Name="videoViewer"
+                                            DocumentSource="{Binding Video}"
+                                            IsVisible="False" />
                                     </HorizontalStackLayout>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
@@ -196,22 +200,25 @@
 
                         </HorizontalStackLayout>
                         <HorizontalStackLayout Spacing="25">
-                            <Button
-                                BackgroundColor="#4CAF50"
+                            <buttons:SfButton Stroke="Black"
+                                Background="#4CAF50"
                                 Command="{Binding LoadImageCommand}"
-                                Text="ENVIAR IMAGEN" />
-                            <Button
-                                BackgroundColor="#4CAF50"
+                                Text="+ IMAGEN" />
+                            <buttons:SfButton
+                                Stroke="Black"
+                                Background="#4CAF50"
                                 Command="{Binding LoadPDFCommand}"
-                                Text="ENVIAR PDF" />
+                                Text="+ PDF" />
+                            <buttons:SfButton Stroke="Black"
+                                Background="#4CAF50"
+                                Command="{Binding LoadVideoCommand}"
+                                Text="+ VIDEO" />
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
 
                 </VerticalStackLayout>
 
             </Border>
-
-
             <VerticalStackLayout
                 Grid.Row="1"
                 Grid.Column="3"
@@ -244,37 +251,6 @@
                     Text="Temario"
                     TextColor="Black"
                     WidthRequest="120" />
-
-                <syncfusion:SfTreeView
-                    x:Name="treeView"
-                    AutoExpandMode="AllNodesExpanded"
-                    ChildPropertyName="SubFiles"
-                    ItemsSource="{Binding ImageNodeInfo}">
-                    <syncfusion:SfTreeView.GestureRecognizers />
-                    <syncfusion:SfTreeView.ItemTemplate>
-                        <DataTemplate>
-                            <HorizontalStackLayout Grid.Row="1" Grid.Column="3">
-                                <Image
-                                    Margin="20,0,0,0"
-                                    HeightRequest="34"
-                                    Source="{Binding ImageIcon}"
-                                    WidthRequest="64">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                            x:DataType="viewmodels:MainViewModel"
-                                            Command="{Binding Source={x:Reference thisPage}, Path=BindingContext.LoadCalendarPageCommand}"
-                                            NumberOfTapsRequired="1" />
-                                    </Image.GestureRecognizers>
-                                </Image>
-                                <Label
-                                    Margin="0,0,0,0"
-                                    HeightRequest="50"
-                                    Text="{Binding ItemName}"
-                                    WidthRequest="100" />
-                            </HorizontalStackLayout>
-                        </DataTemplate>
-                    </syncfusion:SfTreeView.ItemTemplate>
-                </syncfusion:SfTreeView>
             </VerticalStackLayout>
 
         </Grid>
