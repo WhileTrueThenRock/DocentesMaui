@@ -364,11 +364,19 @@ namespace EFDocenteMAUI.ViewModels
                             UserList = JsonConvert.
                                 DeserializeObject<ObservableCollection<string>>(messageChatModel.Content.ToString());
                             Users = new ObservableCollection<UserModel>();
+                            RegisterUserViewModel model = new RegisterUserViewModel();
+                            ObservableCollection<UserModel> allUsers =await GetUsers();
+
                             foreach (string user in UserList){
-                               
-                                UserModel user1 = new UserModel();
-                                user1.UserName = user;
-                                Users.Add(user1);
+                                foreach(var usuario in allUsers)
+                                {
+                                    if (user.Equals(usuario.UserName))
+                                    {
+                                        Users.Add(usuario);
+                                    }
+                                }
+
+                          
                             }
                         }
                         else if (messageChatModel.Purpose.Equals("Private"))
@@ -450,6 +458,23 @@ namespace EFDocenteMAUI.ViewModels
             }
         }
         private Dictionary<string, bool> privateNotifications = new Dictionary<string, bool>();
+        [RelayCommand]
+        public async Task <ObservableCollection<UserModel>> GetUsers()
+        {
+            var request = new RequestModel(method: "GET",
+                                            route: "/users/all",
+                                            data: "",
+                                            server: APIService.GestionServerUrl);
+            ResponseModel response = await APIService.ExecuteRequest(request);
+            if (response.Success == 0)
+            {
+              return JsonConvert.DeserializeObject<ObservableCollection<UserModel>>(response.Data.ToString());
+            }
+            else
+            {
+                return null;
+            }
+        }
 
 
         public async Task ShowNotification(string user)

@@ -12,7 +12,7 @@
     x:Name="thisPage"
     x:DataType="viewmodels:CalendarViewModel"
     CanBeDismissedByTappingOutsideOfPopup="False"
-    Color="Beige">
+    Color="#66FFCC">
 
     <VerticalStackLayout HeightRequest="650" WidthRequest="500">
         <Button
@@ -53,8 +53,8 @@
                                     HorizontalOptions="Center"
                                     Text="Tipo de Evento:" />
                                 <Border
-                                    BackgroundColor="LightGreen"
-                                    StrokeShape="RoundRectangle 0,20,20,0"
+                                    Background="#4CAF50"
+                                    StrokeShape="RoundRectangle 20,20,20,20"
                                     StrokeThickness="2">
                                     <syncfusion:SfExpander
                                         Margin="10,10,0,0"
@@ -151,7 +151,8 @@
                                     Margin="0,20,0,0"
                                     HorizontalOptions="Center"
                                     IsVisible="{Binding User.RolProfesor}"
-                                    WidthRequest="400" Spacing="20">
+                                    Spacing="20"
+                                    WidthRequest="400">
                                     <Button
                                         BackgroundColor="Green"
                                         Command="{Binding CreateEventCommand}"
