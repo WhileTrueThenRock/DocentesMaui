@@ -125,6 +125,10 @@ namespace EFDocenteMAUI.ViewModels
         private MessageMediaModel _messageMedia;
         [ObservableProperty]
         private VisorArchivosPopup _visorPopup;
+        [ObservableProperty]
+        private Color _colorBotonSala;
+        [ObservableProperty]
+        private Color _colorBotonNotificacion;
         public MainViewModel()
         {
             Inicio();
@@ -150,7 +154,6 @@ namespace EFDocenteMAUI.ViewModels
 
             };
             ImageNodeInfo.Add(fileManager);
-            Conectar();
             ImMainChat = true;
             ImNotificationChat = false;
             PrivateNotification = false;
@@ -159,6 +162,9 @@ namespace EFDocenteMAUI.ViewModels
             Users = new ObservableCollection<UserModel>();
             ListMediaMessages = new ObservableCollection<MessageMediaModel>();
             ListNotificationMediaMessages = new ObservableCollection<MessageMediaModel>();
+            Conectar();
+            ColorBotonSala = Colors.Transparent;
+            ColorBotonNotificacion= Colors.Transparent;
             ShowMainMsg();
         }
         [RelayCommand]
@@ -240,8 +246,8 @@ namespace EFDocenteMAUI.ViewModels
             NotificationMessage = false;
             ImMainChat = true;
             ImNotificationChat = false;
-            ImageMainChat = "botonmain.png";
             Profesor = true;
+            ColorBotonSala = Colors.Transparent;
         }
         [RelayCommand]
         public void ShowNotificationMsg()
@@ -251,8 +257,8 @@ namespace EFDocenteMAUI.ViewModels
             NotificationMessage = true;
             ImMainChat = false;
             ImNotificationChat = true;
-            ImageNotificationChat = "botonnotification.png";
             Profesor = User.RolProfesor;
+            ColorBotonNotificacion = Colors.Transparent;
         }
         [RelayCommand]
         private async Task ShowVisorPopup()
@@ -506,7 +512,7 @@ namespace EFDocenteMAUI.ViewModels
                         {
                             if (!ImMainChat)
                             {
-                                ImageMainChat = "botonmainnotifications.png";
+                                ColorBotonSala = Colors.Red;
                             }
                             //Añado mensaje al chat general
                             string mensaje = (string)messageChatModel.Content;
@@ -574,7 +580,7 @@ namespace EFDocenteMAUI.ViewModels
                                 sessionMessages += messageChatModel.Content + "\n";
                                 MessagesDict.Remove(messageChatModel.UserId);
                                 MessagesDict.Add(messageChatModel.UserId, sessionMessages);
-                                if (SelectedUser.Equals(messageChatModel.UserId))
+                                if (null!=SelectedUser.UserName  ||messageChatModel.UserId.Equals(SelectedUser.UserName))
                                 {
                                     MessagesPrivateReceived = sessionMessages;
                                 }
@@ -587,12 +593,21 @@ namespace EFDocenteMAUI.ViewModels
                             }
                             ShowNotification(messageChatModel.UserId);
 
-
-                            User = Users.FirstOrDefault(u => u.UserName == messageChatModel.UserId);
-                            if (User != null)
+                            ObservableCollection<UserModel> allUsersPrivate = new ObservableCollection<UserModel>(Users);
+                            var usuario = new UserModel();
+                            usuario = Users.FirstOrDefault(u => u.UserName == messageChatModel.UserId);
+                            if (usuario != null)
                             {
-                                User.IsNotificationEnabled = true;
+                               foreach(var nombreUsuario in allUsersPrivate)
+                                {
+                                    if (nombreUsuario.UserName.Equals(usuario.UserName))
+                                    {
+                                        nombreUsuario.IsNotificationEnabled = true;
+                                    }
+                                }
+                               Users= new ObservableCollection<UserModel>(allUsersPrivate);
                             }
+
 
                         }
                         else if (messageChatModel.Purpose.Equals("BroadcastMsg"))
@@ -671,7 +686,7 @@ namespace EFDocenteMAUI.ViewModels
                         {
                             if (!ImNotificationChat)
                             {
-                                ImageNotificationChat = "botonnotificationnotifications.png";
+                                ColorBotonNotificacion = Colors.Red;
                             }
                             string mensaje = (string)messageChatModel.Content;
                             if (mensaje.Contains("/images"))
