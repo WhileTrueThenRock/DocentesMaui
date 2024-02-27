@@ -21,7 +21,20 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Padding="5">
-                <ImageButton
+                <buttons:SfButton
+                    Margin="2"
+                    BackgroundImageSource="{Binding ImageMainChat}"
+                    Command="{Binding ShowMainMsgCommand}"
+                    CornerRadius="5"
+                    Text="SALA PRINCIPAL" />
+                <buttons:SfButton
+                    Margin="2"
+                    BackgroundImageSource="{Binding ImageNotificationChat}"
+                    Command="{Binding ShowNotificationMsgCommand}"
+                    CornerRadius="5"
+                    Text="NOTIFICACIONES" />
+
+                <!--<ImageButton
                     Margin="2"
                     BackgroundColor="Transparent"
                     Command="{Binding ShowMainMsgCommand}"
@@ -32,7 +45,7 @@
                     BackgroundColor="Transparent"
                     Command="{Binding ShowNotificationMsgCommand}"
                     CornerRadius="5"
-                    Source="{Binding ImageNotificationChat}" />
+                    Source="{Binding ImageNotificationChat}" />-->
                 <Label
                     Grid.Row="1"
                     Grid.Column="1"
@@ -205,18 +218,20 @@
 
                         </HorizontalStackLayout>
                         <HorizontalStackLayout Spacing="25">
-                            <buttons:SfButton Stroke="Black"
+                            <buttons:SfButton
                                 Background="#4CAF50"
                                 Command="{Binding LoadImageCommand}"
+                                Stroke="Black"
                                 Text="+ IMAGEN" />
                             <buttons:SfButton
-                                Stroke="Black"
                                 Background="#4CAF50"
                                 Command="{Binding LoadPDFCommand}"
+                                Stroke="Black"
                                 Text="+ PDF" />
-                            <buttons:SfButton Stroke="Black"
+                            <buttons:SfButton
                                 Background="#4CAF50"
                                 Command="{Binding LoadVideoCommand}"
+                                Stroke="Black"
                                 Text="+ VIDEO" />
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
