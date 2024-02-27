@@ -7,12 +7,17 @@ using EFDocenteMAUI.Views.Popups;
 using MongoDB.Bson;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace EFDocenteMAUI.ViewModels
 {
     [QueryProperty("User", "User")]
     internal partial class UnitsViewModel : ObservableObject
     {
+        
+
+      
+
 
         [ObservableProperty]
         private ObservableCollection<UnitModel> _unitList;
@@ -51,7 +56,7 @@ namespace EFDocenteMAUI.ViewModels
         private UserModel _user;
         [ObservableProperty]
         private bool _modoCrear;
-
+        public ICommand TapCommand => new Command<UnitModel>(async (selectedUnit) => await TapCommandExecute(selectedUnit)); //Para mostrar la info en el Popup usando Accordion.
 
         public UnitsViewModel() 
         {
@@ -85,6 +90,14 @@ namespace EFDocenteMAUI.ViewModels
             UnitsPopup = new UnitsPopup();
             await App.Current.MainPage.ShowPopupAsync(UnitsPopup);
         }
+
+        public async Task TapCommandExecute(UnitModel selectedUnit) //Para abrir el popup sin perder el binding.
+        {
+            Unit = selectedUnit;
+            UnitsPopup = new UnitsPopup();
+            await App.Current.MainPage.ShowPopupAsync(UnitsPopup);
+        }
+
         [RelayCommand]
         public async Task LoadImage()
         {
