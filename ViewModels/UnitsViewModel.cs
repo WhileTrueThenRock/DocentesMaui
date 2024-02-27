@@ -7,6 +7,9 @@ using EFDocenteMAUI.Views.Popups;
 using MongoDB.Bson;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace EFDocenteMAUI.ViewModels
 {
@@ -49,23 +52,24 @@ namespace EFDocenteMAUI.ViewModels
 
         [ObservableProperty]
         private UserModel _user;
+
         [ObservableProperty]
         private bool _modoCrear;
+        public ICommand TapCommand => new Command<UnitModel>(async (selectedUnit) => await TapCommandExecute(selectedUnit)); //Para mostrar la info en el Popup usando Accordion.
 
-
-        public UnitsViewModel() 
+        public UnitsViewModel()
         {
             UnitList = new ObservableCollection<UnitModel>();
             Unit = new UnitModel();
             GetUnits();
         }
-        
+
 
         [RelayCommand]
         public void ShowResource(object image)
-        {     
-                var uriURL = (UriImageSource)image;
-                ResourceToShow = uriURL.Uri.AbsoluteUri;
+        {
+            var uriURL = (UriImageSource)image;
+            ResourceToShow = uriURL.Uri.AbsoluteUri;
         }
 
         [RelayCommand]
@@ -76,7 +80,7 @@ namespace EFDocenteMAUI.ViewModels
 
         [RelayCommand]
         public async Task ShowUnitPopup(string opcion)
-        {   
+        {
             ModoCrear = bool.Parse(opcion);
             if (ModoCrear)
             {
@@ -85,6 +89,14 @@ namespace EFDocenteMAUI.ViewModels
             UnitsPopup = new UnitsPopup();
             await App.Current.MainPage.ShowPopupAsync(UnitsPopup);
         }
+
+        public async Task TapCommandExecute(UnitModel selectedUnit) //Para abrir el popup sin perder el binding.
+        {
+            Unit = selectedUnit;
+            UnitsPopup = new UnitsPopup();
+            await App.Current.MainPage.ShowPopupAsync(UnitsPopup);
+        }
+
         [RelayCommand]
         public async Task LoadImage()
         {
@@ -122,7 +134,7 @@ namespace EFDocenteMAUI.ViewModels
         public async Task<bool> UpdateImage()
         {
             ImageModel imagen = new ImageModel();
-            imagen.Id = ObjectId.GenerateNewId().ToString(); 
+            imagen.Id = ObjectId.GenerateNewId().ToString();
             imagen.Content = Image64;
             var request = new RequestModel(method: "POST", route: "/images/save", data: imagen, server: APIService.ImagenesServerUrl);
             ResponseModel response = await APIService.ExecuteRequest(request);
@@ -152,7 +164,7 @@ namespace EFDocenteMAUI.ViewModels
             if (response.Success == 0)
             {
                 Unit.Resources.Add(APIService.ImagenesServerUrl + "/videos/" + video.Id.ToString());
-            }        
+            }
             return response.Success == 0;
         }
         public async Task SaveImageAsync()
@@ -193,19 +205,20 @@ namespace EFDocenteMAUI.ViewModels
         }
         [RelayCommand]
         public async Task ExecuteRequest()
-        {  
-                var request = new RequestModel(method: "POST",
-                                              route: "/units/" + Mode,
-                                              data: Unit,
-                                              server: APIService.GestionServerUrl);
-                var response = await APIService.ExecuteRequest(request);
-                if (response.Success == 0)
-                {
-                    App.Current.MainPage.DisplayAlert("Temario", response.Message, "Aceptar");
-                    GetUnits();
-                    Unit = new UnitModel();
-                    ClosePopUp();
-                }
+        {
+            var request = new RequestModel(method: "POST",
+                                          route: "/units/" + Mode,
+                                          data: Unit,
+                                          server: APIService.GestionServerUrl);
+            var response = await APIService.ExecuteRequest(request);
+            if (response.Success == 0)
+            {
+                App.Current.MainPage.DisplayAlert("Temario", response.Message, "Aceptar");
+                Unit = new UnitModel();
+                ClosePopUp();
+                GetUnits();
+
+            }
         }
         [RelayCommand]
         public async Task CreateUnit()
@@ -230,19 +243,26 @@ namespace EFDocenteMAUI.ViewModels
             {
                 Mode = "delete";
                 ExecuteRequest();
+                //GetUnits();
                 ClosePopUp();
             }
-            
+
         }
         [RelayCommand]
         public async Task ClosePopUp()
         {
+            ModoCrear = false;
             UnitsPopup.Close();
+
 
         }
         public async Task GetUnits()
         {
-            UnitList.Clear();
+            try
+            {
+
+
+            UnitList = new ObservableCollection<UnitModel>();
             var request = new RequestModel(method: "GET",
                                            route: "/units/getUnits",
                                            data: string.Empty,
@@ -255,8 +275,17 @@ namespace EFDocenteMAUI.ViewModels
                     (response.Data.ToString());
                 foreach (UnitModel dem in unitList)
                 {
-                    UnitList.Add(dem);
+                    if (!UnitList.Contains(dem))
+                    {
+                        UnitList.Add(dem);
+
+                    }
                 }
+            }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
         [RelayCommand]
