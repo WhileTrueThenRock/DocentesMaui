@@ -7,19 +7,33 @@
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
     x:DataType="viewmodels:MainViewModel"
     CanBeDismissedByTappingOutsideOfPopup="False"
-    Color="White">
+    Color="#66FFCC">
 
     <VerticalStackLayout>
-        <HorizontalStackLayout BackgroundColor="Red">
-            <Label
-                HorizontalOptions="Center"
-                Text="Mensaje privado con: "
-                VerticalOptions="Center" />
-            <Label
-                HorizontalOptions="Center"
-                Text="{Binding SelectedUser}"
-                VerticalOptions="Center" />
+        <Button
+            BackgroundColor="Black"
+            Command="{Binding ClosePopUpCommand}"
+            HeightRequest="10"
+            HorizontalOptions="End"
+            Text="X"
+            TextColor="White"
+            VerticalOptions="Start"
+            WidthRequest="10" />
+
+        <HorizontalStackLayout  HorizontalOptions="Center">
+            <Border Stroke="Black" BackgroundColor="#4CAF50">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+                <HorizontalStackLayout Margin="5,0,5,0">
+                    <Label Text="Mensaje privado con: " VerticalOptions="Center" />
+                    <Label Text="{Binding SelectedUser.UserName}" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+            </Border>
         </HorizontalStackLayout>
+
+
 
         <Editor
             Grid.Row="2"
@@ -55,18 +69,12 @@
                 </Picker.Behaviors>
             </Picker>
             <Button
-                Background="LightGreen"
+                Background="Green"
                 Command="{Binding SendMessageCommand}"
                 CommandParameter="Private"
                 HorizontalOptions="Center"
                 Text="ENVIAR"
                 WidthRequest="80" />
         </HorizontalStackLayout>
-        <Button
-            Background="Red"
-            Command="{Binding ClosePopUpCommand}"
-            HorizontalOptions="Center"
-            Text="Salir"
-            WidthRequest="80" />
     </VerticalStackLayout>
 </toolkit:Popup>
