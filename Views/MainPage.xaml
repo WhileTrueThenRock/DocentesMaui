@@ -23,29 +23,19 @@
                 Padding="5">
                 <buttons:SfButton
                     Margin="2"
-                    BackgroundImageSource="{Binding ImageMainChat}"
+                    Background="{Binding ColorBotonSala}"
                     Command="{Binding ShowMainMsgCommand}"
                     CornerRadius="5"
-                    Text="SALA PRINCIPAL" />
+                    Text="SALA PRINCIPAL"
+                    TextColor="Black" />
                 <buttons:SfButton
                     Margin="2"
-                    BackgroundImageSource="{Binding ImageNotificationChat}"
+                    Background="{Binding ColorBotonNotificacion}"
                     Command="{Binding ShowNotificationMsgCommand}"
                     CornerRadius="5"
-                    Text="NOTIFICACIONES" />
+                    Text="NOTIFICACIONES"
+                    TextColor="Black" />
 
-                <!--<ImageButton
-                    Margin="2"
-                    BackgroundColor="Transparent"
-                    Command="{Binding ShowMainMsgCommand}"
-                    CornerRadius="5"
-                    Source="{Binding ImageMainChat}" />
-                <ImageButton
-                    Margin="2"
-                    BackgroundColor="Transparent"
-                    Command="{Binding ShowNotificationMsgCommand}"
-                    CornerRadius="5"
-                    Source="{Binding ImageNotificationChat}" />-->
                 <Label
                     Grid.Row="1"
                     Grid.Column="1"
@@ -76,7 +66,7 @@
                                         Source="{Binding Avatar}"
                                         WidthRequest="30" />
                                     <Label
-                                        Margin="5,5,20,0"
+                                        Margin="5,5,0,0"
                                         HeightRequest="30"
                                         Text="{Binding UserName}" />
 
@@ -85,6 +75,7 @@
                                         IsVisible="{Binding IsNotificationEnabled}"
                                         Source="notificationbell.png"
                                         WidthRequest="30" />
+
                                 </HorizontalStackLayout>
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup Name="CommonStates">
