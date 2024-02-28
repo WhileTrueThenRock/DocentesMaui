@@ -6,166 +6,178 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
     x:DataType="viewmodels:UnitsViewModel"
-    CanBeDismissedByTappingOutsideOfPopup="False"
-    Color="#66FFCC">
-    <VerticalStackLayout HeightRequest="600" WidthRequest="500">
-        <Button
-            BackgroundColor="Black"
-            Command="{Binding ClosePopUpCommand}"
-            HeightRequest="10"
-            HorizontalOptions="End"
-            Text="X"
-            TextColor="White"
-            VerticalOptions="Start"
-            WidthRequest="10" />
-        <Grid ColumnDefinitions="150,300" RowDefinitions="50,50,*,*,*">
-            <Label
-                Grid.Row="0"
-                Grid.Column="0"
-                Margin="3"
-                HorizontalOptions="End"
-                Text="Titulo: "
-                VerticalOptions="Center" />
-            <Label
-                Grid.Row="1"
-                Grid.Column="0"
-                Margin="3"
-                HorizontalOptions="End"
-                Text="Descripción: "
-                VerticalOptions="Center" />
-            <Label
-                Grid.Row="2"
-                Grid.Column="0"
-                HorizontalOptions="End"
-                Text="Imagenes: "
-                VerticalOptions="Center" />
-            <Label
-                Grid.Row="3"
-                Grid.Column="0"
-                Margin="3"
-                HorizontalOptions="End"
-                Text="PDFs: "
-                VerticalOptions="Center" />
-            <Label
-                Grid.Row="4"
-                Grid.Column="0"
-                Margin="3"
-                HorizontalOptions="End"
-                Text="Recursos: "
-                VerticalOptions="Center" />
-            <Entry
-                Grid.Row="0"
-                Grid.Column="1"
-                Margin="3"
-                HorizontalOptions="FillAndExpand"
-                Text="{Binding Unit.Titulo}"
-                VerticalOptions="Center"
-                WidthRequest="250" />
-            <Entry
-                Grid.Row="1"
-                Grid.Column="1"
-                Margin="3"
-                HorizontalOptions="FillAndExpand"
-                Text="{Binding Unit.Description}"
-                VerticalOptions="Center"
-                WidthRequest="250" />
-            <HorizontalStackLayout
-                Grid.Row="2"
-                Grid.Column="1"
-                Margin="3">
-                <Button
-                    BackgroundColor="#4CAF50"
-                    Command="{Binding LoadImageCommand}"
-                    HeightRequest="20"
-                    IsVisible="{Binding User.RolProfesor}"
-                    Text="+"
-                    WidthRequest="20" />
-                <CollectionView ItemsSource="{Binding Unit.Images}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="viewmodels:UnitsViewModel">
-                            <HorizontalStackLayout>
-                                <Image
-                                    HeightRequest="30"
-                                    Source="{Binding .}"
-                                    WidthRequest="30" />
-                            </HorizontalStackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout
-                Grid.Row="3"
-                Grid.Column="1"
-                Margin="3">
-                <Button
-                    BackgroundColor="#4CAF50"
-                    Command="{Binding LoadPDFCommand}"
-                    HeightRequest="20"
-                    IsVisible="{Binding User.RolProfesor}"
-                    Text="+"
-                    WidthRequest="20" />
-                <CollectionView ItemsSource="{Binding Unit.Pdfs}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="viewmodels:UnitsViewModel">
-                            <HorizontalStackLayout>
-                                <Image
-                                    HeightRequest="30"
-                                    Source="pdf.png"
-                                    WidthRequest="30" />
-                            </HorizontalStackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout
-                Grid.Row="4"
-                Grid.Column="1"
-                Margin="3">
-                <Button
-                    BackgroundColor="#4CAF50"
-                    Command="{Binding LoadVideoCommand}"
-                    HeightRequest="20"
-                    IsVisible="{Binding User.RolProfesor}"
-                    Text="+"
-                    WidthRequest="20" />
-                <CollectionView ItemsSource="{Binding Unit.Resources}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="viewmodels:UnitsViewModel">
-                            <HorizontalStackLayout>
-                                <Image
-                                    HeightRequest="30"
-                                    Source="video.png"
-                                    WidthRequest="30" />
-                            </HorizontalStackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </HorizontalStackLayout>
-        </Grid>
-        <HorizontalStackLayout
-            Margin="0,20,0,0"
-            HorizontalOptions="Center"
-            IsVisible="{Binding User.RolProfesor}"
-            Spacing="20"
-            WidthRequest="400">
+    CanBeDismissedByTappingOutsideOfPopup="False">
+    <Grid ColumnDefinitions="500" RowDefinitions="600">
+        <Image
+            Grid.Row="0"
+            Grid.Column="0"
+            Aspect="AspectFill"
+            Source="fondopop2.png" />
+        <VerticalStackLayout>
             <Button
-                BackgroundColor="Green"
-                Command="{Binding CreateUnitCommand}"
-                IsVisible="{Binding ModoCrear}"
-                Text="GUARDAR"
-                WidthRequest="100" />
-            <Button
-                BackgroundColor="Blue"
-                Command="{Binding UpdateUnitCommand}"
-                IsVisible="{Binding ModoCrear, Converter={toolkit:InvertedBoolConverter}}"
-                Text="ACTUALIZAR"
-                WidthRequest="120" />
-            <Button
-                BackgroundColor="Red"
-                Command="{Binding DeleteUnitCommand}"
-                IsVisible="{Binding ModoCrear, Converter={toolkit:InvertedBoolConverter}}"
-                Text="BORRAR"
-                WidthRequest="120" />
-        </HorizontalStackLayout>
-    </VerticalStackLayout>
+                BackgroundColor="Black"
+                Command="{Binding ClosePopUpCommand}"
+                HeightRequest="10"
+                HorizontalOptions="End"
+                Text="X"
+                TextColor="White"
+                VerticalOptions="Start"
+                WidthRequest="10" />
+            <Grid ColumnDefinitions="150,300" RowDefinitions="50,50,*,*,*">
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="3"
+                    HorizontalOptions="End"
+                    Text="Titulo: "
+                    VerticalOptions="Center" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="3"
+                    HorizontalOptions="End"
+                    Text="Descripción: "
+                    VerticalOptions="Center" />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    HorizontalOptions="End"
+                    Text="Imagenes: "
+                    VerticalOptions="Center" />
+                <Label
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Margin="3"
+                    HorizontalOptions="End"
+                    Text="PDFs: "
+                    VerticalOptions="Center" />
+                <Label
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    Margin="3"
+                    HorizontalOptions="End"
+                    Text="Vídeos: "
+                    VerticalOptions="Center" />
+                <Entry
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="3"
+                    HorizontalOptions="FillAndExpand"
+                    Placeholder="Escribe un Título"
+                    PlaceholderColor="Black"
+                    Text="{Binding Unit.Titulo}"
+                    TextColor="Black"
+                    VerticalOptions="Center"
+                    WidthRequest="250" />
+                <Entry
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="3"
+                    HorizontalOptions="FillAndExpand"
+                    Placeholder="Escribe una descripción"
+                    PlaceholderColor="Black"
+                    Text="{Binding Unit.Description}"
+                    TextColor="Black"
+                    VerticalOptions="Center"
+                    WidthRequest="250" />
+                <HorizontalStackLayout
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="3">
+                    <Button
+                        BackgroundColor="#4CAF50"
+                        Command="{Binding LoadImageCommand}"
+                        HeightRequest="20"
+                        IsVisible="{Binding User.RolProfesor}"
+                        Text="+"
+                        WidthRequest="20" />
+                    <CollectionView ItemsSource="{Binding Unit.Images}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="viewmodels:UnitsViewModel">
+                                <HorizontalStackLayout>
+                                    <Image
+                                        HeightRequest="30"
+                                        Source="{Binding .}"
+                                        WidthRequest="30" />
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Margin="3">
+                    <Button
+                        BackgroundColor="#4CAF50"
+                        Command="{Binding LoadPDFCommand}"
+                        HeightRequest="20"
+                        IsVisible="{Binding User.RolProfesor}"
+                        Text="+"
+                        WidthRequest="20" />
+                    <CollectionView ItemsSource="{Binding Unit.Pdfs}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="viewmodels:UnitsViewModel">
+                                <HorizontalStackLayout>
+                                    <Image
+                                        HeightRequest="30"
+                                        Source="pdf.png"
+                                        WidthRequest="30" />
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    Margin="3">
+                    <Button
+                        BackgroundColor="#4CAF50"
+                        Command="{Binding LoadVideoCommand}"
+                        HeightRequest="20"
+                        IsVisible="{Binding User.RolProfesor}"
+                        Text="+"
+                        WidthRequest="20" />
+                    <CollectionView ItemsSource="{Binding Unit.Resources}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="viewmodels:UnitsViewModel">
+                                <HorizontalStackLayout>
+                                    <Image
+                                        HeightRequest="30"
+                                        Source="video.png"
+                                        WidthRequest="30" />
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </HorizontalStackLayout>
+            </Grid>
+            <HorizontalStackLayout
+                Margin="0,20,0,0"
+                HorizontalOptions="Center"
+                IsVisible="{Binding User.RolProfesor}"
+                Spacing="20"
+                WidthRequest="400">
+                <Button
+                    BackgroundColor="Green"
+                    Command="{Binding CreateUnitCommand}"
+                    IsVisible="{Binding ModoCrear}"
+                    Text="GUARDAR"
+                    WidthRequest="100" />
+                <Button
+                    BackgroundColor="#2196F3"
+                    Command="{Binding UpdateUnitCommand}"
+                    IsVisible="{Binding ModoCrear, Converter={toolkit:InvertedBoolConverter}}"
+                    Text="ACTUALIZAR"
+                    WidthRequest="120" />
+                <Button
+                    BackgroundColor="#D32F2F"
+                    Command="{Binding DeleteUnitCommand}"
+                    IsVisible="{Binding ModoCrear, Converter={toolkit:InvertedBoolConverter}}"
+                    Text="BORRAR"
+                    WidthRequest="120" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Grid>
 </toolkit:Popup>

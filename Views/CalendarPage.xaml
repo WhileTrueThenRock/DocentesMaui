@@ -12,7 +12,7 @@
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
     x:Name="thisPage"
     x:DataType="viewmodels:CalendarViewModel"
-    BackgroundImageSource="fondo.png"
+    BackgroundImageSource="fondo3.png"
     BindingContext="{viewmodels:CalendarViewModel}">
     <ScrollView>
         <Grid ColumnDefinitions="0,550,550,*" RowDefinitions="*,400,400,*">
@@ -21,7 +21,7 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="0,150,0,0"
-                ArrowsBackgroundColor="#00CC33"
+                ArrowsBackgroundColor="#0288D1"
                 ArrowsColor="Black"
                 Culture="{Binding Culture}"
                 Events="{Binding Events}"
@@ -46,7 +46,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:EventModel">
                         <Border
-                            BackgroundColor="#66FFCC"
+                            BackgroundColor="#EAFAF1"
                             Stroke="Black"
                             StrokeThickness="3"
                             WidthRequest="400">
@@ -80,7 +80,7 @@
                                     <VisualState Name="Normal" />
                                     <VisualState Name="Selected">
                                         <VisualState.Setters>
-                                            <Setter Property="Background" Value="#00CC33" />
+                                            <Setter Property="Background" Value="#00BCD4" />
                                         </VisualState.Setters>
                                     </VisualState>
                                 </VisualStateGroup>
@@ -107,7 +107,7 @@
                 Grid.Column="2"
                 Margin="10"
                 IsVisible="True">
-                <Border>
+                <Border Stroke="Black">
                     <Border.Shadow>
                         <Shadow
                             Brush="White"
@@ -118,14 +118,17 @@
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="20" />
                     </Border.StrokeShape>
-                    <VerticalStackLayout Padding="10" Background="#66FFCC">
+                    <VerticalStackLayout Padding="10" Background="Transparent">
                         <!--  TAB 2  -->
                         <tabview:SfTabView
                             x:Name="tabView"
                             HeightRequest="750"
                             WidthRequest="500">
                             <tabview:SfTabView.Items>
-                                <tabview:SfTabItem Header="Fecha">
+                                <tabview:SfTabItem
+                                    Header="Fecha"
+                                    ImagePosition="Left"
+                                    ImageSource="calendar.png">
                                     <tabview:SfTabItem.Content>
                                         <ScrollView>
                                             <VerticalStackLayout>
@@ -161,7 +164,7 @@
                                                     <Button
                                                         x:Name="pickerButtonIni"
                                                         Margin="0,28,0,0"
-                                                        Background="#4CAF50"
+                                                        Background="#F57F17"
                                                         Clicked="Button_ClickedIni"
                                                         HeightRequest="5"
                                                         Text="Primera fecha"
@@ -171,7 +174,7 @@
                                                     <Button
                                                         x:Name="pickerButtonFin"
                                                         Margin="130,0,0,0"
-                                                        Background="#4CAF50"
+                                                        Background="#F57F17"
                                                         Clicked="Button_ClickedFin"
                                                         HeightRequest="5"
                                                         Text="Segunda fecha"
@@ -221,7 +224,7 @@
 
                                                 <Button
                                                     Margin="0,20,0,0"
-                                                    BackgroundColor="#4CAF50"
+                                                    BackgroundColor="#F57F17"
                                                     Command="{Binding FiltrarFechaCommand}"
                                                     Text="Filtrar"
                                                     WidthRequest="100" />
@@ -283,7 +286,11 @@
                                     </tabview:SfTabItem.Content>
                                 </tabview:SfTabItem>
 
-                                <tabview:SfTabItem Header="Tipo">
+                                <tabview:SfTabItem
+                                    Header="Tipo"
+                                    ImagePosition="Left"
+                                    ImageSource="types.png">
+
                                     <tabview:SfTabItem.Content>
                                         <ScrollView>
                                             <VerticalStackLayout>
@@ -293,7 +300,7 @@
                                                     Placeholder="Introduce un texto..." />
                                                 <Button
                                                     Margin="10"
-                                                    BackgroundColor="#4CAF50"
+                                                    BackgroundColor="#F57F17"
                                                     Command="{Binding GetUsersByFiltroTypeCommand}"
                                                     CommandParameter="{Binding Source={x:Reference typeEntry}, Path=Text}"
                                                     HorizontalOptions="Center"
@@ -357,7 +364,10 @@
                                     </tabview:SfTabItem.Content>
                                 </tabview:SfTabItem>
 
-                                <tabview:SfTabItem Header="Descripción">
+                                <tabview:SfTabItem
+                                    Header="Descripción"
+                                    ImagePosition="Left"
+                                    ImageSource="typing.png">
                                     <tabview:SfTabItem.Content>
                                         <ScrollView>
                                             <VerticalStackLayout>
@@ -367,7 +377,7 @@
                                                     Placeholder="Introduce un texto..." />
                                                 <Button
                                                     Margin="10"
-                                                    BackgroundColor="#4CAF50"
+                                                    BackgroundColor="#F57F17"
                                                     Command="{Binding GetUsersByFiltroDescriptionCommand}"
                                                     CommandParameter="{Binding Source={x:Reference descriptionEntry}, Path=Text}"
                                                     HorizontalOptions="Center"
