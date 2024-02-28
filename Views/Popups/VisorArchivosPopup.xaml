@@ -7,7 +7,7 @@
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
     x:DataType="viewmodels:MainViewModel"
     CanBeDismissedByTappingOutsideOfPopup="False"
-    Color="#66FFCC">
+    Color="Transparent">
     <VerticalStackLayout HeightRequest="650" WidthRequest="650">
         <Button
             BackgroundColor="Black"

@@ -66,6 +66,23 @@
 	  <None Remove="Resources\Images\chat_background.jpg" />
 	  <None Remove="Resources\Images\crud.png" />
 	  <None Remove="Resources\Images\fondo.png" />
+	  <None Remove="Resources\Images\fondo1.png" />
+	  <None Remove="Resources\Images\fondo2.png" />
+	  <None Remove="Resources\Images\fondo3.png" />
+	  <None Remove="Resources\Images\fondo4.png" />
+	  <None Remove="Resources\Images\fondo5.png" />
+	  <None Remove="Resources\Images\fondo6.png" />
+	  <None Remove="Resources\Images\fondo7.png" />
+	  <None Remove="Resources\Images\fondo8.png" />
+	  <None Remove="Resources\Images\fondo9.png" />
+	  <None Remove="Resources\Images\fondopop1.png" />
+	  <None Remove="Resources\Images\fondopop2.png" />
+	  <None Remove="Resources\Images\fondopop3.png" />
+	  <None Remove="Resources\Images\fondopop4.png" />
+	  <None Remove="Resources\Images\fondopop5.png" />
+	  <None Remove="Resources\Images\fondopop6.png" />
+	  <None Remove="Resources\Images\fondopop7.png" />
+	  <None Remove="Resources\Images\fondopop8.png" />
 	  <None Remove="Resources\Images\loupe.png" />
 	  <None Remove="Resources\Images\notificationbell.png" />
 	  <None Remove="Resources\Images\pdf.png" />
@@ -73,6 +90,8 @@
 	  <None Remove="Resources\Images\ricardo.jpg" />
 	  <None Remove="Resources\Images\student.png" />
 	  <None Remove="Resources\Images\temario.png" />
+	  <None Remove="Resources\Images\types.png" />
+	  <None Remove="Resources\Images\typing.png" />
 	  <None Remove="Resources\Images\video.png" />
 	</ItemGroup>
 
