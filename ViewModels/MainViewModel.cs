@@ -146,14 +146,7 @@ namespace EFDocenteMAUI.ViewModels
             ConnectionState = "DESCONECTADO";
             ChatSelection = "SALA PRINCIPAL";
             UserName = LoginViewModel.UserName;
-            ImageNodeInfo = new ObservableCollection<FileManager>();
-            FileManager fileManager = new FileManager()
-            {
-                ItemName = "Carpeta",
-                ImageIcon = "ricardo.jpg"
-
-            };
-            ImageNodeInfo.Add(fileManager);
+            SelectedUser = new UserModel();
             ImMainChat = true;
             ImNotificationChat = false;
             PrivateNotification = false;
@@ -296,6 +289,7 @@ namespace EFDocenteMAUI.ViewModels
         public async Task ClosePopUp()
         {
             PrivateMessagePopup.Close();
+            SelectedUser = new UserModel();
         }
 
         [RelayCommand]
@@ -445,7 +439,8 @@ namespace EFDocenteMAUI.ViewModels
                 MessagesDict.TryGetValue(SelectedUser.UserName, out sessionMessages);
                 if (sessionMessages != null)
                 {
-                    sessionMessages += messageChat.Content + "\n";
+                    sessionMessages += messageChat.Content;
+                    sessionMessages += PrivateMessageToSend + "\n";
                     MessagesDict.Remove(SelectedUser.UserName);
                     MessagesDict.Add(SelectedUser.UserName, sessionMessages);
                 }
@@ -588,8 +583,14 @@ namespace EFDocenteMAUI.ViewModels
                             else
                             {
                                 MessagesDict.Add(messageChatModel.UserId, messageChatModel.Content + "\n");
-
-                                MessagesPrivateReceived = messageChatModel.Content + "\n";
+                                if(null != SelectedUser)
+                                {
+                                    if (messageChatModel.UserId == SelectedUser.UserName)
+                                    {
+                                        MessagesPrivateReceived = messageChatModel.Content + "\n";
+                                    }
+                                }
+                                
                             }
                             ShowNotification(messageChatModel.UserId);
 
@@ -600,7 +601,7 @@ namespace EFDocenteMAUI.ViewModels
                             {
                                foreach(var nombreUsuario in allUsersPrivate)
                                 {
-                                    if (nombreUsuario.UserName.Equals(usuario.UserName))
+                                    if (nombreUsuario.UserName.Equals(usuario.UserName) && !nombreUsuario.UserName.Equals(SelectedUser.UserName))
                                     {
                                         nombreUsuario.IsNotificationEnabled = true;
                                     }
