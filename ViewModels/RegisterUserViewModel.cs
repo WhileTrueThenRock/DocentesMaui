@@ -73,9 +73,9 @@ namespace EFDocenteMAUI.ViewModels
             {   
                 string[] fechamodificada = UserSelected.FechaNacimiento.Replace(" 0:00:00", " ").Split(' ');
                 UserSelected.FechaNacimiento = fechamodificada[0];
-                UserSelected.Avatar = APIService.ImagenesServerUrl + "/images/" + UserSelected.Id.ToString();
+                UserSelected.Avatar = APIService.ImagenesServerUrl + "/avatars/" + UserSelected.Id.ToString();
                 var request = new RequestModel(method: "POST",
-                                                route: "/events/update",
+                                                route: "/users/update",
                                                 data: UserSelected,
                                                 server: APIService.GestionServerUrl);
                 ResponseModel response = await APIService.ExecuteRequest(request);
@@ -161,7 +161,7 @@ namespace EFDocenteMAUI.ViewModels
         }
         private bool ValidateSurname()
         {
-            if (null == UserSelected.Apellidos || UserSelected.Apellidos.Any(Char.IsWhiteSpace))
+            if (null == UserSelected.Apellidos)
             {
                 MensajeError = "El campo Apellidos, no puede estar vacio";
                 return false;
@@ -219,7 +219,7 @@ namespace EFDocenteMAUI.ViewModels
 
         private bool ValidateStreet()
         {
-            if (null == UserSelected.Direccion.Calle || UserSelected.Direccion.Calle.Any(Char.IsWhiteSpace))
+            if (null == UserSelected.Direccion.Calle)
             {
                 MensajeError = "El campo Calle, no puede estar vacio";
                 return false;

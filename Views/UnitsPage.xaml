@@ -107,8 +107,8 @@
                                                                     <DataTemplate>
                                                                         <HorizontalStackLayout>
                                                                             <Image
-                                                                                Margin="5,0,5,0"
                                                                                 x:Name="myImageResource"
+                                                                                Margin="5,0,5,0"
                                                                                 HeightRequest="30"
                                                                                 Source="{Binding .}"
                                                                                 WidthRequest="30">
@@ -202,10 +202,10 @@
                                                                     <DataTemplate>
                                                                         <HorizontalStackLayout>
                                                                             <Image
+                                                                                Margin="5,0,5,0"
                                                                                 HeightRequest="30"
                                                                                 Source="web.png"
-                                                                                WidthRequest="30"
-                                                                                Margin="5,0,5,0">
+                                                                                WidthRequest="30">
                                                                                 <Image.GestureRecognizers>
                                                                                     <TapGestureRecognizer
                                                                                         Command="{Binding Source={x:Reference unitpage}, Path=BindingContext.ShowResourceWebCommand}"
@@ -217,7 +217,10 @@
                                                                                 x:Name="webViewer"
                                                                                 DocumentSource="{Binding .}"
                                                                                 IsVisible="False" />
-                                                                            <Label x:DataType="models:ResourceModel" Text="{Binding Titulo}" />
+                                                                            <Label
+                                                                                x:DataType="models:ResourceModel"
+                                                                                Text="{Binding Titulo}"
+                                                                                VerticalOptions="Center" />
                                                                         </HorizontalStackLayout>
                                                                     </DataTemplate>
                                                                 </CollectionView.ItemTemplate>
