@@ -1,11 +1,10 @@
 using CommunityToolkit.Maui.Views;
-using EFDocenteMAUI.ViewModels;
 
 namespace EFDocenteMAUI.Views.Popups;
 
-public partial class UnitsPopup : Popup
+public partial class VisorArchivosPopup : Popup
 {
-	public UnitsPopup()
+	public VisorArchivosPopup()
 	{
 		InitializeComponent();
 	}

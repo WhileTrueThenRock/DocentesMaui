@@ -6,67 +6,98 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
     x:DataType="viewmodels:MainViewModel"
-    CanBeDismissedByTappingOutsideOfPopup="False"
-    Color="White">
+    CanBeDismissedByTappingOutsideOfPopup="False">
+    <Grid
+        ColumnDefinitions="*"
+        HeightRequest="800"
+        RowDefinitions="*"
+        WidthRequest="600">
+        <Image
+            Grid.Row="0"
+            Grid.Column="0"
+            Aspect="AspectFill"
+            Source="fondopop1.png" />
 
-    <VerticalStackLayout>
-        <HorizontalStackLayout BackgroundColor="Red">
-            <Label
-                HorizontalOptions="Center"
-                Text="Mensaje privado con: "
-                VerticalOptions="Center" />
-            <Label
-                HorizontalOptions="Center"
-                Text="{Binding SelectedUser}"
-                VerticalOptions="Center" />
-        </HorizontalStackLayout>
-
-        <Editor
-            Grid.Row="2"
-            Grid.Column="2"
-            Grid.ColumnSpan="2"
-            Margin="5"
-            HeightRequest="400"
-            HorizontalOptions="Center"
-            IsReadOnly="True"
-            Text="{Binding MessagesPrivateReceived}"
-            WidthRequest="490" />
-        <HorizontalStackLayout
-            Grid.Row="3"
-            Grid.Column="2"
-            Grid.ColumnSpan="2"
-            Margin="0,10,0,0"
-            HorizontalOptions="Center">
-            <Entry
-                HorizontalOptions="Center"
-                Placeholder="Escribe algo........"
-                Text="{Binding PrivateMessageToSend}"
-                WidthRequest="310" />
-            <Picker
-                x:Name="picker_emojys"
-                HorizontalOptions="Center"
-                ItemsSource="{Binding Emojis}"
-                WidthRequest="100">
-                <Picker.Behaviors>
-                    <toolkit:EventToCommandBehavior
-                        Command="{Binding AddEmojyCommand}"
-                        CommandParameter="{Binding Source={x:Reference picker_emojys}, Path=SelectedItem}"
-                        EventName="SelectedIndexChanged" />
-                </Picker.Behaviors>
-            </Picker>
+        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
             <Button
-                Background="LightGreen"
-                Command="{Binding SendMessageCommand}"
-                CommandParameter="Private"
-                HorizontalOptions="Center"
-                Text="ENVIAR"
-                WidthRequest="80" />
-        </HorizontalStackLayout>
-        <Button
-            Background="Red"
-            Command="{Binding ClosePopUpCommand}"
-            HorizontalOptions="Center"
-            Text="Salir"
-            WidthRequest="80" />
-    </VerticalStackLayout>
+                Margin="0,20,20,0"
+                BackgroundColor="Black"
+                Command="{Binding ClosePopUpCommand}"
+                HeightRequest="10"
+                HorizontalOptions="End"
+                Text="X"
+                TextColor="White"
+                VerticalOptions="Start"
+                WidthRequest="10" />
+
+            <HorizontalStackLayout HorizontalOptions="Center">
+                <Border
+                    Margin="0,0,0,20"
+                    BackgroundColor="#4CAF50"
+                    Stroke="Black">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                    </Border.StrokeShape>
+                    <HorizontalStackLayout Margin="5,0,5,0">
+                        <Label Text="Mensaje privado con: " VerticalOptions="Center" />
+                        <Label Text="{Binding SelectedUser.UserName}" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                </Border>
+            </HorizontalStackLayout>
+
+
+            <Border
+                HeightRequest="400"
+                Stroke="Black"
+                StrokeShape="RoundRectangle 10,10,10,10"
+                StrokeThickness="2"
+                WidthRequest="490">
+                <Editor
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    Margin="5"
+                    HeightRequest="380"
+                    HorizontalOptions="Center"
+                    IsReadOnly="True"
+                    Text="{Binding MessagesPrivateReceived}"
+                    WidthRequest="470" />
+            </Border>
+
+            <HorizontalStackLayout
+                Grid.Row="3"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                Margin="0,10,0,0"
+                HorizontalOptions="Center">
+                <Entry
+                    HorizontalOptions="Center"
+                    Placeholder="Escribe algo........"
+                    PlaceholderColor="Black"
+                    Text="{Binding PrivateMessageToSend}"
+                    TextColor="Black"
+                    WidthRequest="310" />
+                <Picker
+                    x:Name="picker_emojys"
+                    HorizontalOptions="Center"
+                    ItemsSource="{Binding Emojis}"
+                    WidthRequest="100">
+                    <Picker.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            Command="{Binding AddEmojyCommand}"
+                            CommandParameter="{Binding Source={x:Reference picker_emojys}, Path=SelectedItem}"
+                            EventName="SelectedIndexChanged" />
+                    </Picker.Behaviors>
+                </Picker>
+                <Button
+                    Background="Green"
+                    Command="{Binding SendMessageCommand}"
+                    CommandParameter="Private"
+                    HorizontalOptions="Center"
+                    Text="ENVIAR"
+                    WidthRequest="80" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Grid>
 </toolkit:Popup>

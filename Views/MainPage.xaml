@@ -5,40 +5,37 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
     xmlns:models="clr-namespace:EFDocenteMAUI.Models"
+    xmlns:pdfviewer="clr-namespace:Syncfusion.Maui.PdfViewer;assembly=Syncfusion.Maui.PdfViewer"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
     x:Name="thisPage"
     x:DataType="viewmodels:MainViewModel"
-    BackgroundImageSource="fondo.png"
+    BackgroundImageSource="fondo1.png"
     BindingContext="{viewmodels:MainViewModel}">
 
     <ScrollView>
-        <Grid ColumnDefinitions="*,180,650,250,*" RowDefinitions="*,600,*">
+        <Grid ColumnDefinitions="*,180,650,250,*" RowDefinitions="*,650,*">
 
             <VerticalStackLayout
                 Grid.Row="1"
                 Grid.Column="1"
                 Padding="5">
-                <ImageButton
+                <buttons:SfButton
                     Margin="2"
-                    BackgroundColor="Transparent"
+                    Background="{Binding ColorBotonSala}"
                     Command="{Binding ShowMainMsgCommand}"
                     CornerRadius="5"
-                    Source="{Binding ImageMainChat}" />
-                <ImageButton
+                    Text="SALA PRINCIPAL"
+                    TextColor="Black" />
+                <buttons:SfButton
                     Margin="2"
-                    BackgroundColor="Transparent"
+                    Background="{Binding ColorBotonNotificacion}"
                     Command="{Binding ShowNotificationMsgCommand}"
                     CornerRadius="5"
-                    Source="{Binding ImageNotificationChat}" />
-                <Label
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    FontSize="13"
-                    HorizontalOptions="Center"
-                    Text="Users"
-                    VerticalOptions="Center" />
+                    Text="NOTIFICACIONES"
+                    TextColor="Black" />
+
                 <CollectionView
                     Grid.Row="2"
                     Grid.Column="1"
@@ -54,10 +51,15 @@
                     </CollectionView.GestureRecognizers>
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:UserModel">
-                            <Border>
+                            <Border StrokeShape="RoundRectangle 10,10,10,10" StrokeThickness="2">
                                 <HorizontalStackLayout HorizontalOptions="Start">
+                                    <Image
+                                        Margin="5,0,0,0"
+                                        HeightRequest="30"
+                                        Source="{Binding Avatar}"
+                                        WidthRequest="30" />
                                     <Label
-                                        Margin="5,5,20,0"
+                                        Margin="5,5,0,0"
                                         HeightRequest="30"
                                         Text="{Binding UserName}" />
 
@@ -66,13 +68,15 @@
                                         IsVisible="{Binding IsNotificationEnabled}"
                                         Source="notificationbell.png"
                                         WidthRequest="30" />
+
                                 </HorizontalStackLayout>
+
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup Name="CommonStates">
                                         <VisualState Name="Normal" />
                                         <VisualState Name="Selected">
                                             <VisualState.Setters>
-                                                <Setter Property="Background" Value="#4CAF50" />
+                                                <Setter Property="Background" Value="#00BCD4" />
                                             </VisualState.Setters>
                                         </VisualState>
                                     </VisualStateGroup>
@@ -116,14 +120,15 @@
                                 FontFamily="Times New Roman"
                                 FontSize="20"
                                 HorizontalOptions="Center"
-                                Text="{Binding User.UserName}" />
+                                Text="{Binding User.UserName}"
+                                TextColor="#00BCD4" />
                         </HorizontalStackLayout>
                     </HorizontalStackLayout>
                     <HorizontalStackLayout Padding="2" HorizontalOptions="Center">
-                        <Label Text="{Binding ConnectionState}" />
+                        <Label FontAttributes="Bold" Text="{Binding ConnectionState}" />
                     </HorizontalStackLayout>
                     <Border
-                        Background="Blue"
+                        Background="#66FFCC"
                         HeightRequest="450"
                         HorizontalOptions="Center"
                         Opacity="0.6"
@@ -132,61 +137,100 @@
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="10" />
                         </Border.StrokeShape>
-                        <CollectionView ItemsSource="{Binding ShowMessagesList}" ItemsUpdatingScrollMode="KeepLastItemInView">
+                        <CollectionView
+                            ItemsSource="{Binding ShowMessagesList}"
+                            ItemsUpdatingScrollMode="KeepLastItemInView"
+                            SelectedItem="{Binding MessageMedia}"
+                            SelectionMode="Single">
+                            <CollectionView.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ShowVisorPopupCommand}" NumberOfTapsRequired="2" />
+                            </CollectionView.GestureRecognizers>
                             <CollectionView.ItemTemplate>
-                                <DataTemplate>
-
-                                    <Label
-                                        Margin="15,10,0,0"
-                                        BackgroundColor="#E1720F"
-                                        FontAttributes="Bold"
-                                        FontSize="15"
-                                        Text="{Binding}" />
+                                <DataTemplate x:DataType="models:MessageMediaModel">
+                                    <HorizontalStackLayout>
+                                        <Label
+                                            Margin="5,10,5,0"
+                                            FontAttributes="Bold"
+                                            FontSize="15"
+                                            Text="{Binding Mensaje}" />
+                                        <Image
+                                            HeightRequest="30"
+                                            Source="{Binding Imagen}"
+                                            WidthRequest="30" />
+                                        <pdfviewer:SfPdfViewer
+                                            x:Name="pdfViewer"
+                                            DocumentSource="{Binding Pdf}"
+                                            IsVisible="False" />
+                                        <pdfviewer:SfPdfViewer
+                                            x:Name="videoViewer"
+                                            DocumentSource="{Binding Video}"
+                                            IsVisible="False" />
+                                    </HorizontalStackLayout>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
                     </Border>
+                    <VerticalStackLayout HorizontalOptions="Center" IsVisible="{Binding Profesor}">
+                        <HorizontalStackLayout>
+                            <Entry
+                                Margin="0,2,2,2"
+                                BackgroundColor="AliceBlue"
+                                HorizontalOptions="Center"
+                                Placeholder="Introduce un mensaje"
+                                Text="{Binding MessageToSend}"
+                                WidthRequest="315" />
+                            <Picker
+                                x:Name="pk_emojis"
+                                Margin="2"
+                                BackgroundColor="AliceBlue"
+                                HorizontalOptions="Center"
+                                ItemsSource="{Binding Emojis}"
+                                WidthRequest="75">
+                                <Picker.Behaviors>
+                                    <toolkit:EventToCommandBehavior
+                                        Command="{Binding AddEmojiCommand}"
+                                        CommandParameter="{Binding Source={x:Reference pk_emojis}, Path=SelectedItem}"
+                                        EventName="SelectedIndexChanged" />
+                                </Picker.Behaviors>
+                            </Picker>
+                            <Button
+                                Margin="2"
+                                BackgroundColor="#EC407A"
+                                Command="{Binding SendMessageCommand}"
+                                CommandParameter="BroadCast"
+                                HorizontalOptions="Center"
+                                Text="ENVIAR"
+                                WidthRequest="100" />
 
-                    <HorizontalStackLayout HorizontalOptions="Center" IsVisible="{Binding Profesor}">
-                        <Entry
-                            Margin="0,2,2,2"
-                            BackgroundColor="AliceBlue"
-                            HorizontalOptions="Center"
-                            Placeholder="Introduce un mensaje"
-                            Text="{Binding MessageToSend}"
-                            WidthRequest="315" />
-                        <Picker
-                            x:Name="pk_emojis"
-                            Margin="2"
-                            BackgroundColor="AliceBlue"
-                            HorizontalOptions="Center"
-                            ItemsSource="{Binding Emojis}"
-                            WidthRequest="75">
-                            <Picker.Behaviors>
-                                <toolkit:EventToCommandBehavior
-                                    Command="{Binding AddEmojiCommand}"
-                                    CommandParameter="{Binding Source={x:Reference pk_emojis}, Path=SelectedItem}"
-                                    EventName="SelectedIndexChanged" />
-                            </Picker.Behaviors>
-                        </Picker>
-                        <Button
-                            Margin="2"
-                            BackgroundColor="#4CAF50"
-                            Command="{Binding SendMessageCommand}"
-                            CommandParameter="BroadCast"
-                            HorizontalOptions="Center"
-                            Text="ENVIAR"
-                            WidthRequest="100" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="25">
+                            <buttons:SfButton
+                                Background="#EC407A"
+                                Command="{Binding LoadImageCommand}"
+                                Stroke="Black"
+                                Text="+ IMAGEN" />
+                            <buttons:SfButton
+                                Background="#EC407A"
+                                Command="{Binding LoadPDFCommand}"
+                                Stroke="Black"
+                                Text="+ PDF" />
+                            <buttons:SfButton
+                                Background="#EC407A"
+                                Command="{Binding LoadVideoCommand}"
+                                Stroke="Black"
+                                Text="+ VIDEO" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
 
-                    </HorizontalStackLayout>
                 </VerticalStackLayout>
 
             </Border>
-
-
-            <VerticalStackLayout Grid.Row="1" Grid.Column="3">
+            <VerticalStackLayout
+                Grid.Row="1"
+                Grid.Column="3"
+                HorizontalOptions="Start">
                 <buttons:SfButton
-                    Background="#4CAF50"
+                    Background="#00BCD4"
                     Command="{Binding LoadCalendarPageCommand}"
                     ImageSource="calendar.png"
                     ShowIcon="True"
@@ -196,54 +240,23 @@
 
                 <buttons:SfButton
                     Margin="0,10,0,0"
-                    Background="#4CAF50"
+                    Background="#00BCD4"
                     Command="{Binding LoadRegisterPageCommand}"
                     ImageSource="student.png"
                     IsVisible="{Binding User.RolProfesor}"
                     ShowIcon="True"
-                    Text="Alumnos"
+                    Text="Estudiantes"
                     TextColor="Black"
                     WidthRequest="120" />
                 <buttons:SfButton
                     Margin="0,10,0,0"
-                    Background="#4CAF50"
+                    Background="#00BCD4"
                     Command="{Binding LoadUnitsPageCommand}"
                     ImageSource="temario.png"
                     ShowIcon="True"
                     Text="Temario"
                     TextColor="Black"
                     WidthRequest="120" />
-
-                <syncfusion:SfTreeView
-                    x:Name="treeView"
-                    AutoExpandMode="AllNodesExpanded"
-                    ChildPropertyName="SubFiles"
-                    ItemsSource="{Binding ImageNodeInfo}">
-                    <syncfusion:SfTreeView.GestureRecognizers />
-                    <syncfusion:SfTreeView.ItemTemplate>
-                        <DataTemplate>
-                            <HorizontalStackLayout Grid.Row="1" Grid.Column="3">
-                                <Image
-                                    Margin="20,0,0,0"
-                                    HeightRequest="34"
-                                    Source="{Binding ImageIcon}"
-                                    WidthRequest="64">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                            x:DataType="viewmodels:MainViewModel"
-                                            Command="{Binding Source={x:Reference thisPage}, Path=BindingContext.LoadCalendarPageCommand}"
-                                            NumberOfTapsRequired="1" />
-                                    </Image.GestureRecognizers>
-                                </Image>
-                                <Label
-                                    Margin="0,0,0,0"
-                                    HeightRequest="50"
-                                    Text="{Binding ItemName}"
-                                    WidthRequest="100" />
-                            </HorizontalStackLayout>
-                        </DataTemplate>
-                    </syncfusion:SfTreeView.ItemTemplate>
-                </syncfusion:SfTreeView>
             </VerticalStackLayout>
 
         </Grid>

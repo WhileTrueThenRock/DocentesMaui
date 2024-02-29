@@ -7,6 +7,7 @@ using EFDocenteMAUI.Views.Popups;
 using MongoDB.Bson;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace EFDocenteMAUI.ViewModels
 {
@@ -36,6 +37,10 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private string _pdf64;
         [ObservableProperty]
+        private ImageSource _videoSource;
+        [ObservableProperty]
+        private string _video64;
+        [ObservableProperty]
         private UnitsPopup _unitsPopup;
 
         [ObservableProperty]
@@ -46,38 +51,106 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private UserModel _user;
 
+        [ObservableProperty]
+        private bool _modoCrear;
+        [ObservableProperty]
+        private ResourceModel _resourceModel;
 
-        public UnitsViewModel() 
+        [ObservableProperty]
+        private bool _webResourceVisible;
+
+        [ObservableProperty]
+        private string _mensajeError;
+        public ICommand TapCommand => new Command<UnitModel>(async (selectedUnit) => await TapCommandExecute(selectedUnit)); //Para mostrar la info en el Popup usando Accordion.
+
+        public UnitsViewModel()
         {
             UnitList = new ObservableCollection<UnitModel>();
             Unit = new UnitModel();
+            ResourceModel = new ResourceModel();
+            WebResourceVisible = false;
             GetUnits();
         }
-        
+
 
         [RelayCommand]
         public void ShowResource(object image)
         {
-          
-                var uriURL = (UriImageSource)image;
-                ResourceToShow = uriURL.Uri.AbsoluteUri;
-           
+            var uriURL = (UriImageSource)image;
+            ResourceToShow = uriURL.Uri.AbsoluteUri;
         }
 
         [RelayCommand]
         public void ShowResourcePdf(object image)
         {
-
             ResourceToShow = image.ToString();
-
         }
-
         [RelayCommand]
-        public async Task ShowUnitPopup()
+        public void ShowResourceWeb(ResourceModel resource)
+        {   
+            ResourceToShow = resource.Contenido;
+        }
+        [RelayCommand]
+        public void LoadWebResource()
         {
+            ResourceModel = new ResourceModel();
+            WebResourceVisible = true;
+        }
+        [RelayCommand]
+        public async void AddWebResource()
+        {
+            if (ComprobarCampos())
+            {
+                Unit.WebResources.Add(ResourceModel);
+                WebResourceVisible = false;
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Info", MensajeError, "ACEPTAR");
+            }
+        }
+        public bool ComprobarCampos()
+        {
+            bool todoOK = false;
+            if(null == ResourceModel.Titulo || ResourceModel.Titulo.Any(Char.IsWhiteSpace))
+            {
+                MensajeError = "El campo Titulo, no puede estar vacio";
+                todoOK = false;
+            }
+            else if(null == ResourceModel.Descripcion)
+            {
+                MensajeError = "El campo Descripción, no puede estar vacio";
+                todoOK = false;
+            }else if (null == ResourceModel.Contenido || ResourceModel.Contenido.Any(Char.IsWhiteSpace))
+            {
+                MensajeError = "El campo URL, no puede estar vacio";
+                todoOK = false;
+            }
+            else
+            {
+                todoOK = true;
+            }
+            return todoOK;
+        }
+        [RelayCommand]
+        public async Task ShowUnitPopup(string opcion)
+        {
+            ModoCrear = bool.Parse(opcion);
+            if (ModoCrear)
+            {
+                Unit = new UnitModel();
+            }
             UnitsPopup = new UnitsPopup();
             await App.Current.MainPage.ShowPopupAsync(UnitsPopup);
         }
+
+        public async Task TapCommandExecute(UnitModel selectedUnit) //Para abrir el popup sin perder el binding.
+        {
+            Unit = selectedUnit;
+            UnitsPopup = new UnitsPopup();
+            await App.Current.MainPage.ShowPopupAsync(UnitsPopup);
+        }
+
         [RelayCommand]
         public async Task LoadImage()
         {
@@ -100,11 +173,22 @@ namespace EFDocenteMAUI.ViewModels
                 await SavePDFAsync();
             }
         }
+        [RelayCommand]
+        public async Task LoadVideo()
+        {
+            var videoDict = await VideoUtils.OpenVideo();
+            if (videoDict != null)
+            {
+                VideoSource = (ImageSource)videoDict["videoFromStream"];
+                Video64 = (string)videoDict["videoBase64"];
+                await SaveVideoAsync();
+            }
+        }
 
         public async Task<bool> UpdateImage()
         {
             ImageModel imagen = new ImageModel();
-            imagen.Id = ObjectId.GenerateNewId().ToString(); 
+            imagen.Id = ObjectId.GenerateNewId().ToString();
             imagen.Content = Image64;
             var request = new RequestModel(method: "POST", route: "/images/save", data: imagen, server: APIService.ImagenesServerUrl);
             ResponseModel response = await APIService.ExecuteRequest(request);
@@ -118,7 +202,23 @@ namespace EFDocenteMAUI.ViewModels
             pdf.Content = Pdf64;
             var request = new RequestModel(method: "POST", route: "/pdfs/save", data: pdf, server: APIService.ImagenesServerUrl);
             ResponseModel response = await APIService.ExecuteRequest(request);
-            Unit.Pdfs.Add(APIService.ImagenesServerUrl + "/pdfs/" + pdf.Id.ToString());
+            if (response.Success == 0)
+            {
+                Unit.Pdfs.Add(APIService.ImagenesServerUrl + "/pdfs/" + pdf.Id.ToString());
+            }
+            return response.Success == 0;
+        }
+        public async Task<bool> UpdateVideo()
+        {
+            VideoModel video = new VideoModel();
+            video.Id = ObjectId.GenerateNewId().ToString();
+            video.Content = Video64;
+            var request = new RequestModel(method: "POST", route: "/videos/save", data: video, server: APIService.ImagenesServerUrl);
+            ResponseModel response = await APIService.ExecuteRequest(request);
+            if (response.Success == 0)
+            {
+                Unit.Resources.Add(APIService.ImagenesServerUrl + "/videos/" + video.Id.ToString());
+            }
             return response.Success == 0;
         }
         public async Task SaveImageAsync()
@@ -145,21 +245,34 @@ namespace EFDocenteMAUI.ViewModels
                 await App.Current.MainPage.DisplayAlert("Temario", "Error al añadir PDF", "Aceptar");
             }
         }
+        public async Task SaveVideoAsync()
+        {
+            bool okSaveVideo = await UpdateVideo();
+            if (okSaveVideo)
+            {
+                await App.Current.MainPage.DisplayAlert("Temario", "Video añadida correctamente", "Aceptar");
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Temario", "Error al añadir Video", "Aceptar");
+            }
+        }
         [RelayCommand]
         public async Task ExecuteRequest()
-        {  
-                var request = new RequestModel(method: "POST",
-                                              route: "/units/" + Mode,
-                                              data: Unit,
-                                              server: APIService.GestionServerUrl);
-                var response = await APIService.ExecuteRequest(request);
-                if (response.Success == 0)
-                {
-                    App.Current.MainPage.DisplayAlert("Temario", response.Message, "Aceptar");
-                    GetUnits();
-                    Unit = new UnitModel();
-                    ClosePopUp();
-                }
+        {
+            var request = new RequestModel(method: "POST",
+                                          route: "/units/" + Mode,
+                                          data: Unit,
+                                          server: APIService.GestionServerUrl);
+            var response = await APIService.ExecuteRequest(request);
+            if (response.Success == 0)
+            {
+                App.Current.MainPage.DisplayAlert("Temario", response.Message, "Aceptar");
+                Unit = new UnitModel();
+                ClosePopUp();
+                GetUnits();
+
+            }
         }
         [RelayCommand]
         public async Task CreateUnit()
@@ -178,19 +291,28 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task DeleteUnit()
         {
-            Mode = "delete";
-            ExecuteRequest();
-            ClosePopUp();
+            bool deleteUnit = await App.Current.MainPage.DisplayAlert("Confirmación",
+                "¿Estás seguro de que quieres eliminar esta Unidad?", "Sí", "No");
+            if (deleteUnit)
+            {
+                Mode = "delete";
+                ExecuteRequest();
+                ClosePopUp();
+            }
+
         }
         [RelayCommand]
         public async Task ClosePopUp()
         {
+            ModoCrear = false;
+            WebResourceVisible = false;
             UnitsPopup.Close();
-
         }
         public async Task GetUnits()
         {
-            UnitList.Clear();
+            try
+            {
+            UnitList = new ObservableCollection<UnitModel>();
             var request = new RequestModel(method: "GET",
                                            route: "/units/getUnits",
                                            data: string.Empty,
@@ -203,8 +325,17 @@ namespace EFDocenteMAUI.ViewModels
                     (response.Data.ToString());
                 foreach (UnitModel dem in unitList)
                 {
-                    UnitList.Add(dem);
+                    if (!UnitList.Contains(dem))
+                    {
+                        UnitList.Add(dem);
+
+                    }
                 }
+            }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
         [RelayCommand]

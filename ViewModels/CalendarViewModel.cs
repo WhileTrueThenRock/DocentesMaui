@@ -17,16 +17,18 @@ namespace EFDocenteMAUI.ViewModels
     [QueryProperty("User", "User")]
     internal partial class CalendarViewModel : ObservableObject, INotifyPropertyChanged
     {
-        
+
         private UserModel _user;
         public UserModel User
         {
-            get { 
-                return _user; 
+            get
+            {
+                return _user;
             }
-            set { 
-                _user = value; 
-                OnPropertyChanged(); 
+            set
+            {
+                _user = value;
+                OnPropertyChanged();
             }
         }
 
@@ -37,21 +39,43 @@ namespace EFDocenteMAUI.ViewModels
         private EventCollection _events = new();
 
         private ObservableCollection<EventModel> _eventsList;
-        public ObservableCollection<EventModel> EventsList { 
+        public ObservableCollection<EventModel> EventsList
+        {
             get
-            { 
+            {
                 return _eventsList;
-            } 
+            }
             set
             {
                 _eventsList = value;
                 OnPropertyChanged();
             }
-                
+
+        }
+
+        private EventModel _selectedEvent;
+        public EventModel SelectedEvent
+        {
+            get { return _selectedEvent; }
+            set
+            {
+                _selectedEvent = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _eventHeader;
+        public string EventHeader
+        {
+            get { return _eventHeader; }
+            set
+            {
+                _eventHeader = value; OnPropertyChanged();
+            }
         }
 
         [ObservableProperty]
-        private ObservableCollection<EventModel> _eventsDateFilter = new();
+        private ObservableCollection<EventModel> _eventsDateFilter = new ();
 
         [ObservableProperty]
         private ObservableCollection<EventModel> _eventsTypeFilter = new();
@@ -59,8 +83,7 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private ObservableCollection<EventModel> _eventsDescriptionFilter = new();
 
-        [ObservableProperty]
-        private EventModel _selectedEvent;
+
 
         [ObservableProperty]
         private DayEventsModel _dayEvents = new();
@@ -77,8 +100,6 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private ImageSource avatarImage;
 
-        [ObservableProperty]
-        private string _eventHeader;
 
         [ObservableProperty]
         private bool _eventExpander;
@@ -87,7 +108,7 @@ namespace EFDocenteMAUI.ViewModels
         private string _resultadoFecha;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         private string _fechaIni;
 
         public string FechaIni
@@ -95,7 +116,6 @@ namespace EFDocenteMAUI.ViewModels
             set
             {
                 _fechaIni = value.Replace(" 0:00:00", "");
-                //_fechaIni = value;
                 OnPropertyChanged();
             }
             get
@@ -111,7 +131,6 @@ namespace EFDocenteMAUI.ViewModels
             set
             {
                 _fechaFin = value.Replace(" 0:00:00", "");
-                
                 OnPropertyChanged();
             }
             get
@@ -137,7 +156,7 @@ namespace EFDocenteMAUI.ViewModels
 
         public CalendarViewModel()
         {
-            
+
             Culture = CultureInfo.CurrentCulture;
             EventsList = new ObservableCollection<EventModel>();
             SelectedEvent = new EventModel();
@@ -145,21 +164,21 @@ namespace EFDocenteMAUI.ViewModels
             EventHeader = "Actividades de clase";
             FechaIni = new DateTime(2023, 1, 1).ToString("dd-MM-yyyy");
             FechaFin = DateTime.Now.ToString("dd-MM-yyyy");
-           
+
         }
 
 
         [RelayCommand]
         public async Task GetUsersByFiltroType(string type)
         {
-            
+
             if (null == type || type.Any(Char.IsWhiteSpace))
             {
                 await App.Current.MainPage.DisplayAlert("Info", "El campo de busqueda no puede estar vacio", "ACEPTAR");
             }
             else
             {
-               
+
                 var request = new RequestModel(method: "GET",
                                                 route: "/events/getEventsByFilter/" + type.ToLower(),
                                                 data: User,
@@ -192,14 +211,14 @@ namespace EFDocenteMAUI.ViewModels
         [RelayCommand]
         public async Task GetUsersByFiltroDescription(string descripcion)
         {
-            
+
             if (null == descripcion || descripcion.Any(Char.IsWhiteSpace))
             {
                 await App.Current.MainPage.DisplayAlert("Info", "El campo de busqueda no puede estar vacio", "ACEPTAR");
             }
             else
             {
-                
+
                 var request = new RequestModel(method: "GET",
                                                 route: "/events/getEventsByDescription/" + descripcion.ToLower(),
                                                 data: User,
@@ -238,40 +257,40 @@ namespace EFDocenteMAUI.ViewModels
             {
                 return;
             }
-                
-                string[] dateArray = FechaIni.Split(' ');
-                FechaIni = dateArray[0];
 
-                string[] dateArray2 = FechaFin.Split(' ');
-                FechaFin = dateArray2[0];
+            string[] dateArray = FechaIni.Split(' ');
+            FechaIni = dateArray[0];
 
-                FechaIni = FechaIni.Replace("/", "-");
-                FechaFin = FechaFin.Replace("/", "-");
-                var request = new RequestModel(method: "GET",
-                                               route: "/events/getEventsByDate/" + FechaIni + "/" + FechaFin, //No filtra si es otro mes
-                                               data: string.Empty,
-                                               server: APIService.GestionServerUrl);
-                var response = await APIService.ExecuteRequest(request);
+            string[] dateArray2 = FechaFin.Split(' ');
+            FechaFin = dateArray2[0];
 
-                if (response.Success == 0)
+            FechaIni = FechaIni.Replace("/", "-");
+            FechaFin = FechaFin.Replace("/", "-");
+            var request = new RequestModel(method: "GET",
+                                           route: "/events/getEventsByDate/" + FechaIni + "/" + FechaFin, //No filtra si es otro mes
+                                           data: string.Empty,
+                                           server: APIService.GestionServerUrl);
+            var response = await APIService.ExecuteRequest(request);
+
+            if (response.Success == 0)
+            {
+                ObservableCollection<DayEventsModel> eventsList =
+                JsonConvert.DeserializeObject<ObservableCollection<DayEventsModel>>
+                    (response.Data.ToString());
+                EventsDateFilter.Clear();
+                foreach (DayEventsModel dem in eventsList)
                 {
-                    ObservableCollection<DayEventsModel> eventsList =
-                    JsonConvert.DeserializeObject<ObservableCollection<DayEventsModel>>
-                        (response.Data.ToString());
-                    EventsDateFilter.Clear();
-                    foreach (DayEventsModel dem in eventsList)
+                    if (dem.Events.Count > 0)
                     {
-                        if (dem.Events.Count > 0)
-                        {
-                            //Events.Add(DateTime.Parse(dem.EventDate), dem.Events);
+                        //Events.Add(DateTime.Parse(dem.EventDate), dem.Events);
 
-                            foreach (var eventModel in dem.Events)
-                            {
-                                EventsDateFilter.Add(eventModel);
-                            }
+                        foreach (var eventModel in dem.Events)
+                        {
+                            EventsDateFilter.Add(eventModel);
                         }
                     }
                 }
+            }
 
         }
 
@@ -331,7 +350,7 @@ namespace EFDocenteMAUI.ViewModels
                 }
             }
         }
-        
+
         [RelayCommand]
         public async Task ExecuteRequest()
         {
@@ -417,7 +436,7 @@ namespace EFDocenteMAUI.ViewModels
                 IsCreateVisible = true;
                 IsUpdateVisible = false;
                 IsDeleteVisible = false;
-                AvatarImage = APIService.ImagenesServerUrl + "/images/default";
+                AvatarImage = SelectedEvent.Image;
 
 
                 DayEvents.Events.Clear();
@@ -430,6 +449,7 @@ namespace EFDocenteMAUI.ViewModels
                 IsCreateVisible = false;
                 IsUpdateVisible = true;
                 IsDeleteVisible = true;
+                EventHeader = SelectedEvent.Type;
                 AvatarImage = SelectedEvent.Image;
             }
             CalendarPopup = new CalendarPopup();

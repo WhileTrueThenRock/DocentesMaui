@@ -43,7 +43,7 @@ namespace EFDocenteMAUI.ViewModels
                     UserName = User.UserName;
                     await LoadMainPage();
                     await App.Current.MainPage.DisplayAlert("Login",
-                    response.Message, "ACEPTAR");
+                    response.Message+" "+User.Nombre, "ACEPTAR");
                 }
                 else if (response.Success.Equals(2))
                 {

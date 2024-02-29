@@ -3,21 +3,17 @@ using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EFDocenteMAUI.Models;
+using EFDocenteMAUI.Utils;
+using EFDocenteMAUI.Views.Popups;
 using GestorChat.Views.Popups;
-using Mopups.PreBaked.PopupPages.Login;
+using MongoDB.Bson;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Plugin.LocalNotification;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.WebSockets;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace EFDocenteMAUI.ViewModels
 {
@@ -71,7 +67,7 @@ namespace EFDocenteMAUI.ViewModels
         private ObservableCollection<string> _notificationMessagesReceived;
 
         [ObservableProperty]
-        private ObservableCollection<string> _showMessagesList;
+        private ObservableCollection<MessageMediaModel> _showMessagesList;
 
         [ObservableProperty]
         private bool _notificationMessage;
@@ -103,6 +99,36 @@ namespace EFDocenteMAUI.ViewModels
         private UserModel _user;
         [ObservableProperty]
         private bool _profesor;
+        [ObservableProperty]
+        private ObservableCollection<MessageMediaModel> _listMediaMessages;
+        [ObservableProperty]
+        private ObservableCollection<MessageMediaModel> _listNotificationMediaMessages;
+        [ObservableProperty]
+        private string _image;
+
+        [ObservableProperty]
+        private string _image64;
+
+        [ObservableProperty]
+        private ImageSource _imageSource;
+        [ObservableProperty]
+        private ImageSource _pdfSource;
+        [ObservableProperty]
+        private string _pdf64;
+        [ObservableProperty]
+        private ImageSource _videoSource;
+        [ObservableProperty]
+        private string _video64;
+        [ObservableProperty]
+        private string _resourceToShow;
+        [ObservableProperty]
+        private MessageMediaModel _messageMedia;
+        [ObservableProperty]
+        private VisorArchivosPopup _visorPopup;
+        [ObservableProperty]
+        private Color _colorBotonSala;
+        [ObservableProperty]
+        private Color _colorBotonNotificacion;
         public MainViewModel()
         {
             Inicio();
@@ -113,31 +139,26 @@ namespace EFDocenteMAUI.ViewModels
             NotificacionChatGeneral = false;
             MessagesReceived = new ObservableCollection<string>();
             NotificationMessagesReceived = new ObservableCollection<string>();
-            ShowMessagesList = new ObservableCollection<string>();
+            ShowMessagesList = new ObservableCollection<MessageMediaModel>();
             MessagesDict = new Dictionary<string, string>();
             Emojis = new ObservableCollection<string>() { "🍻", "🙋‍", "♂️", "💁‍", "♀️", "😍" };
             UserList = new ObservableCollection<string>();
             ConnectionState = "DESCONECTADO";
             ChatSelection = "SALA PRINCIPAL";
             UserName = LoginViewModel.UserName;
-            ImageNodeInfo = new ObservableCollection<FileManager>();
-            FileManager fileManager = new FileManager()
-            {
-                ItemName = "Carpeta",
-                ImageIcon = "ricardo.jpg"
-
-            };
-            ImageNodeInfo.Add(fileManager);
-            GenerateSource();
-            Conectar();
-            ShowMainMsg();
+            SelectedUser = new UserModel();
             ImMainChat = true;
             ImNotificationChat = false;
             PrivateNotification = false;
             ImageMainChat = "botonmain.png";
             ImageNotificationChat = "botonnotification.png";
             Users = new ObservableCollection<UserModel>();
-
+            ListMediaMessages = new ObservableCollection<MessageMediaModel>();
+            ListNotificationMediaMessages = new ObservableCollection<MessageMediaModel>();
+            Conectar();
+            ColorBotonSala = Colors.Transparent;
+            ColorBotonNotificacion= Colors.Transparent;
+            ShowMainMsg();
         }
         [RelayCommand]
         public void AddEmoji(string emoji)
@@ -145,68 +166,6 @@ namespace EFDocenteMAUI.ViewModels
             MessageToSend += emoji;
         }
         
-        private void GenerateSource()
-        {
-            var nodeImageInfo = new ObservableCollection<FileManager>();
-
-            var calendar = new FileManager() { ItemName = "Calendario", ImageIcon = "calendar.png" };
-            var alumnos = new FileManager() { ItemName = "Alumnos", ImageIcon = "student.png" };
-            var mp3 = new FileManager() { ItemName = "Music", ImageIcon = "ricardo.jpg" };
-            var pictures = new FileManager() { ItemName = "Pictures", ImageIcon = "ricardo.jpg" };
-            var video = new FileManager() { ItemName = "Videos", ImageIcon = "ricardo.jpg" };
-
-            var pollution = new FileManager() { ItemName = "Calendar", ImageIcon = "calendar.png" };
-            var globalWarming = new FileManager() { ItemName = "Global Warming.ppt", ImageIcon = "ricardo.jpg" };
-            var sanitation = new FileManager() { ItemName = "Sanitation.docx", ImageIcon = "ricardo.jpg" };
-            var socialNetwork = new FileManager() { ItemName = "Social Network.pdf", ImageIcon = "ricardo.jpg" };
-            var youthEmpower = new FileManager() { ItemName = "Youth Empowerment.pdf", ImageIcon = "ricardo.jpg" };
-
-
-            var tutorials = new FileManager() { ItemName = "Tutorials.zip", ImageIcon = "ricardo.jpg" };
-            var typeScript = new FileManager() { ItemName = "TypeScript.7z", ImageIcon = "ricardo.jpg" };
-            var uiGuide = new FileManager() { ItemName = "UI-Guide.pdf", ImageIcon = "ricardo.jpg" };
-
-            var song = new FileManager() { ItemName = "Gouttes", ImageIcon = "ricardo.jpg" };
-
-            var camera = new FileManager() { ItemName = "Camera Roll", ImageIcon = "ricardo.jpg" };
-            var stone = new FileManager() { ItemName = "Stone.jpg", ImageIcon = "ricardo.jpg" };
-            var wind = new FileManager() { ItemName = "Wind.jpg", ImageIcon = "ricardo.jpg" };
-
-            var img0 = new FileManager() { ItemName = "WIN_20160726_094117.JPG", ImageIcon = "ricardo.jpg" };
-            var img1 = new FileManager() { ItemName = "WIN_20160726_094118.JPG", ImageIcon = "ricardo.jpg" };
-
-            var video1 = new FileManager() { ItemName = "Naturals.mp4", ImageIcon = "ricardo.jpg" };
-            var video2 = new FileManager() { ItemName = "Wild.mpeg", ImageIcon = "ricardo.jpg" };
-
-
-            mp3.SubFiles = new ObservableCollection<FileManager>
-            {
-                song
-            };
-
-            pictures.SubFiles = new ObservableCollection<FileManager>
-            {
-                camera,
-                stone,
-                wind
-            };
-            camera.SubFiles = new ObservableCollection<FileManager>
-            {
-                img0,
-                img1
-            };
-
-            video.SubFiles = new ObservableCollection<FileManager>
-            {
-                video1,
-                video2
-            };
-
-            nodeImageInfo.Add(mp3);
-            nodeImageInfo.Add(pictures);
-            nodeImageInfo.Add(video);
-            ImageNodeInfo = nodeImageInfo;
-        }
         public async Task Conectar()
         {
             ClientWebSocket = new ClientWebSocket();  // Crear una nueva instancia de ClientWebSocket.
@@ -268,7 +227,7 @@ namespace EFDocenteMAUI.ViewModels
             await App.Current.MainPage.ShowPopupAsync(PrivateMessagePopup);
         }
 
-        public void LoadMessagesList(ObservableCollection<string> lista)
+        public void LoadMessagesList(ObservableCollection<MessageMediaModel> lista)
         {
             ShowMessagesList = lista;
         }
@@ -276,32 +235,61 @@ namespace EFDocenteMAUI.ViewModels
         public void ShowMainMsg()
         {
             ChatSelection = "SALA PRINCIPAL";
-            LoadMessagesList(MessagesReceived);
+            LoadMessagesList(ListMediaMessages);
             NotificationMessage = false;
             ImMainChat = true;
             ImNotificationChat = false;
-            ImageMainChat = "botonmain.png";
             Profesor = true;
+            ColorBotonSala = Colors.Transparent;
         }
         [RelayCommand]
         public void ShowNotificationMsg()
         {
             ChatSelection = "NOTIFICACIONES";
-            LoadMessagesList(NotificationMessagesReceived);
+            LoadMessagesList(ListNotificationMediaMessages);
             NotificationMessage = true;
             ImMainChat = false;
             ImNotificationChat = true;
-            ImageNotificationChat = "botonnotification.png";
             Profesor = User.RolProfesor;
+            ColorBotonNotificacion = Colors.Transparent;
         }
-
-        
+        [RelayCommand]
+        private async Task ShowVisorPopup()
+        {
+            VisorPopup = new VisorArchivosPopup();
+            if (null!=MessageMedia.Pdf && MessageMedia.Pdf.Contains("/pdfs"))
+            {
+                ResourceToShow = MessageMedia.Pdf;
+                await App.Current.MainPage.ShowPopupAsync(VisorPopup);
+            }
+            else if (null != MessageMedia.Imagen && MessageMedia.Imagen.Contains("/images"))
+            {
+                ResourceToShow = MessageMedia.Imagen;
+                await App.Current.MainPage.ShowPopupAsync(VisorPopup);
+            }
+            else if (null != MessageMedia.Video && MessageMedia.Video.Contains("/videos"))
+            {
+                ResourceToShow = MessageMedia.Video;
+                await App.Current.MainPage.ShowPopupAsync(VisorPopup);
+            }
+            else
+            {
+                return;
+            }
+            
+            
+        }
+        [RelayCommand]
+        public async Task CloseVisorPopUp()
+        {
+            VisorPopup.Close();
+        }
 
         [RelayCommand]
         public async Task ClosePopUp()
         {
             PrivateMessagePopup.Close();
-
+            SelectedUser = new UserModel();
         }
 
         [RelayCommand]
@@ -330,6 +318,108 @@ namespace EFDocenteMAUI.ViewModels
         }
 
         [RelayCommand]
+        public async Task LoadImage()
+        {
+            var imagesDict = await ImageUtils.OpenImage();
+            if (imagesDict != null)
+            {
+                ImageSource = (ImageSource)imagesDict["imageFromStream"];
+                Image64 = (string)imagesDict["imageBase64"];
+                await SaveImageAsync();
+            }
+        }
+        public async Task SaveImageAsync()
+        {
+            bool okSaveImage = await UpdateImage();
+            if (okSaveImage)
+            {
+                await SendMessage("BroadCast");
+            }
+            else
+            {
+                MessageToSend = "";
+                await App.Current.MainPage.DisplayAlert("ERROR", "Error al enviar imagen", "Aceptar");
+            }
+        }
+        public async Task<bool> UpdateImage()
+        {
+            ImageModel imagen = new ImageModel();
+            imagen.Id = ObjectId.GenerateNewId().ToString();
+            imagen.Content = Image64;
+            var request = new RequestModel(method: "POST", route: "/images/save", data: imagen, server: APIService.ImagenesServerUrl);
+            ResponseModel response = await APIService.ExecuteRequest(request);
+            MessageToSend =APIService.ImagenesServerUrl + "/images/" + imagen.Id.ToString();
+            return response.Success == 0;
+        }
+        [RelayCommand]
+        public async Task LoadPDF()
+        {
+            var pdfDict = await PDFUtils.OpenPDF();
+            if (pdfDict != null)
+            {
+                PdfSource = (ImageSource)pdfDict["pdfFromStream"];
+                Pdf64 = (string)pdfDict["pdfBase64"];
+                await SavePDFAsync();
+            }
+        }
+        public async Task SavePDFAsync()
+        {
+            bool okSavePDF = await UpdatePDF();
+            if (okSavePDF)
+            {
+                await SendMessage("BroadCast");
+            }
+            else
+            {
+                MessageToSend = "";
+                await App.Current.MainPage.DisplayAlert("ERROR", "Error al enviar pdf", "Aceptar");
+            }
+        }
+        public async Task<bool> UpdatePDF()
+        {
+            PDFModel pdf = new PDFModel();
+            pdf.Id = ObjectId.GenerateNewId().ToString();
+            pdf.Content = Pdf64;
+            var request = new RequestModel(method: "POST", route: "/pdfs/save", data: pdf, server: APIService.ImagenesServerUrl);
+            ResponseModel response = await APIService.ExecuteRequest(request);
+            MessageToSend = APIService.ImagenesServerUrl + "/pdfs/" + pdf.Id.ToString();
+            return response.Success == 0;
+        }
+        [RelayCommand]
+        public async Task LoadVideo()
+        {
+            var videoDict = await VideoUtils.OpenVideo();
+            if (videoDict != null)
+            {
+                VideoSource = (ImageSource)videoDict["videoFromStream"];
+                Video64 = (string)videoDict["videoBase64"];
+                await SaveVideoAsync();
+            }
+        }
+        public async Task SaveVideoAsync()
+        {
+            bool okSaveVideo = await UpdateVideo();
+            if (okSaveVideo)
+            {
+                await SendMessage("BroadCast");
+            }
+            else
+            {
+                MessageToSend = "";
+                await App.Current.MainPage.DisplayAlert("ERROR", "Error al enviar video", "Aceptar");
+            }
+        }
+        public async Task<bool> UpdateVideo()
+        {
+            VideoModel video = new VideoModel();
+            video.Id = ObjectId.GenerateNewId().ToString();
+            video.Content = Video64;
+            var request = new RequestModel(method: "POST", route: "/videos/save", data: video, server: APIService.ImagenesServerUrl);
+            ResponseModel response = await APIService.ExecuteRequest(request);
+            MessageToSend = APIService.ImagenesServerUrl + "/videos/" + video.Id.ToString();
+            return response.Success == 0;
+        }
+        [RelayCommand]
         public async Task SendMessage(string purpose)
         {
             // Crear una nueva instancia del modelo de mensaje de chat.
@@ -349,7 +439,8 @@ namespace EFDocenteMAUI.ViewModels
                 MessagesDict.TryGetValue(SelectedUser.UserName, out sessionMessages);
                 if (sessionMessages != null)
                 {
-                    sessionMessages += messageChat.Content + "\n";
+                    sessionMessages += messageChat.Content;
+                    sessionMessages += PrivateMessageToSend + "\n";
                     MessagesDict.Remove(SelectedUser.UserName);
                     MessagesDict.Add(SelectedUser.UserName, sessionMessages);
                 }
@@ -416,10 +507,42 @@ namespace EFDocenteMAUI.ViewModels
                         {
                             if (!ImMainChat)
                             {
-                                ImageMainChat = "botonmainnotifications.png";
-                            }                        
+                                ColorBotonSala = Colors.Red;
+                            }
                             //Añado mensaje al chat general
-                            MessagesReceived.Add((string)messageChatModel.Content);
+                            string mensaje = (string)messageChatModel.Content;
+                            if (mensaje.Contains("/images"))
+                            {
+                                var arrayMensajes = mensaje.Split(' ');
+                                var sms = new MessageMediaModel();
+                                sms.Mensaje = arrayMensajes[0] + " " + arrayMensajes[1];
+                                sms.Imagen = arrayMensajes[2];
+                                ListMediaMessages.Add(sms);
+                            }
+                            else if (mensaje.Contains("/pdfs"))
+                            {
+                                var arrayMensajes = mensaje.Split(' ');
+                                var sms = new MessageMediaModel();
+                                sms.Mensaje = arrayMensajes[0] + " " + arrayMensajes[1];
+                                sms.Imagen = "pdf.png";
+                                sms.Pdf = arrayMensajes[2];
+                                ListMediaMessages.Add(sms);
+                            }
+                            else if (mensaje.Contains("/videos"))
+                            {
+                                var arrayMensajes = mensaje.Split(' ');
+                                var sms = new MessageMediaModel();
+                                sms.Mensaje = arrayMensajes[0] + " " + arrayMensajes[1];
+                                sms.Imagen = "video.png";
+                                sms.Video = arrayMensajes[2];
+                                ListMediaMessages.Add(sms);
+                            }
+                            else
+                            {
+                                var sms = new MessageMediaModel();
+                                sms.Mensaje = mensaje;
+                                ListMediaMessages.Add(sms);
+                            }
 
                         }
                         else if (messageChatModel.Purpose.Equals("UserList"))
@@ -427,11 +550,19 @@ namespace EFDocenteMAUI.ViewModels
                             UserList = JsonConvert.
                                 DeserializeObject<ObservableCollection<string>>(messageChatModel.Content.ToString());
                             Users = new ObservableCollection<UserModel>();
+                            RegisterUserViewModel model = new RegisterUserViewModel();
+                            ObservableCollection<UserModel> allUsers =await GetUsers();
+
                             foreach (string user in UserList){
-                               
-                                UserModel user1 = new UserModel();
-                                user1.UserName = user;
-                                Users.Add(user1);
+                                foreach(var usuario in allUsers)
+                                {
+                                    if (user.Equals(usuario.UserName))
+                                    {
+                                        Users.Add(usuario);
+                                    }
+                                }
+
+                          
                             }
                         }
                         else if (messageChatModel.Purpose.Equals("Private"))
@@ -444,7 +575,7 @@ namespace EFDocenteMAUI.ViewModels
                                 sessionMessages += messageChatModel.Content + "\n";
                                 MessagesDict.Remove(messageChatModel.UserId);
                                 MessagesDict.Add(messageChatModel.UserId, sessionMessages);
-                                if (SelectedUser.Equals(messageChatModel.UserId))
+                                if (null!=SelectedUser.UserName  ||messageChatModel.UserId.Equals(SelectedUser.UserName))
                                 {
                                     MessagesPrivateReceived = sessionMessages;
                                 }
@@ -452,47 +583,103 @@ namespace EFDocenteMAUI.ViewModels
                             else
                             {
                                 MessagesDict.Add(messageChatModel.UserId, messageChatModel.Content + "\n");
-
-                                MessagesPrivateReceived = messageChatModel.Content + "\n";
-                                //if ( SelectedUser.Equals(messageChatModel.UserId))
-                                //{
-                                   
-                                //}
+                                if(null != SelectedUser)
+                                {
+                                    if (messageChatModel.UserId == SelectedUser.UserName)
+                                    {
+                                        MessagesPrivateReceived = messageChatModel.Content + "\n";
+                                    }
+                                }
+                                
                             }
                             ShowNotification(messageChatModel.UserId);
 
-                            //if (!privateNotifications.ContainsKey(messageChatModel.UserId))
-                            //{
-                            //    privateNotifications.Add(messageChatModel.UserId, false);
-                            //}
-
-                            //privateNotifications[messageChatModel.UserId] = true;
-                            //PrivateNotification = privateNotifications[messageChatModel.UserId];
-
-                            User = Users.FirstOrDefault(u => u.UserName == messageChatModel.UserId);
-                            if (User != null)
+                            ObservableCollection<UserModel> allUsersPrivate = new ObservableCollection<UserModel>(Users);
+                            var usuario = new UserModel();
+                            usuario = Users.FirstOrDefault(u => u.UserName == messageChatModel.UserId);
+                            if (usuario != null)
                             {
-                                User.IsNotificationEnabled = true;
+                               foreach(var nombreUsuario in allUsersPrivate)
+                                {
+                                    if (nombreUsuario.UserName.Equals(usuario.UserName) && !nombreUsuario.UserName.Equals(SelectedUser.UserName))
+                                    {
+                                        nombreUsuario.IsNotificationEnabled = true;
+                                    }
+                                }
+                               Users= new ObservableCollection<UserModel>(allUsersPrivate);
                             }
+
 
                         }
                         else if (messageChatModel.Purpose.Equals("BroadcastMsg"))
                         {
                             JArray jArray = (JArray)messageChatModel.Content;
                             var msgList = jArray.ToObject<ObservableCollection<string>>();
-                            foreach (var msg in msgList)
+                            foreach (var mensaje in msgList)
                             {
-                                MessagesReceived.Add(msg);
+                                if (mensaje.Contains("/images"))
+                                {   var arrayMensajes = mensaje.Split(' ');
+                                    var sms = new MessageMediaModel();
+                                    sms.Mensaje = arrayMensajes[0]+" " + arrayMensajes[1];
+                                    sms.Imagen = arrayMensajes[2];
+                                    ListMediaMessages.Add(sms);
+                                }
+                                else if (mensaje.Contains("/pdfs"))
+                                {
+                                    var arrayMensajes = mensaje.Split(' ');
+                                    var sms = new MessageMediaModel();
+                                    sms.Mensaje = arrayMensajes[0] + " " + arrayMensajes[1];
+                                    sms.Imagen = "pdf.png";
+                                    sms.Pdf = arrayMensajes[2];
+                                    ListMediaMessages.Add(sms);
+                                }
+                                else if (mensaje.Contains("/videos"))
+                                {
+                                    var arrayMensajes = mensaje.Split(' ');
+                                    var sms = new MessageMediaModel();
+                                    sms.Mensaje = arrayMensajes[0] + " " + arrayMensajes[1];
+                                    sms.Imagen = "video.png";
+                                    sms.Video = arrayMensajes[2];
+                                    ListMediaMessages.Add(sms);
+                                }
+                                else
+                                {
+                                    var sms = new MessageMediaModel();
+                                    sms.Mensaje = mensaje;
+                                    ListMediaMessages.Add(sms);
+                                }
                             }
                         }
                         else if (messageChatModel.Purpose.Equals("NotificationMsg"))
                         {
                             JArray jArray = (JArray)messageChatModel.Content;
                             var msgList = jArray.ToObject<ObservableCollection<string>>();
-                            foreach (var msg in msgList)
+                            foreach (var mensaje in msgList)
                             {
-                                NotificationMessagesReceived.Add(msg);
-                               
+                                if (mensaje.Contains("/images"))
+                                {
+                                    var arrayMensajes = mensaje.Split(' ');
+                                    var sms = new MessageMediaModel();
+                                    sms.Mensaje = arrayMensajes[0] + " " + arrayMensajes[1];
+                                    sms.Imagen = arrayMensajes[2];
+                                    ListNotificationMediaMessages.Add(sms);
+                                }
+                                else if (mensaje.Contains("/pdfs"))
+                                {
+                                    var arrayMensajes = mensaje.Split(' ');
+                                    var sms = new MessageMediaModel();
+                                    sms.Mensaje = arrayMensajes[0] + " " + arrayMensajes[1];
+                                    sms.Imagen = "pdf.png";
+                                    sms.Pdf = arrayMensajes[2];
+                                    ListNotificationMediaMessages.Add(sms);
+                                }
+                                else
+                                {
+                                    var sms = new MessageMediaModel();
+                                    sms.Mensaje = mensaje;
+                                    ListNotificationMediaMessages.Add(sms);
+                                }
+
                             }
                             
                         }
@@ -500,9 +687,29 @@ namespace EFDocenteMAUI.ViewModels
                         {
                             if (!ImNotificationChat)
                             {
-                                ImageNotificationChat = "botonnotificationnotifications.png";
+                                ColorBotonNotificacion = Colors.Red;
                             }
-                            NotificationMessagesReceived.Add((string)messageChatModel.Content);
+                            string mensaje = (string)messageChatModel.Content;
+                            if (mensaje.Contains("/images"))
+                            {
+                                var sms = new MessageMediaModel();
+                                sms.Imagen = mensaje;
+                                ListNotificationMediaMessages.Add(sms);
+                            }
+                            else if (mensaje.Contains("/pdfs"))
+                            {
+                                var sms = new MessageMediaModel();
+                                sms.Imagen = "pdf.png";
+                                sms.Pdf = mensaje;
+                                ListNotificationMediaMessages.Add(sms);
+                            }
+                            else
+                            {
+                                var sms = new MessageMediaModel();
+                                sms.Mensaje = mensaje;
+                                ListNotificationMediaMessages.Add(sms);
+                            }
+                            
                         }
                         Debug.WriteLine("Received message: " + MessagesReceived);
                     }
@@ -524,6 +731,23 @@ namespace EFDocenteMAUI.ViewModels
             }
         }
         private Dictionary<string, bool> privateNotifications = new Dictionary<string, bool>();
+        [RelayCommand]
+        public async Task <ObservableCollection<UserModel>> GetUsers()
+        {
+            var request = new RequestModel(method: "GET",
+                                            route: "/users/all",
+                                            data: "",
+                                            server: APIService.GestionServerUrl);
+            ResponseModel response = await APIService.ExecuteRequest(request);
+            if (response.Success == 0)
+            {
+              return JsonConvert.DeserializeObject<ObservableCollection<UserModel>>(response.Data.ToString());
+            }
+            else
+            {
+                return null;
+            }
+        }
 
 
         public async Task ShowNotification(string user)

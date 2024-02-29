@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    x:Class="EFDocenteMAUI.Views.Popups.VisorArchivosPopup"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewmodels="clr-namespace:EFDocenteMAUI.ViewModels"
+    x:DataType="viewmodels:MainViewModel"
+    CanBeDismissedByTappingOutsideOfPopup="False"
+    Color="Transparent">
+    <VerticalStackLayout HeightRequest="650" WidthRequest="650">
+        <Button
+            BackgroundColor="Black"
+            Command="{Binding CloseVisorPopUpCommand}"
+            HeightRequest="10"
+            HorizontalOptions="End"
+            Text="X"
+            TextColor="White"
+            VerticalOptions="Start"
+            WidthRequest="10" />
+        <WebView
+            Margin="10"
+            Background="Transparent"
+            BackgroundColor="Transparent"
+            HeightRequest="580"
+            Source="{Binding ResourceToShow}"
+            WidthRequest="580" />
+    </VerticalStackLayout>
+</toolkit:Popup>
