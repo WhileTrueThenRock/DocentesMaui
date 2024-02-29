@@ -19,12 +19,14 @@ namespace EFDocenteMAUI.Models
         public ObservableCollection<string> Pdfs { get; set; }
         public ObservableCollection<string> Images { get; set; }
         public ObservableCollection<string> Resources { get; set; }
+        public ObservableCollection<ResourceModel> WebResources { get; set; }
 
         public UnitModel() {
             Id = ObjectId.GenerateNewId().ToString();
             Pdfs = new ObservableCollection<string>();
             Images = new ObservableCollection<string>();
             Resources = new ObservableCollection<string>();
+            WebResources = new ObservableCollection<ResourceModel>();
         }
     }
 }

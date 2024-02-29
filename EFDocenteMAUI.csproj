@@ -93,6 +93,7 @@
 	  <None Remove="Resources\Images\types.png" />
 	  <None Remove="Resources\Images\typing.png" />
 	  <None Remove="Resources\Images\video.png" />
+	  <None Remove="Resources\Images\web.png" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -7,8 +7,6 @@ using EFDocenteMAUI.Views.Popups;
 using MongoDB.Bson;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace EFDocenteMAUI.ViewModels
@@ -55,12 +53,22 @@ namespace EFDocenteMAUI.ViewModels
 
         [ObservableProperty]
         private bool _modoCrear;
+        [ObservableProperty]
+        private ResourceModel _resourceModel;
+
+        [ObservableProperty]
+        private bool _webResourceVisible;
+
+        [ObservableProperty]
+        private string _mensajeError;
         public ICommand TapCommand => new Command<UnitModel>(async (selectedUnit) => await TapCommandExecute(selectedUnit)); //Para mostrar la info en el Popup usando Accordion.
 
         public UnitsViewModel()
         {
             UnitList = new ObservableCollection<UnitModel>();
             Unit = new UnitModel();
+            ResourceModel = new ResourceModel();
+            WebResourceVisible = false;
             GetUnits();
         }
 
@@ -77,7 +85,53 @@ namespace EFDocenteMAUI.ViewModels
         {
             ResourceToShow = image.ToString();
         }
-
+        [RelayCommand]
+        public void ShowResourceWeb(ResourceModel resource)
+        {   
+            ResourceToShow = resource.Contenido;
+        }
+        [RelayCommand]
+        public void LoadWebResource()
+        {
+            ResourceModel = new ResourceModel();
+            WebResourceVisible = true;
+        }
+        [RelayCommand]
+        public async void AddWebResource()
+        {
+            if (ComprobarCampos())
+            {
+                Unit.WebResources.Add(ResourceModel);
+                WebResourceVisible = false;
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Info", MensajeError, "ACEPTAR");
+            }
+        }
+        public bool ComprobarCampos()
+        {
+            bool todoOK = false;
+            if(null == ResourceModel.Titulo || ResourceModel.Titulo.Any(Char.IsWhiteSpace))
+            {
+                MensajeError = "El campo Titulo, no puede estar vacio";
+                todoOK = false;
+            }
+            else if(null == ResourceModel.Descripcion)
+            {
+                MensajeError = "El campo Descripción, no puede estar vacio";
+                todoOK = false;
+            }else if (null == ResourceModel.Contenido || ResourceModel.Contenido.Any(Char.IsWhiteSpace))
+            {
+                MensajeError = "El campo URL, no puede estar vacio";
+                todoOK = false;
+            }
+            else
+            {
+                todoOK = true;
+            }
+            return todoOK;
+        }
         [RelayCommand]
         public async Task ShowUnitPopup(string opcion)
         {
@@ -243,7 +297,6 @@ namespace EFDocenteMAUI.ViewModels
             {
                 Mode = "delete";
                 ExecuteRequest();
-                //GetUnits();
                 ClosePopUp();
             }
 
@@ -253,15 +306,11 @@ namespace EFDocenteMAUI.ViewModels
         {
             ModoCrear = false;
             UnitsPopup.Close();
-
-
         }
         public async Task GetUnits()
         {
             try
             {
-
-
             UnitList = new ObservableCollection<UnitModel>();
             var request = new RequestModel(method: "GET",
                                            route: "/units/getUnits",
