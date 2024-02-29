@@ -373,6 +373,7 @@
                                 Grid.Column="0"
                                 Margin="0,0,10,0"
                                 HorizontalTextAlignment="End"
+                                IsVisible="{Binding IsCreateMode}"
                                 Text="Contraseña:"
                                 VerticalOptions="Center" />
                             <Entry
@@ -380,6 +381,7 @@
                                 Grid.Column="1"
                                 Margin="0,0,10,0"
                                 IsEnabled="{Binding IsCreateMode}"
+                                IsVisible="{Binding IsCreateMode}"
                                 Text="{Binding UserSelected.Password}" />
                         </Grid>
                         <HorizontalStackLayout HorizontalOptions="Center">
