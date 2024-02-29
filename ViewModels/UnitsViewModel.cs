@@ -305,6 +305,7 @@ namespace EFDocenteMAUI.ViewModels
         public async Task ClosePopUp()
         {
             ModoCrear = false;
+            WebResourceVisible = false;
             UnitsPopup.Close();
         }
         public async Task GetUnits()
