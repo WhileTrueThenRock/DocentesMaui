@@ -82,7 +82,7 @@
                                                         </Grid>
                                                     </accordion:AccordionItem.Header>
                                                     <accordion:AccordionItem.Content>
-                                                        <Grid x:Name="myGrid" RowDefinitions="30,30,30,30,30,30,30">
+                                                        <Grid x:Name="myGrid" RowDefinitions="30,30,30,30,30,30,30,30,30">
                                                             <Grid.GestureRecognizers>
                                                                 <TapGestureRecognizer
                                                                     Command="{Binding Path=BindingContext.TapCommand, Source={x:Reference myUnitCollection}}"
@@ -107,6 +107,7 @@
                                                                     <DataTemplate>
                                                                         <HorizontalStackLayout>
                                                                             <Image
+                                                                                Margin="5,0,5,0"
                                                                                 x:Name="myImageResource"
                                                                                 HeightRequest="30"
                                                                                 Source="{Binding .}"
@@ -139,6 +140,7 @@
                                                                     <DataTemplate>
                                                                         <HorizontalStackLayout>
                                                                             <Image
+                                                                                Margin="5,0,5,0"
                                                                                 HeightRequest="30"
                                                                                 Source="pdf.png"
                                                                                 WidthRequest="30">
@@ -169,6 +171,7 @@
                                                                     <DataTemplate>
                                                                         <HorizontalStackLayout>
                                                                             <Image
+                                                                                Margin="5,0,5,0"
                                                                                 HeightRequest="30"
                                                                                 Source="video.png"
                                                                                 WidthRequest="30">
@@ -187,7 +190,38 @@
                                                                     </DataTemplate>
                                                                 </CollectionView.ItemTemplate>
                                                             </CollectionView>
-
+                                                            <Label
+                                                                Grid.Row="7"
+                                                                Margin="5,0,0,0"
+                                                                Text="Videos:" />
+                                                            <CollectionView
+                                                                Grid.Row="8"
+                                                                ItemsSource="{Binding WebResources}"
+                                                                SelectionMode="Single">
+                                                                <CollectionView.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <HorizontalStackLayout>
+                                                                            <Image
+                                                                                HeightRequest="30"
+                                                                                Source="web.png"
+                                                                                WidthRequest="30"
+                                                                                Margin="5,0,5,0">
+                                                                                <Image.GestureRecognizers>
+                                                                                    <TapGestureRecognizer
+                                                                                        Command="{Binding Source={x:Reference unitpage}, Path=BindingContext.ShowResourceWebCommand}"
+                                                                                        CommandParameter="{Binding Source={x:Reference webViewer}, Path=DocumentSource}"
+                                                                                        NumberOfTapsRequired="1" />
+                                                                                </Image.GestureRecognizers>
+                                                                            </Image>
+                                                                            <pdfviewer:SfPdfViewer
+                                                                                x:Name="webViewer"
+                                                                                DocumentSource="{Binding .}"
+                                                                                IsVisible="False" />
+                                                                            <Label x:DataType="models:ResourceModel" Text="{Binding Titulo}" />
+                                                                        </HorizontalStackLayout>
+                                                                    </DataTemplate>
+                                                                </CollectionView.ItemTemplate>
+                                                            </CollectionView>
                                                         </Grid>
                                                     </accordion:AccordionItem.Content>
                                                 </accordion:AccordionItem>
