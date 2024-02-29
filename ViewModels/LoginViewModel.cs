@@ -22,8 +22,6 @@ namespace EFDocenteMAUI.ViewModels
         public LoginViewModel()
         {
             User = new UserModel();
-            User.UserName = "dam08";
-            User.Password = "1234";
             SecureStorage.Default.RemoveAll();
         }
 

@@ -120,9 +120,9 @@
                                             Source="{Binding Avatar}"
                                             WidthRequest="100" />
                                         <VerticalStackLayout Grid.Column="1" Margin="5">
-                                            <Label Text="{Binding Nombre}" />
-                                            <Label Text="{Binding Dni}" />
-                                            <Label Text="{Binding FechaNacimiento}" />
+                                            <Label Style="{StaticResource EstiloLabel}" Text="{Binding Nombre}" />
+                                            <Label Style="{StaticResource EstiloLabel}" Text="{Binding Dni}" />
+                                            <Label Style="{StaticResource EstiloLabel}" Text="{Binding FechaNacimiento}" />
                                         </VerticalStackLayout>
                                     </Grid>
                                     <VisualStateManager.VisualStateGroups>
