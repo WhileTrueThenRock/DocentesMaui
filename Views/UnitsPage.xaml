@@ -85,7 +85,7 @@
                                                             </Grid>
                                                         </accordion:AccordionItem.Header>
                                                         <accordion:AccordionItem.Content>
-                                                            <Grid x:Name="myGrid" RowDefinitions="30,30,30,30,30,30,30,30,30">
+                                                            <Grid x:Name="myGrid" RowDefinitions="30,30,30,30,30,30,30">
                                                                 <Grid.GestureRecognizers>
                                                                     <TapGestureRecognizer
                                                                         Command="{Binding Path=BindingContext.TapCommand, Source={x:Reference myUnitCollection}}"
@@ -162,7 +162,7 @@
                                                                         </DataTemplate>
                                                                     </CollectionView.ItemTemplate>
                                                                 </CollectionView>
-                                                                <Label
+                                                                <!--<Label
                                                                     Grid.Row="5"
                                                                     Margin="5,0,0,0"
                                                                     Text="Videos:" />
@@ -192,13 +192,13 @@
                                                                             </HorizontalStackLayout>
                                                                         </DataTemplate>
                                                                     </CollectionView.ItemTemplate>
-                                                                </CollectionView>
+                                                                </CollectionView>-->
                                                                 <Label
-                                                                    Grid.Row="7"
+                                                                    Grid.Row="5"
                                                                     Margin="5,0,0,0"
                                                                     Text="Enlaces:" />
                                                                 <CollectionView
-                                                                    Grid.Row="8"
+                                                                    Grid.Row="6"
                                                                     ItemsSource="{Binding WebResources}"
                                                                     SelectionMode="Single">
                                                                     <CollectionView.ItemTemplate>
