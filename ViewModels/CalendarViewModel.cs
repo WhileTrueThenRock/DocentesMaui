@@ -120,8 +120,13 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private string avatarImage64;
 
-        [ObservableProperty]
+        
         private ImageSource avatarImage;
+        public ImageSource AvatarImage
+        {
+            get { return avatarImage; }
+            set { avatarImage = value; OnPropertyChanged(); }
+        }
 
 
         [ObservableProperty]
