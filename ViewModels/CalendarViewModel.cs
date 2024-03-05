@@ -74,14 +74,37 @@ namespace EFDocenteMAUI.ViewModels
             }
         }
 
-        [ObservableProperty]
+        
         private ObservableCollection<EventModel> _eventsDateFilter = new ();
+        public ObservableCollection<EventModel> EventsDateFilter
+        {
+            get { return _eventsDateFilter; }
+            set
+            {
+                _eventsDateFilter = value; OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
         private ObservableCollection<EventModel> _eventsTypeFilter = new();
+        public ObservableCollection<EventModel> EventsTypeFilter
+        {
+            get { return _eventsTypeFilter; }
+            set
+            {
+                _eventsTypeFilter= value; OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
+        
         private ObservableCollection<EventModel> _eventsDescriptionFilter = new();
+        public ObservableCollection<EventModel> EventsDescriptionFilter
+        {
+            get { return _eventsDescriptionFilter; }
+            set
+            {
+                _eventsDescriptionFilter= value; OnPropertyChanged();
+            }
+        }
 
 
 
@@ -97,8 +120,13 @@ namespace EFDocenteMAUI.ViewModels
         [ObservableProperty]
         private string avatarImage64;
 
-        [ObservableProperty]
+        
         private ImageSource avatarImage;
+        public ImageSource AvatarImage
+        {
+            get { return avatarImage; }
+            set { avatarImage = value; OnPropertyChanged(); }
+        }
 
 
         [ObservableProperty]
@@ -372,6 +400,9 @@ namespace EFDocenteMAUI.ViewModels
                 {
                     App.Current.MainPage.DisplayAlert("Eventos", response.Message, "Aceptar");
                     GetEvents();
+                    EventsDateFilter = new ObservableCollection<EventModel>();
+                    EventsTypeFilter = new ObservableCollection<EventModel>();
+                    EventsDescriptionFilter = new ObservableCollection<EventModel>();
                     ClosePopUp();
                 }
             }
@@ -433,6 +464,7 @@ namespace EFDocenteMAUI.ViewModels
             if (Mode.Equals("create"))
             {
                 HeaderTabName = "Crear Evento";
+                SelectedEvent = new EventModel();   
                 IsCreateVisible = true;
                 IsUpdateVisible = false;
                 IsDeleteVisible = false;

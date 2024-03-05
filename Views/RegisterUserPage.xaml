@@ -88,58 +88,60 @@
                 <Border.Shadow>
                     <Shadow Radius="20" Offset="15,15" />
                 </Border.Shadow>
-                <VerticalStackLayout>
-                    <CollectionView
-                        ItemsSource="{Binding UserList}"
-                        SelectedItem="{Binding UserSelected}"
-                        SelectionChangedCommand="{Binding ShowUserInfoCommand}"
-                        SelectionMode="Single"
-                        WidthRequest="430">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:UserModel">
-                                <Border
-                                    Margin="5"
-                                    Background="#81D4FA"
-                                    Stroke="Black"
-                                    StrokeThickness="4">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="10" />
-                                    </Border.StrokeShape>
-                                    <Border.Shadow>
-                                        <Shadow
-                                            Brush="White"
-                                            Opacity="0.3"
-                                            Radius="20"
-                                            Offset="15,15" />
-                                    </Border.Shadow>
-                                    <Grid ColumnDefinitions="110,*">
-                                        <Image
-                                            Grid.Column="0"
-                                            Margin="5"
-                                            HeightRequest="100"
-                                            Source="{Binding Avatar}"
-                                            WidthRequest="100" />
-                                        <VerticalStackLayout Grid.Column="1" Margin="5">
-                                            <Label Style="{StaticResource EstiloLabel}" Text="{Binding Nombre}" />
-                                            <Label Style="{StaticResource EstiloLabel}" Text="{Binding Dni}" />
-                                            <Label Style="{StaticResource EstiloLabel}" Text="{Binding FechaNacimiento}" />
-                                        </VerticalStackLayout>
-                                    </Grid>
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup Name="CommonStates">
-                                            <VisualState Name="Normal" />
-                                            <VisualState Name="Selected">
-                                                <VisualState.Setters>
-                                                    <Setter Property="Background" Value="#00BCD4" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
-                                </Border>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
+                <ScrollView>
+                    <VerticalStackLayout>
+                        <CollectionView
+                            ItemsSource="{Binding UserList}"
+                            SelectedItem="{Binding UserSelected}"
+                            SelectionChangedCommand="{Binding ShowUserInfoCommand}"
+                            SelectionMode="Single"
+                            WidthRequest="430">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:UserModel">
+                                    <Border
+                                        Margin="5"
+                                        Background="#81D4FA"
+                                        Stroke="Black"
+                                        StrokeThickness="4">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" />
+                                        </Border.StrokeShape>
+                                        <Border.Shadow>
+                                            <Shadow
+                                                Brush="White"
+                                                Opacity="0.3"
+                                                Radius="20"
+                                                Offset="15,15" />
+                                        </Border.Shadow>
+                                        <Grid ColumnDefinitions="110,*">
+                                            <Image
+                                                Grid.Column="0"
+                                                Margin="5"
+                                                HeightRequest="100"
+                                                Source="{Binding Avatar}"
+                                                WidthRequest="100" />
+                                            <VerticalStackLayout Grid.Column="1" Margin="5">
+                                                <Label Style="{StaticResource EstiloLabel}" Text="{Binding Nombre}" />
+                                                <Label Style="{StaticResource EstiloLabel}" Text="{Binding Dni}" />
+                                                <Label Style="{StaticResource EstiloLabel}" Text="{Binding FechaNacimiento}" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup Name="CommonStates">
+                                                <VisualState Name="Normal" />
+                                                <VisualState Name="Selected">
+                                                    <VisualState.Setters>
+                                                        <Setter Property="Background" Value="#00BCD4" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </ScrollView>
             </Border>
             <ScrollView
                 Grid.Row="1"
@@ -373,6 +375,7 @@
                                 Grid.Column="0"
                                 Margin="0,0,10,0"
                                 HorizontalTextAlignment="End"
+                                IsVisible="{Binding IsCreateMode}"
                                 Text="Contraseña:"
                                 VerticalOptions="Center" />
                             <Entry
@@ -380,6 +383,7 @@
                                 Grid.Column="1"
                                 Margin="0,0,10,0"
                                 IsEnabled="{Binding IsCreateMode}"
+                                IsVisible="{Binding IsCreateMode}"
                                 Text="{Binding UserSelected.Password}" />
                         </Grid>
                         <HorizontalStackLayout HorizontalOptions="Center">

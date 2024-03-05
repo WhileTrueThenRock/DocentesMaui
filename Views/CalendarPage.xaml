@@ -31,7 +31,7 @@
                 SelectedDateColor="Black"
                 SelectedDayBackgroundColor="Red"
                 SelectedDayEvents="{Binding EventsList, Mode=TwoWay}"
-                TodayOutlineColor="#66FFCC"
+                TodayOutlineColor="#0288D1"
                 WidthRequest="450"
                 YearLabelColor="Black" />
 
