@@ -4,6 +4,7 @@ using EFDocenteMAUI.Models;
 using EFDocenteMAUI.Utils;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.Numerics;
 
 namespace EFDocenteMAUI.ViewModels
 {
@@ -73,6 +74,7 @@ namespace EFDocenteMAUI.ViewModels
             {   
                 string[] fechamodificada = UserSelected.FechaNacimiento.Replace(" 0:00:00", " ").Split(' ');
                 UserSelected.FechaNacimiento = fechamodificada[0];
+                UserSelected.Direccion.Cp = int.Parse(CpString);
                 UserSelected.Avatar = APIService.ImagenesServerUrl + "/avatars/" + UserSelected.Id.ToString();
                 var request = new RequestModel(method: "POST",
                                                 route: "/users/update",
@@ -301,6 +303,7 @@ namespace EFDocenteMAUI.ViewModels
                     {
                         string[] fechamodificada = UserSelected.FechaNacimiento.Replace(" 0:00:00", " ").Split(' ');
                         UserSelected.FechaNacimiento = fechamodificada[0];
+                        UserSelected.Direccion.Cp = int.Parse(CpString);
                         UserSelected.Avatar = APIService.ImagenesServerUrl + "/avatars/" + UserSelected.Id.ToString();
                         var request = new RequestModel(method: "POST",
                                                         route: "/auth/register",
