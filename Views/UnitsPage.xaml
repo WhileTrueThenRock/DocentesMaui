@@ -16,54 +16,55 @@
     BindingContext="{viewmodels:UnitsViewModel}">
     <ScrollView>
         <Grid ColumnDefinitions="40,200,800,300,*" RowDefinitions="*,650,*">
-            <VerticalStackLayout
+            <ScrollView
                 Grid.Row="1"
                 Grid.Column="1"
                 HorizontalOptions="Center"
                 VerticalOptions="FillAndExpand">
+                <VerticalStackLayout>
 
-                <Label
-                    FontAttributes="Bold"
-                    FontSize="Large"
-                    HorizontalOptions="Center"
-                    HorizontalTextAlignment="Center"
-                    Text="EDUCACIÓN FISICA" />
-                <Button
-                    Margin="10"
-                    BackgroundColor="#D84315"
-                    Command="{Binding ShowUnitPopupCommand}"
-                    CommandParameter="True"
-                    IsVisible="{Binding User.RolProfesor}"
-                    Text="CREAR TEMARIO" />
-                <ScrollView>
-                    <CollectionView
-                        x:Name="myUnitCollection"
-                        ItemsSource="{Binding UnitList}"
-                        SelectedItem="{Binding Unit}"
-                        SelectionMode="Single">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:UnitModel">
-                                <Border
-                                    Margin="5"
-                                    Background="Transparent"
-                                    StrokeThickness="4">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="10" />
-                                    </Border.StrokeShape>
-                                    <Border.Shadow>
-                                        <Shadow Radius="5" Offset="5,5" />
-                                    </Border.Shadow>
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        Text="EDUCACIÓN FISICA" />
+                    <Button
+                        Margin="10"
+                        BackgroundColor="#D84315"
+                        Command="{Binding ShowUnitPopupCommand}"
+                        CommandParameter="True"
+                        IsVisible="{Binding User.RolProfesor}"
+                        Text="CREAR TEMARIO" />
+                    <ScrollView>
+                        <CollectionView
+                            x:Name="myUnitCollection"
+                            ItemsSource="{Binding UnitList}"
+                            SelectedItem="{Binding Unit}"
+                            SelectionMode="Single">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:UnitModel">
+                                    <Border
+                                        Margin="5"
+                                        Background="Transparent"
+                                        StrokeThickness="4">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" />
+                                        </Border.StrokeShape>
+                                        <Border.Shadow>
+                                            <Shadow Radius="5" Offset="5,5" />
+                                        </Border.Shadow>
 
-                                    <VerticalStackLayout>
-                                        <VerticalStackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                x:DataType="viewmodels:UnitsViewModel"
-                                                BindingContext="{Binding Source={x:Reference unitpage}, Path=BindingContext}"
-                                                Command="{Binding ShowUnitPopupCommand}"
-                                                CommandParameter="False"
-                                                NumberOfTapsRequired="2" />
-                                        </VerticalStackLayout.GestureRecognizers>
-                                        <ScrollView>
+                                        <VerticalStackLayout>
+                                            <VerticalStackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    x:DataType="viewmodels:UnitsViewModel"
+                                                    BindingContext="{Binding Source={x:Reference unitpage}, Path=BindingContext}"
+                                                    Command="{Binding ShowUnitPopupCommand}"
+                                                    CommandParameter="False"
+                                                    NumberOfTapsRequired="2" />
+                                            </VerticalStackLayout.GestureRecognizers>
+
                                             <accordion:SfAccordion
                                                 x:Name="myAccordionItem"
                                                 AnimationDuration="250"
@@ -232,15 +233,16 @@
                                                     </accordion:AccordionItem>
                                                 </accordion:SfAccordion.Items>
                                             </accordion:SfAccordion>
-                                        </ScrollView>
-                                    </VerticalStackLayout>
 
-                                </Border>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </ScrollView>
-            </VerticalStackLayout>
+                                        </VerticalStackLayout>
+
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </ScrollView>
+                </VerticalStackLayout>
+            </ScrollView>
             <ScrollView
                 Grid.Row="1"
                 Grid.Column="2"
