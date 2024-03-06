@@ -19,12 +19,7 @@
             <RoundRectangle CornerRadius="25" />
         </Border.StrokeShape>
         <VerticalStackLayout Padding="15" Background="#F6DDCC">
-            <Label
-                Margin="0,0,0,15"
-                FontSize="Large"
-                HorizontalOptions="CenterAndExpand"
-                Text="ACCEDER"
-                TextColor="#333333" />
+            <Image Source="titulo.png" />
             <Entry
                 x:Name="EntryUsuario"
                 Margin="0,0,0,10"
