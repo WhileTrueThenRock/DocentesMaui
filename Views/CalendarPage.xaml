@@ -31,7 +31,7 @@
                 SelectedDateColor="Black"
                 SelectedDayBackgroundColor="Red"
                 SelectedDayEvents="{Binding EventsList, Mode=TwoWay}"
-                TodayOutlineColor="#66FFCC"
+                TodayOutlineColor="#0288D1"
                 WidthRequest="450"
                 YearLabelColor="Black" />
 
@@ -63,10 +63,22 @@
                                         NumberOfTapsRequired="2" />
                                 </VerticalStackLayout.GestureRecognizers>
                                 <VerticalStackLayout>
-                                    <Label HorizontalTextAlignment="Center" Text="{Binding Type}" />
-                                    <Label HorizontalTextAlignment="Center" Text="{Binding Description}" />
-                                    <Label HorizontalTextAlignment="Center" Text="{Binding StartAt}" />
-                                    <Label HorizontalTextAlignment="Center" Text="{Binding EndAt}" />
+                                    <Label
+                                        HorizontalTextAlignment="Center"
+                                        Style="{StaticResource EstiloLabel}"
+                                        Text="{Binding Type}" />
+                                    <Label
+                                        HorizontalTextAlignment="Center"
+                                        Style="{StaticResource EstiloLabel}"
+                                        Text="{Binding Description}" />
+                                    <Label
+                                        HorizontalTextAlignment="Center"
+                                        Style="{StaticResource EstiloLabel}"
+                                        Text="{Binding StartAt}" />
+                                    <Label
+                                        HorizontalTextAlignment="Center"
+                                        Style="{StaticResource EstiloLabel}"
+                                        Text="{Binding EndAt}" />
 
                                     <Image
                                         HeightRequest="100"
@@ -240,7 +252,7 @@
                                                     <CollectionView.ItemTemplate>
                                                         <DataTemplate x:DataType="models:EventModel">
                                                             <Border
-                                                                BackgroundColor="#66FFCC"
+                                                                BackgroundColor="#EAFAF1"
                                                                 Stroke="Black"
                                                                 StrokeThickness="3"
                                                                 WidthRequest="400">
@@ -261,17 +273,29 @@
                                                                         HeightRequest="50"
                                                                         Source="{Binding Image}"
                                                                         WidthRequest="50" />
-                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding Type}" />
-                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding Description}" />
-                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding StartAt}" />
-                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding EndAt}" />
+                                                                    <Label
+                                                                        HorizontalTextAlignment="Center"
+                                                                        Style="{StaticResource EstiloLabel}"
+                                                                        Text="{Binding Type}" />
+                                                                    <Label
+                                                                        HorizontalTextAlignment="Center"
+                                                                        Style="{StaticResource EstiloLabel}"
+                                                                        Text="{Binding Description}" />
+                                                                    <Label
+                                                                        HorizontalTextAlignment="Center"
+                                                                        Style="{StaticResource EstiloLabel}"
+                                                                        Text="{Binding StartAt}" />
+                                                                    <Label
+                                                                        HorizontalTextAlignment="Center"
+                                                                        Style="{StaticResource EstiloLabel}"
+                                                                        Text="{Binding EndAt}" />
                                                                 </VerticalStackLayout>
                                                                 <VisualStateManager.VisualStateGroups>
                                                                     <VisualStateGroup Name="CommonStates">
                                                                         <VisualState Name="Normal" />
                                                                         <VisualState Name="Selected">
                                                                             <VisualState.Setters>
-                                                                                <Setter Property="Background" Value="#00CC33" />
+                                                                                <Setter Property="Background" Value="#00BCD4" />
                                                                             </VisualState.Setters>
                                                                         </VisualState>
                                                                     </VisualStateGroup>
@@ -317,7 +341,7 @@
                                                     <CollectionView.ItemTemplate>
                                                         <DataTemplate x:DataType="models:EventModel">
                                                             <Border
-                                                                BackgroundColor="#66FFCC"
+                                                                BackgroundColor="#EAFAF1"
                                                                 Stroke="Black"
                                                                 StrokeThickness="3"
                                                                 WidthRequest="400">
@@ -338,17 +362,29 @@
                                                                         HeightRequest="50"
                                                                         Source="{Binding Image}"
                                                                         WidthRequest="50" />
-                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding Type}" />
-                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding Description}" />
-                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding StartAt}" />
-                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding EndAt}" />
+                                                                    <Label
+                                                                        HorizontalTextAlignment="Center"
+                                                                        Style="{StaticResource EstiloLabel}"
+                                                                        Text="{Binding Type}" />
+                                                                    <Label
+                                                                        HorizontalTextAlignment="Center"
+                                                                        Style="{StaticResource EstiloLabel}"
+                                                                        Text="{Binding Description}" />
+                                                                    <Label
+                                                                        HorizontalTextAlignment="Center"
+                                                                        Style="{StaticResource EstiloLabel}"
+                                                                        Text="{Binding StartAt}" />
+                                                                    <Label
+                                                                        HorizontalTextAlignment="Center"
+                                                                        Style="{StaticResource EstiloLabel}"
+                                                                        Text="{Binding EndAt}" />
                                                                 </VerticalStackLayout>
                                                                 <VisualStateManager.VisualStateGroups>
                                                                     <VisualStateGroup Name="CommonStates">
                                                                         <VisualState Name="Normal" />
                                                                         <VisualState Name="Selected">
                                                                             <VisualState.Setters>
-                                                                                <Setter Property="Background" Value="#00CC33" />
+                                                                                <Setter Property="Background" Value="#00BCD4" />
                                                                             </VisualState.Setters>
                                                                         </VisualState>
                                                                     </VisualStateGroup>
@@ -395,7 +431,7 @@
                                                     <CollectionView.ItemTemplate>
                                                         <DataTemplate x:DataType="models:EventModel">
                                                             <Border
-                                                                BackgroundColor="#66FFCC"
+                                                                BackgroundColor="#EAFAF1"
                                                                 Stroke="Black"
                                                                 StrokeThickness="3"
                                                                 WidthRequest="400">
@@ -416,17 +452,29 @@
                                                                         HeightRequest="50"
                                                                         Source="{Binding Image}"
                                                                         WidthRequest="50" />
-                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding Type}" />
-                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding Description}" />
-                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding StartAt}" />
-                                                                    <Label HorizontalTextAlignment="Center" Text="{Binding EndAt}" />
+                                                                    <Label
+                                                                        HorizontalTextAlignment="Center"
+                                                                        Style="{StaticResource EstiloLabel}"
+                                                                        Text="{Binding Type}" />
+                                                                    <Label
+                                                                        HorizontalTextAlignment="Center"
+                                                                        Style="{StaticResource EstiloLabel}"
+                                                                        Text="{Binding Description}" />
+                                                                    <Label
+                                                                        HorizontalTextAlignment="Center"
+                                                                        Style="{StaticResource EstiloLabel}"
+                                                                        Text="{Binding StartAt}" />
+                                                                    <Label
+                                                                        HorizontalTextAlignment="Center"
+                                                                        Style="{StaticResource EstiloLabel}"
+                                                                        Text="{Binding EndAt}" />
                                                                 </VerticalStackLayout>
                                                                 <VisualStateManager.VisualStateGroups>
                                                                     <VisualStateGroup Name="CommonStates">
                                                                         <VisualState Name="Normal" />
                                                                         <VisualState Name="Selected">
                                                                             <VisualState.Setters>
-                                                                                <Setter Property="Background" Value="#00CC33" />
+                                                                                <Setter Property="Background" Value="#00BCD4" />
                                                                             </VisualState.Setters>
                                                                         </VisualState>
                                                                     </VisualStateGroup>
