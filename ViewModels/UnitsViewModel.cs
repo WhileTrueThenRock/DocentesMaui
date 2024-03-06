@@ -112,7 +112,7 @@ namespace EFDocenteMAUI.ViewModels
         public bool ComprobarCampos()
         {
             bool todoOK = false;
-            if(null == ResourceModel.Titulo || ResourceModel.Titulo.Any(Char.IsWhiteSpace))
+            if(null == ResourceModel.Titulo)
             {
                 MensajeError = "El campo Titulo, no puede estar vacio";
                 todoOK = false;

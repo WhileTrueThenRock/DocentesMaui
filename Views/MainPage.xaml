@@ -217,6 +217,7 @@
                             <buttons:SfButton
                                 Background="#EC407A"
                                 Command="{Binding LoadVideoCommand}"
+                                IsVisible="false"
                                 Stroke="Black"
                                 Text="+ VIDEO" />
                         </HorizontalStackLayout>
